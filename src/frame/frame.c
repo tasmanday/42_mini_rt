@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:38 by tday              #+#    #+#             */
-/*   Updated: 2024/07/19 22:04:13 by tday             ###   ########.fr       */
+/*   Updated: 2024/07/19 22:30:32 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,9 @@ void swap_images(t_data *data)
 
 int update_frame(t_data *data)
 {
-    t_img *img;
-
-    img = &(data->img[data->display_img]);
     fill_background(data, 0x00AAFF);
-    mlx_put_image_to_window(data->mlx, data->win, img->img, 0, 0);
+    mlx_put_image_to_window(data->mlx, data->win, 							\
+		data->img[data->display_img].img, 0, 0);
     swap_images(data);
     return (0);
 }
