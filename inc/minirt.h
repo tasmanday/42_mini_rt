@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:50:33 by tday              #+#    #+#             */
-/*   Updated: 2024/07/19 21:44:08 by tday             ###   ########.fr       */
+/*   Updated: 2024/07/19 23:59:11 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ enum {
 
 /* initialisation */
 
+void init_window(t_data *data);
 void init_img(t_data *data);
 
 /* window */

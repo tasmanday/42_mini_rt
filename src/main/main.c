@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:17:07 by tday              #+#    #+#             */
-/*   Updated: 2024/07/19 21:44:10 by tday             ###   ########.fr       */
+/*   Updated: 2024/07/20 00:03:59 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ int main(void)
 {
     t_data data;
 
+	init_window(&data);
     data.mlx = mlx_init();
-    data.win = mlx_new_window(data.mlx, 1920, 1080, "FdF");
+    data.win = mlx_new_window(data.mlx, data.width, data.height, "mini_rt");
     init_img(&data);
 
     mlx_hook(data.win, ON_DESTROY, 0, close_window, &data);
