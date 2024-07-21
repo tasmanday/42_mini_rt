@@ -17,6 +17,8 @@
 # include "../libft/inc/libft.h"
 # include "parsing.h"
 # include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
 
 typedef struct s_mrt
 {

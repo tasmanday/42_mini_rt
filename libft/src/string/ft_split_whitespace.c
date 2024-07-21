@@ -12,6 +12,19 @@
 
 #include "../inc/libft.h"
 
+/*
+	Summary
+	allocates memory and returns a substring from the input_str based on
+	the delimiter character.
+
+	Inputs
+	input_str = The original string from which the substring is extracted.
+	start_pos = A pointer to an integer that keeps track of the current position
+	in the input_str.
+
+	Outputs
+	word = the substring extracted from the input string.
+*/
 static char	*allocate_word(const char *input_str, int *start_pos)
 {
 	char	*word;
@@ -38,6 +51,16 @@ static char	*allocate_word(const char *input_str, int *start_pos)
 	return (word);
 }
 
+/*
+	Summary
+	counts the number of words in a given string, separated by whitespace.
+
+	Inputs
+	input_str = The original string to count the words from.
+
+	Outputs
+	count = the number of words in the input string.
+*/
 static int	count_words(const char *input_str)
 {
 	int		count;
@@ -59,6 +82,17 @@ static int	count_words(const char *input_str)
 	return (count);
 }
 
+/*
+	Summary
+	frees the memory allocated for the array of substrings.
+
+	Inputs
+	result = A double pointer to the array of substrings.
+	i = An integer representing the index of the last substring in the array.
+
+	Outputs
+	none.
+*/
 static void	free_allocated(char **result, int i)
 {
 	while (i >= 0)
@@ -69,6 +103,18 @@ static void	free_allocated(char **result, int i)
 	free(result);
 }
 
+/*
+	Summary
+	allocates memory and returns an array of substrings obtained by splitting
+	the original string at whitespace characters.
+	the array must end with a NULL pointer.
+
+	Inputs
+	input_str = original string.
+
+	Outputs
+	result = array of substrings.
+*/
 char	**ft_split_whitespace(const char *input_str)
 {
 	char	**result;
