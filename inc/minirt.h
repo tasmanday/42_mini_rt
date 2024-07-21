@@ -6,17 +6,19 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:50:33 by tday              #+#    #+#             */
-/*   Updated: 2024/07/19 23:59:11 by tday             ###   ########.fr       */
+/*   Updated: 2024/07/21 14:52:53 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
-#define MINIRT_H
+# define MINIRT_H
 
-#include "../mlx_linux/mlx.h"
-#include <stdlib.h>
+# include "../mlx_linux/mlx.h"
+# include "../libft/inc/libft.h"
+# include "parsing.h"
+# include <stdlib.h>
 
-typedef struct  s_img
+typedef struct s_img
 {
     void        *img;
     char        *addr;
@@ -25,18 +27,24 @@ typedef struct  s_img
     int         endian;
 }               t_img;
 
-
-
-typedef struct  s_data
+typedef struct s_data
 {
-    void        *mlx;
-    void        *win;
-	int			height;
-	int			width;
-    t_img       img[2];
-    int         draw_img;
-	int			display_img;
+    void        *mlx; // move to an mlx struct
+    void        *win; // move to an mlx struct
+	int			height; // move to an mlx struct
+	int			width; // move to an mlx struct
+    t_img       img[2]; // move to an mlx struct
+    int         draw_img; // move to an mlx struct
+	int			display_img; // move to an mlx struct
+	t_list		*params
 }               t_data;
+
+typedef struct s_coord
+{
+	float	x;
+	float	y;
+	float	z;
+}				t_coord;
 
 enum {
     ON_KEYDOWN = 2,
