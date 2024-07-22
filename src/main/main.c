@@ -6,15 +6,21 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:17:07 by tday              #+#    #+#             */
-/*   Updated: 2024/07/21 14:52:53 by tday             ###   ########.fr       */
+/*   Updated: 2024/07/21 15:58:12 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minirt.h"
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	t_data	data;
+	t_mrt	*mrt;
+
+	init_mrt(mrt);
+
+	
+	// uncomment later when we need to deal with minilibx
+	/* t_data	data;
 
 	init_window(&data);
 	data.mlx = mlx_init();
@@ -25,6 +31,6 @@ int	main(void)
 	mlx_key_hook(data.win, key_hook, &data);
 	mlx_loop_hook(data.mlx, loop_function, &data);
 
-	mlx_loop(data.mlx);
+	mlx_loop(data.mlx); */
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 21:50:58 by tday              #+#    #+#             */
-/*   Updated: 2024/04/14 15:59:09 by tday             ###   ########.fr       */
+/*   Updated: 2024/07/21 17:14:05 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,10 +169,12 @@ char		*ft_strjoin(const char *s1, const char *s2);
 char		*ft_strtrim(const char *s1, const char *set);
 char		**ft_split(const char *input_str, char delimiter);
 char		**ft_split_first(const char *input_str, char delimiter);
+char		**ft_split_whitespace(const char *input_str);
 char		*ft_strmapi(const char *str, char (*f)(size_t, char));
 void		ft_striteri(char *str, void (*f)(size_t, char *));
 char		*ft_replace_substr(char *str, int start, int end, char *substr);
 char		*get_next_line(int fd);
+bool		ft_only_whitespace(char *input);
 
 /* arrays */
 
