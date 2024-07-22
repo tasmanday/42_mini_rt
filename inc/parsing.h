@@ -17,13 +17,13 @@
 
 typedef struct s_elem
 {
-	char	*id;
-	t_coord	*coordinates;
-	t_coord	*axis_vector;
-	float	ratio;
-	float	diameter;
-	float	height;
-	int		rgb;
+	char		*id;
+	t_coord		*coordinates;
+	t_coord		*axis_vector;
+	float		ratio;
+	float		diameter;
+	float		height;
+	t_rgb		*rgb;
 }				t_elem;
 
 #endif

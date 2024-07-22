@@ -23,7 +23,15 @@
 typedef struct s_mrt
 {
 	t_list		*params;
+	t_flags		*flags;
 }				t_mrt;
+
+typedef struct s_flags
+{
+	bool		a;
+	bool		l;
+	bool		c;
+}				t_flags;
 
 typedef struct s_img
 {
@@ -47,10 +55,18 @@ typedef struct s_data // rename to mlx specific name
 
 typedef struct s_coord
 {
-	float	x;
-	float	y;
-	float	z;
+	float		x;
+	float		y;
+	float		z;
 }				t_coord;
+
+typedef struct s_rgb
+{
+	int			r;
+	int			g;
+	int			b;
+}				t_rgb;
+
 
 enum
 {
