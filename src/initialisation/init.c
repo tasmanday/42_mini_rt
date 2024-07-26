@@ -15,6 +15,9 @@
 t_mrt	*init_mrt(t_mrt *mrt)
 {
 	mrt = safe_calloc(1, sizeof(t_mrt), "mrt malloc error");
+	mrt->amb = safe_calloc(1, sizeof(t_amb), "amb malloc error");
+	mrt->light = safe_calloc(1, sizeof(t_light), "light malloc error");
+	mrt->cam = safe_calloc(1, sizeof(t_cam), "cam malloc error");
 	return (mrt);
 }
 
