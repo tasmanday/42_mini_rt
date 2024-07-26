@@ -15,7 +15,30 @@
 
 # include "minirt.h"
 
-typedef struct s_elem
+typedef struct s_amb
+{
+	char		*id;
+	float		ratio;
+	t_rgb		*rgb;
+}				t_amb;
+
+typedef struct s_light
+{
+	char		*id;
+	t_coord		*coordinates;
+	float		ratio;
+	t_rgb		*rgb;
+}				t_light;
+
+typedef struct s_cam
+{
+	char		*id;
+	t_coord		*coordinates;
+	t_coord		*norm_vector;
+	int		fov;
+}				t_cam;
+
+typedef struct s_objs
 {
 	char		*id;
 	t_coord		*coordinates;
@@ -24,6 +47,6 @@ typedef struct s_elem
 	float		diameter;
 	float		height;
 	t_rgb		*rgb;
-}				t_elem;
+}				t_objs;
 
 #endif
