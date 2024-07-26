@@ -14,7 +14,6 @@
 
 void	parse_ambient_light(t_mrt *mrt, char **elem_array)
 {
-	t_amb	*ambient_light;
 	// check if there is already an ambient light node (flag in mrt)
 	if (mrt->amb->id)
 		error_exit("invlaid scene file: multiple ambient lights"); // need to make free_everything function and a version of error_exit that frees everything before exiting
@@ -22,14 +21,10 @@ void	parse_ambient_light(t_mrt *mrt, char **elem_array)
 		error_exit("invlaid scene file: incorrect number of parameters in \
 		ambient light element");
 	else
-	{ // fill elem struct with relavent data
-		ambient_light = safe_calloc(1, sizeof(t_amb), \
-			"parse_ambient_light: malloc error");
-		ambient_light->id = ft_strdup(elem_array[0]);
-		ambient_light->ratio = ratio_atof(elem_array[1], "parse_ambient_light"); // atof with check that result is within range 0.0 - 1.0
-		ambient_light->rgb = rgb_atoi(elem_array[2], "parse_ambient_light"); // split rgb param, atoi results, check results are within range 0 - 255, 
+		mrt->amb->id = ft_strdup(elem_array[0]);
+		mrt->amb->ratio = ratio_atof(elem_array[1], "parse_ambient_light"); // atof with check that result is within range 0.0 - 1.0
+		mrt->amb->rgb = rgb_atoi(elem_array[2], "parse_ambient_light"); // split rgb param, atoi results, check results are within range 0 - 255, 
 	}
-	// add node to linked list with elem struct as data
 }
 
 void	process_array_params(t_mrt *mrt, char **elem_array)
