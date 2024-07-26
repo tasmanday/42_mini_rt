@@ -22,16 +22,11 @@
 
 typedef struct s_mrt
 {
-	t_list		*params;
-	t_flags		*flags;
+	t_amb		*amb;
+	t_light		*light;
+	t_cam		*cam;
+	t_list		*objs;
 }				t_mrt;
-
-typedef struct s_flags
-{
-	bool		a;
-	bool		l;
-	bool		c;
-}				t_flags;
 
 typedef struct s_img
 {
