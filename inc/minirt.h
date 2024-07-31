@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:50:33 by tday              #+#    #+#             */
-/*   Updated: 2024/07/21 15:50:36 by tday             ###   ########.fr       */
+/*   Updated: 2024/07/31 17:01:30 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,18 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <math.h>
+# include <stdio.h>
+# include <string.h>
 
 typedef struct s_mrt
 {
 	t_amb		*amb;
 	t_light		*light;
 	t_cam		*cam;
-	t_list		*objs;
+	t_objs		*objs; // change to t_list later, just testing with single sphere
+	int			width;
+	int			height;
 }				t_mrt;
 
 typedef struct s_img
@@ -50,10 +55,17 @@ typedef struct s_data // rename to mlx specific name
 
 typedef struct s_coord
 {
-	float		x;
-	float		y;
-	float		z;
+	double		x;
+	double		y;
+	double		z;
 }				t_coord;
+
+typedef struct s_vect
+{
+	double		x;
+	double		y;
+	double		z;
+}				t_vect;
 
 typedef struct s_rgb
 {
