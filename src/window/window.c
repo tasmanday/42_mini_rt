@@ -6,15 +6,15 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 18:12:51 by tday              #+#    #+#             */
-/*   Updated: 2024/07/19 21:42:30 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/01 22:35:49 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minirt.h"
 
-int close_window(t_data *data)
+int	close_window(t_data *data)
 {
-    mlx_destroy_window(data->mlx, data->win);
-    exit(0);
-    return (0);
+	mlx_destroy_window(data->mlx, data->win);
+	exit(0);
+	return (0);
 }
