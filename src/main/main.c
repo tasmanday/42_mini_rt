@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:17:07 by tday              #+#    #+#             */
-/*   Updated: 2024/07/31 16:27:18 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/04 15:54:57 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ int	main(int argc, char **argv)
 	init_mrt(mrt);
 	fill_mrt_defaults(mrt);
 
-	
+	//setting up camera
+	compute_ray_directions(&mrt, camera);
+
 	// uncomment later when we need to deal with minilibx
 	/* t_data	data;
 
