@@ -6,16 +6,17 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:50:33 by tday              #+#    #+#             */
-/*   Updated: 2024/07/31 17:01:30 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/04 23:46:37 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# include "../mlx_linux/mlx.h"
+// # include "../mlx_linux/mlx.h"
 # include "../libft/inc/libft.h"
 # include "parsing.h"
+# include "types.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
@@ -53,28 +54,6 @@ typedef struct s_data // rename to mlx specific name
 	int			display_img;
 }				t_data;
 
-typedef struct s_coord
-{
-	double		x;
-	double		y;
-	double		z;
-}				t_coord;
-
-typedef struct s_vect
-{
-	double		x;
-	double		y;
-	double		z;
-}				t_vect;
-
-typedef struct s_rgb
-{
-	int			r;
-	int			g;
-	int			b;
-}				t_rgb;
-
-
 enum
 {
 	ON_KEYDOWN = 2,
@@ -90,6 +69,8 @@ enum
 
 void	init_window(t_data *data);
 void	init_img(t_data *data);
+t_mrt	*init_mrt(t_mrt *mrt);
+void 	fill_mrt_defaults(t_mrt *mrt); // remove later
 
 /* window */
 
@@ -106,5 +87,8 @@ int		loop_function(t_data *data);
 /* controls */
 
 int		key_hook(int keycode, t_data *data);
+
+/* ray_casting */
+void	compute_ray_directions(t_mrt *mrt, t_cam *camera);
 
 #endif

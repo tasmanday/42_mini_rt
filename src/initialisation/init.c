@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:36:35 by tday              #+#    #+#             */
-/*   Updated: 2024/07/31 17:01:35 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/04 23:46:41 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 t_mrt	*init_mrt(t_mrt *mrt)
 {
-	mrt = safe_calloc(1, sizeof(t_mrt), "mrt malloc error");
 	mrt->amb = safe_calloc(1, sizeof(t_amb), "amb malloc error");
 	mrt->light = safe_calloc(1, sizeof(t_light), "light malloc error");
 	mrt->cam = safe_calloc(1, sizeof(t_cam), "cam malloc error");
@@ -38,10 +37,10 @@ void fill_mrt_defaults(t_mrt *mrt)
     mrt->cam->coordinates->x = -50.0f;
     mrt->cam->coordinates->y = 0.0f;
     mrt->cam->coordinates->z = 20.0f;
-    mrt->cam->norm_vector = safe_calloc(1, sizeof(t_coord), "cam norm_vector malloc error");
-    mrt->cam->norm_vector->x = 0.0f;
-    mrt->cam->norm_vector->y = 0.0f;
-    mrt->cam->norm_vector->z = 0.0f;
+    mrt->cam->orientation = safe_calloc(1, sizeof(t_coord), "cam norm_vector malloc error");
+    mrt->cam->orientation->x = 0.0f;
+    mrt->cam->orientation->y = 0.0f;
+    mrt->cam->orientation->z = 1.0f;
     mrt->cam->fov = 70;
 
     // Fill light
@@ -75,6 +74,7 @@ void fill_mrt_defaults(t_mrt *mrt)
 	mrt->height = 1080;
 }
 
+/*
 void	init_window(t_data *data) // for mlx
 {
 	data->width = 1920;
@@ -94,4 +94,4 @@ void	init_img(t_data *data) // for mlx
 	data->draw_img = 0;
 	data->display_img = 1;
 }
-
+*/

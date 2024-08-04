@@ -6,21 +6,25 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:17:07 by tday              #+#    #+#             */
-/*   Updated: 2024/08/04 15:54:57 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/04 23:46:32 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minirt.h"
 
-int	main(int argc, char **argv)
+// int	main(int argc, char **argv)
+int	main(void)
 {
 	t_mrt	*mrt;
+	t_cam	*camera;
 
-	init_mrt(mrt);
+	mrt = safe_calloc(1, sizeof(t_mrt), "main - mrt malloc error");
+	mrt = init_mrt(mrt);
 	fill_mrt_defaults(mrt);
 
 	//setting up camera
-	compute_ray_directions(&mrt, camera);
+	camera = mrt->cam;
+	compute_ray_directions(mrt, camera);
 
 	// uncomment later when we need to deal with minilibx
 	/* t_data	data;

@@ -6,14 +6,14 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:18:01 by tday              #+#    #+#             */
-/*   Updated: 2024/08/04 15:55:00 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/04 23:46:35 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
 
-# include "minirt.h"
+# include "types.h"
 
 typedef struct s_amb
 {
@@ -34,7 +34,7 @@ typedef struct s_cam
 {
 	char		*id;
 	t_coord		*coordinates;
-	t_coord		*orientation;
+	t_vect		*orientation;
 	int			fov;
 }				t_cam;
 
