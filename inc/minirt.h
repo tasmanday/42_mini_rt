@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:50:33 by tday              #+#    #+#             */
-/*   Updated: 2024/08/04 23:46:37 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/20 00:02:08 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,16 @@ int		loop_function(t_data *data);
 int		key_hook(int keycode, t_data *data);
 
 /* ray_casting */
+
 void	compute_ray_directions(t_mrt *mrt, t_cam *camera);
+
+/* vectors */
+
+t_vect	vector(double x, double y, double z);
+t_vect	vect_normalise(t_vect v);
+t_vect	vect_add(t_vect a, t_vect b);
+t_vect	vect_subtract(t_vect a, t_vect b);
+t_vect	vect_cross(t_vect a, t_vect b);
+double	vect_dot(t_vect a, t_vect b);
 
 #endif

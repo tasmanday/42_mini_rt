@@ -6,7 +6,7 @@
 #    By: tday <tday@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2024/08/04 23:46:39 by tday             ###   ########.fr        #
+#    Updated: 2024/08/20 00:02:09 by tday             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRCS			:=		$(addprefix src/main/, main.c)							\
 						$(addprefix src/frame/, frame.c)						\
 						$(addprefix src/controls/, controls.c)					\
 						$(addprefix src/window/, window.c)						\
+						$(addprefix src/vectors/, vector_operations.c)			\
 						$(addprefix src/ray_casting/, compute_ray_directions.c)
 OBJS			:=		$(SRCS:.c=.o)
 RM				:=		rm -f

@@ -6,46 +6,22 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/08/04 23:46:43 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/20 00:02:07 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minirt.h"
-#include <math.h>
 
-#ifndef M_PI
-# define M_PI 3.14159265358979323846
-#endif
+//#ifndef M_PI
+//# define M_PI 3.14159265358979323846
+//#endif
 
-/*
-	SUMMARY:
-		Normalizes a 3D vector, scaling it to unit length.
-
-	INPUTS:
-		t_vect v: The vector to be normalized, containing x, y, and z components.
-
-	OUTPUTS:
-		t_vect: The normalized vector with unit length.
-*/
-t_vect	normalise_vector(t_vect v)
+bool	camera_pointed_straight_up_or_down(t_vect	orientation)
 {
-	double	len;
-	t_vect	normalised_vector;
-
-	len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-	if (len == 0) // Add check for zero length
-	{
-		normalised_vector.x = 0;
-		normalised_vector.y = 0;
-		normalised_vector.z = 0;
-	}
+	if (orientation.y == 1 || orientation.y == -1)
+		return (true);
 	else
-	{
-		normalised_vector.x = v.x / len;
-		normalised_vector.y = v.y / len;
-		normalised_vector.z = v.z / len;
-	}
-	return (normalised_vector);
+		return (false);
 }
 
 /*
@@ -59,41 +35,35 @@ t_vect	normalise_vector(t_vect v)
 	OUTPUTS:
 		t_vect: The final ray direction after applying the camera's orientation.
 */
-/* t_vect	apply_camera_orientation(t_vect ray_dir, t_cam *camera)
+t_vect	apply_camera_orientation(t_vect ray, t_cam *camera)
 {
+	t_vect	x_axis;
+	t_vect	y_axis;
+	t_vect	z_axis;
+	t_vect	orientation;
 	t_vect	final_ray_dir;
 
-	final_ray_dir.x = ray_dir.x * camera->orientation->x;
-	final_ray_dir.y = ray_dir.y * camera->orientation->y;
-	final_ray_dir.z = ray_dir.z * camera->orientation->z;
-	final_ray_dir = normalise_vector(final_ray_dir);
-	return (final_ray_dir);
-} */
-
-t_vect apply_camera_orientation(t_vect ray_dir, t_cam *camera, int x, int y)
-{
-    t_vect final_ray_dir;
-    t_vect orientation;
-
     // Ensure camera orientation is normalized
-    orientation = normalise_vector(*camera->orientation);
-
-    // Apply the camera orientation as a rotation (assuming the orientation is the forward direction)
-    // This is a basic approach; for more complex orientations, use a full rotation matrix
-    final_ray_dir.x = ray_dir.x * orientation.x;
-    final_ray_dir.y = ray_dir.y * orientation.y;
-    final_ray_dir.z = ray_dir.z * orientation.z;
-
-	if ((y % 500 == 0) && (x % 500 == 0))
+	orientation = vect_normalise(*camera->orientation);
+	z_axis = orientation;
+	if (camera_pointed_straight_up_or_down(orientation))
 	{
-    	printf("Applying Camera Orientation: [%f, %f, %f] * [%f, %f, %f]\n",
-           ray_dir.x, ray_dir.y, ray_dir.z,
-           orientation.x, orientation.y, orientation.z);
+		if (orientation.y == 1)
+			x_axis = vector(1, 0, 0);
+		else
+			x_axis = vector(-1, 0, 0);
 	}
-    // Normalize the final direction
-    final_ray_dir = normalise_vector(final_ray_dir);
+	else
+		x_axis = vect_cross(vector(0, 1, 0), z_axis);
+	y_axis = vect_cross(z_axis, x_axis);
+	final_ray_dir.x = ray.x * x_axis.x + ray.y * y_axis.x + ray.z * z_axis.x;
+	final_ray_dir.y = ray.x * x_axis.y + ray.y * y_axis.y + ray.z * z_axis.y;
+	final_ray_dir.z = ray.x * x_axis.z + ray.y * y_axis.z + ray.z * z_axis.z;
 
-    return final_ray_dir;
+    // Normalize the final direction
+	final_ray_dir = vect_normalise(final_ray_dir);
+
+	return (final_ray_dir);
 }
 
 /*
@@ -113,26 +83,17 @@ t_vect	get_ray_direction(t_mrt *mrt, int x, int y, t_cam *camera)
 {
 	double	aspect_ratio;
 	double	fov_adjustment;
-	double	px;
-	double	py;
-	t_vect	ray_dir;
+	t_vect	ray;
 
 	aspect_ratio = (double)mrt->width / mrt->height;
-	fov_adjustment = tan((camera->fov * 0.5) * M_PI / 180);
-	px = (2 * ((x + 0.5) / mrt->width) - 1) * aspect_ratio * fov_adjustment;
-	py = (1 - 2 * ((y + 0.5) / mrt->height)) * fov_adjustment;
-	ray_dir.x = px;
-	ray_dir.y = py;
-	ray_dir.z = -1;
-	//if ((y % 500 == 0) && (x % 500 == 0))
-	//	printf("Initial Ray Direction: [%f, %f, %f]\n", ray_dir.x, ray_dir.y, ray_dir.z);
-	ray_dir = normalise_vector(ray_dir);
-	//if ((y % 500 == 0) && (x % 500 == 0))
-	//	printf("Normalized Ray Direction: [%f, %f, %f]\n", ray_dir.x, ray_dir.y, ray_dir.z);
-	ray_dir = apply_camera_orientation(ray_dir, camera, x, y);
-	//if ((y % 500 == 0) && (x % 500 == 0))
-	//	printf("Final Ray Direction after Orientation: [%f, %f, %f]\n", ray_dir.x, ray_dir.y, ray_dir.z);
-	return (ray_dir);
+	fov_adjustment = tan((camera->fov * M_PI / 180) / 2);
+	ray.x = (2 * ((double)x / mrt->width) - 1) * aspect_ratio * fov_adjustment;
+	ray.y = (1 - 2 * ((double)y / mrt->height)) * fov_adjustment;
+	ray.z = 1;
+	ray.x *= -1; // inverts the x axis, In many 3D rendering setups, the screen space is mapped so that the left side of the image has negative x-values and the right side has positive x-values.
+	ray = apply_camera_orientation(ray, camera);
+
+	return (ray);
 }
 
 /*
