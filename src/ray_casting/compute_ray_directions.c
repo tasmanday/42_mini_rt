@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/08/25 00:41:23 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/25 17:22:03 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,8 +154,10 @@ void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
 		x = 0;
 		while (x < mrt->width)
 		{
+//			ray_dir = get_ray_direction(mrt, x, y, camera);
+			
 			// Always calculate the ray direction for the center pixel
-			if ((x == mrt->width / 2 && y == mrt->height / 2))
+			/* if ((x == mrt->width / 2 && y == mrt->height / 2))
 			{
 				ray_dir = get_ray_direction(mrt, x, y, camera);
 				printf("Center Ray Direction: [%f, %f, %f]\n", ray_dir.x, ray_dir.y, ray_dir.z);
@@ -163,21 +165,26 @@ void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
 					printf("Center Ray intersects sphere\n");
 				else
 					printf("Center Ray doesn't intersect sphere\n");
-			}
+			} */
 
 			// Continue processing every 100th pixel for intersection checks
-			if (y % 100 == 0 && x % 100 == 0)
+			if (y % 25 == 0 && x % 25 == 0)
 			{
 				ray_dir = get_ray_direction(mrt, x, y, camera);
-				if (ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
-					printf("O"); // Intersection with sphere
-				else
+//				printf("Ray Direction: [%f, %f, %f] ", ray_dir.x, ray_dir.y, ray_dir.z);
+				if (!ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
+//					printf("O"); // Intersection with sphere
+//				else
 					printf("_"); // No intersection
 				printf(" ");
 			}
+
+//			if ((y % 500 == 0) && (x % 500 == 0))
+//				printf("Pixel [%d, %d] -> Ray direction: [%f, %f, %f]\n", x, y, ray_dir.x, ray_dir.y, ray_dir.z);
+			
 			x++;
 		}
-		if (y % 100 == 0) // Only print newline every 100th row
+		if (y % 25 == 0) // Only print newline every 100th row
 			printf("\n"); // delete later
 		y++;
 	}

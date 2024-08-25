@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:36:35 by tday              #+#    #+#             */
-/*   Updated: 2024/08/25 00:43:11 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/25 17:30:25 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void fill_mrt_defaults(t_mrt *mrt)
     mrt->objs->coordinates = safe_calloc(1, sizeof(t_vect), "objs coordinates malloc error");
     mrt->objs->coordinates->x = 0.0f;
     mrt->objs->coordinates->y = 0.0f;
-    mrt->objs->coordinates->z = -10.0f;
+    mrt->objs->coordinates->z = 15.0f;
     mrt->objs->axis_vector = NULL; // Not needed for sphere
-    mrt->objs->diameter = 10.0f;
+    mrt->objs->diameter = 20.0f;
     mrt->objs->height = 0.0f; // Not needed for sphere
     mrt->objs->rgb = safe_calloc(1, sizeof(t_rgb), "objs rgb malloc error");
     mrt->objs->rgb->r = 77;
@@ -73,7 +73,6 @@ void fill_mrt_defaults(t_mrt *mrt)
 	mrt->width = 1920;
 	mrt->height = 1080;
 }
-
 /*
 void	init_window(t_data *data) // for mlx
 {
