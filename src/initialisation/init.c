@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:36:35 by tday              #+#    #+#             */
-/*   Updated: 2024/08/04 23:46:41 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/25 00:43:11 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,19 @@ void fill_mrt_defaults(t_mrt *mrt)
 
     // Fill camera
     mrt->cam->id = strdup("C");
-    mrt->cam->coordinates = safe_calloc(1, sizeof(t_coord), "cam coordinates malloc error");
-    mrt->cam->coordinates->x = -50.0f;
+    mrt->cam->coordinates = safe_calloc(1, sizeof(t_vect), "cam coordinates malloc error");
+    mrt->cam->coordinates->x = 0.0f;
     mrt->cam->coordinates->y = 0.0f;
-    mrt->cam->coordinates->z = 20.0f;
-    mrt->cam->orientation = safe_calloc(1, sizeof(t_coord), "cam norm_vector malloc error");
+    mrt->cam->coordinates->z = 0.0f;
+    mrt->cam->orientation = safe_calloc(1, sizeof(t_vect), "cam norm_vector malloc error");
     mrt->cam->orientation->x = 0.0f;
     mrt->cam->orientation->y = 0.0f;
-    mrt->cam->orientation->z = 1.0f;
-    mrt->cam->fov = 70;
+    mrt->cam->orientation->z = -1.0f;
+    mrt->cam->fov = 90;
 
     // Fill light
     mrt->light->id = strdup("L");
-    mrt->light->coordinates = safe_calloc(1, sizeof(t_coord), "light coordinates malloc error");
+    mrt->light->coordinates = safe_calloc(1, sizeof(t_vect), "light coordinates malloc error");
     mrt->light->coordinates->x = -40.0f;
     mrt->light->coordinates->y = 0.0f;
     mrt->light->coordinates->z = 30.0f;
@@ -58,17 +58,17 @@ void fill_mrt_defaults(t_mrt *mrt)
     // Fill object (sphere)
     mrt->objs = safe_calloc(1, sizeof(t_objs), "objs malloc error");
     mrt->objs->id = strdup("sp");
-    mrt->objs->coordinates = safe_calloc(1, sizeof(t_coord), "objs coordinates malloc error");
+    mrt->objs->coordinates = safe_calloc(1, sizeof(t_vect), "objs coordinates malloc error");
     mrt->objs->coordinates->x = 0.0f;
     mrt->objs->coordinates->y = 0.0f;
-    mrt->objs->coordinates->z = 20.0f;
+    mrt->objs->coordinates->z = -10.0f;
     mrt->objs->axis_vector = NULL; // Not needed for sphere
-    mrt->objs->diameter = 20.0f;
+    mrt->objs->diameter = 10.0f;
     mrt->objs->height = 0.0f; // Not needed for sphere
     mrt->objs->rgb = safe_calloc(1, sizeof(t_rgb), "objs rgb malloc error");
-    mrt->objs->rgb->r = 255;
-    mrt->objs->rgb->g = 0;
-    mrt->objs->rgb->b = 0;
+    mrt->objs->rgb->r = 77;
+    mrt->objs->rgb->g = 220;
+    mrt->objs->rgb->b = 255;
 
 	mrt->width = 1920;
 	mrt->height = 1080;

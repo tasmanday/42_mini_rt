@@ -6,15 +6,11 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/08/20 00:02:07 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/25 00:41:23 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minirt.h"
-
-//#ifndef M_PI
-//# define M_PI 3.14159265358979323846
-//#endif
 
 bool	camera_pointed_straight_up_or_down(t_vect	orientation)
 {
@@ -108,25 +104,82 @@ t_vect	get_ray_direction(t_mrt *mrt, int x, int y, t_cam *camera)
     OUTPUTS:
         None.
 */
+/* void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
+{
+	int		y;
+	int		x;
+	t_vect	ray_dir;
+	double	distance = 0;
+
+	y = 0;
+	while (y < mrt->height)
+	{
+		if (y % 100 == 0) // delete later
+		{
+			x = 0;
+			while (x < mrt->width)
+			{
+				if (x % 100 == 0)
+				{
+					ray_dir = get_ray_direction(mrt, x, y, camera);
+					// Send ray from camera coordinates in direction of ray_dir
+					if (ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
+						printf("O"); // Intersection with sphere
+					else
+						printf("_"); // No intersection
+					printf(" ");
+					// calculate intersection
+		//			if ((y % 500 == 0) && (x % 500 == 0))
+		//				printf("Pixel [%d, %d] -> Ray direction: [%f, %f, %f]\n", x, y, ray_dir.x, ray_dir.y, ray_dir.z);
+				}
+				x++;
+			}
+			printf("\n"); // delete later
+		}
+		y++;
+	}
+} */
+
 void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
 {
 	int		y;
 	int		x;
 	t_vect	ray_dir;
+	double	distance = 0;
 
 	y = 0;
 	while (y < mrt->height)
 	{
+		// Calculate the ray direction for every pixel but process every 100th row
 		x = 0;
 		while (x < mrt->width)
 		{
-			ray_dir = get_ray_direction(mrt, x, y, camera);
-			// Send ray from camera coordinates in direction of ray_dir
-			// calculate intersection
-			if ((y % 500 == 0) && (x % 500 == 0))
-				printf("Pixel [%d, %d] -> Ray direction: [%f, %f, %f]\n", x, y, ray_dir.x, ray_dir.y, ray_dir.z);
+			// Always calculate the ray direction for the center pixel
+			if ((x == mrt->width / 2 && y == mrt->height / 2))
+			{
+				ray_dir = get_ray_direction(mrt, x, y, camera);
+				printf("Center Ray Direction: [%f, %f, %f]\n", ray_dir.x, ray_dir.y, ray_dir.z);
+				if (ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
+					printf("Center Ray intersects sphere\n");
+				else
+					printf("Center Ray doesn't intersect sphere\n");
+			}
+
+			// Continue processing every 100th pixel for intersection checks
+			if (y % 100 == 0 && x % 100 == 0)
+			{
+				ray_dir = get_ray_direction(mrt, x, y, camera);
+				if (ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
+					printf("O"); // Intersection with sphere
+				else
+					printf("_"); // No intersection
+				printf(" ");
+			}
 			x++;
 		}
+		if (y % 100 == 0) // Only print newline every 100th row
+			printf("\n"); // delete later
 		y++;
 	}
 }
+

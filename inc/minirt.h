@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:50:33 by tday              #+#    #+#             */
-/*   Updated: 2024/08/20 00:02:08 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/25 00:06:12 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int		key_hook(int keycode, t_data *data);
 /* ray_casting */
 
 void	compute_ray_directions(t_mrt *mrt, t_cam *camera);
+bool	ray_intersects_sphere(t_cam *camera, t_vect ray_dir, t_objs *sphere, \
+		double *distance);
 
 /* vectors */
 

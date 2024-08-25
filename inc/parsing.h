@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 14:18:01 by tday              #+#    #+#             */
-/*   Updated: 2024/08/04 23:46:35 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/25 00:03:55 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct s_amb
 typedef struct s_light
 {
 	char		*id;
-	t_coord		*coordinates;
+	t_vect		*coordinates;
 	float		ratio;
 	t_rgb		*rgb;
 }				t_light;
@@ -33,7 +33,7 @@ typedef struct s_light
 typedef struct s_cam
 {
 	char		*id;
-	t_coord		*coordinates;
+	t_vect		*coordinates;
 	t_vect		*orientation;
 	int			fov;
 }				t_cam;
@@ -41,8 +41,8 @@ typedef struct s_cam
 typedef struct s_objs
 {
 	char		*id;
-	t_coord		*coordinates;
-	t_coord		*axis_vector;
+	t_vect		*coordinates;
+	t_vect		*axis_vector;
 	float		diameter;
 	float		height;
 	t_rgb		*rgb;
