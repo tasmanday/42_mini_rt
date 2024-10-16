@@ -12,6 +12,17 @@
 
 #include "../../inc/minirt.h"
 
+/*
+	Summary
+	Checks if the camera orientation vector is pointing straight up or down.
+
+	Inputs
+	[t_vect] orientation: A vector representing the camera's orientation.
+
+	Outputs
+	[bool] Returns true if the camera is oriented straight up (y == 1) or 
+	straight down (y == -1), otherwise returns false.
+*/
 bool	camera_pointed_straight_up_or_down(t_vect	orientation)
 {
 	if (orientation.y == 1 || orientation.y == -1)
