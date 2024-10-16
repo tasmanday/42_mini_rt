@@ -12,6 +12,19 @@
 
 #include "../../inc/minirt.h"
 
+/*
+	Summary
+	Creates and returns a vector with the specified x, y, and z components.
+
+	Inputs
+	[double] x: The x component of the vector.
+	[double] y: The y component of the vector.
+	[double] z: The z component of the vector.
+
+	Outputs
+	[t_vect] Returns a t_vect structure initialized with the given x, y, and z
+	components.
+*/
 t_vect	vector(double x, double y, double z)
 {
 	t_vect	vector;
@@ -53,6 +66,17 @@ t_vect	vect_normalise(t_vect v)
 	return (normalised_vector);
 }
 
+/*
+	Summary
+	Calculates and returns the sum of two vectors.
+
+	Inputs
+	[t_vect] a: The first vector to be added.
+	[t_vect] b: The second vector to be added.
+
+	Outputs
+	[t_vect] Returns a vector representing the sum of the two input vectors.
+*/
 t_vect	vect_add(t_vect a, t_vect b)
 {
 	t_vect	vector;
@@ -63,6 +87,17 @@ t_vect	vect_add(t_vect a, t_vect b)
 	return (vector);
 }
 
+/*
+	Summary
+	Calculates and returns the difference between two vectors.
+
+	Inputs
+	[t_vect] a: The vector to be subtracted from.
+	[t_vect] b: The vector to subtract.
+
+	Outputs
+	[t_vect] Returns a vector representing the difference between the two input vectors.
+*/
 t_vect	vect_subtract(t_vect a, t_vect b)
 {
 	t_vect	vector;
@@ -73,6 +108,18 @@ t_vect	vect_subtract(t_vect a, t_vect b)
 	return (vector);
 }
 
+/*
+	Summary
+	Calculates and returns the cross product of two vectors, which is a vector perpendicular
+	to both input vectors and represents their area in 3D space.
+
+	Inputs
+	[t_vect] a: The first vector.
+	[t_vect] b: The second vector.
+
+	Outputs
+	[t_vect] Returns a vector representing the cross product of the two input vectors.
+*/
 t_vect	vect_cross(t_vect a, t_vect b)
 {
 	t_vect	vector;
@@ -83,6 +130,18 @@ t_vect	vect_cross(t_vect a, t_vect b)
 	return (vector);
 }
 
+/*
+	Summary
+	Calculates and returns the dot product of two vectors, which is a scalar
+	representing the magnitude of their projection onto each other.
+
+	Inputs
+	[t_vect] a: The first vector.
+	[t_vect] b: The second vector.
+
+	Outputs
+	[double] Returns a scalar value representing the dot product of the two input vectors.
+*/
 double	vect_dot(t_vect a, t_vect b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
