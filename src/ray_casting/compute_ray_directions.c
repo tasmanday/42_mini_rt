@@ -91,6 +91,7 @@ t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
 	double	fov_adjustment;
 	t_Vector3	ray;
 
+//	printf("in grd\n");
 	aspect_ratio = (double)scene->mlx.width / scene->mlx.height;
 	fov_adjustment = tan((scene->camera.fov * M_PI / 180) / 2);
 	ray.x = (2 * ((double)x / scene->mlx.width) - 1) * aspect_ratio * fov_adjustment;
@@ -157,12 +158,18 @@ void	compute_ray_directions(t_Scene *scene)
 	t_Vector3	ray_dir;
 	double	distance = 0;
 
+	int		height = 1080;
+	int		width = 1920;
+
+	//printf("in crd\n");
 	y = 0;
-	while (y < scene->mlx.height)
+	//while (y < scene->mlx.height)
+	while (y < height)
 	{
 		// Calculate the ray direction for every pixel but process every 100th row
 		x = 0;
-		while (x < scene->mlx.width)
+	//	while (x < scene->mlx.width)
+		while (x < width)
 		{
 //			ray_dir = get_ray_direction(mrt, x, y, camera);
 			
@@ -182,11 +189,7 @@ void	compute_ray_directions(t_Scene *scene)
 			{
 				ray_dir = get_ray_direction(scene, x, y);
 //				printf("Ray Direction: [%f, %f, %f] ", ray_dir.x, ray_dir.y, ray_dir.z);
-				if (!ray_intersects_sphere(scene, ray_dir, &distance))
-//					printf("O"); // Intersection with sphere
-//				else
-					printf("_"); // No intersection
-				printf(" ");
+				ray_intersects_sphere(scene, ray_dir, &distance);
 			}
 
 //			if ((y % 500 == 0) && (x % 500 == 0))

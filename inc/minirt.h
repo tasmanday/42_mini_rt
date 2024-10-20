@@ -171,7 +171,7 @@ int			file_exists(char *filename);
 int			file_status(const char *filename);
 int			filename_error(char	*filename);
 
-// get_next_line_utils.c //
+/*/ get_next_line_utils.c //
 size_t		gnl_strlen(const char *str);
 char		*gnl_strchr(char *str, int target_char);
 char		*gnl_strjoin(char *first_str, char *second_str);
@@ -181,7 +181,7 @@ char		*gnl_initialise_str(void);
 char		*read_and_append_lines(int fd, char	*stash);
 char		*extract_line_from_stash(char	*stash);
 char		*remaining_stash_after_extraction(char *stash);
-char		*get_next_line(int fd, char **line);
+char		*get_next_line(int fd, char **line); */
 
 // mlx.c //
 void		initialise_data(t_Scene	*mlx);

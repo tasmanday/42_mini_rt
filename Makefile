@@ -25,7 +25,6 @@ MLX_FLAGS		:=		-L$(MLX_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 SRCS			:=		$(addprefix src/main/, main.c)							\
 						$(addprefix src/mlx/, mlx.c)							\
 						$(addprefix src/parsing/, error.c file_check.c 			\
-									get_next_line.c get_next_line_utils.c		\
 									parse_elements.c parse_main.c 				\
 									parse_objects.c parse_utils.c utils.c		\
 									print_elements.c print_objects.c)			\
