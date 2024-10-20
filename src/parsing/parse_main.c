@@ -37,8 +37,8 @@ int	parse_rt_file(const char *filename, t_Scene *scene)
 	result = 1;
 	while (1)
 	{
-		line = NULL;
-		if (get_next_line(fd, &line) == NULL)
+		line = get_next_line(fd);
+		if (line == NULL)
 		{
 			printf(Y "\nLine read: get_next_line returned NULL - EOF or error!\n\n" RST);
 			result = 0;

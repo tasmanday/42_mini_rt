@@ -18,8 +18,8 @@ OBJ_DIR			:=		obj
 INC_DIR 		:=		inc
 LIBFT_DIR		:=		libft
 LIBFT			:=		$(LIBFT_DIR)/libft.a
-# MLX_DIR 		:= 		./minilibx_macos/
-MLX_DIR 		:= 		./minilibx-linux/
+MLX_DIR 		:= 		./minilibx_macos/
+#MLX_DIR 		:= 		./minilibx-linux/
 CC				:=		gcc
 CFLAGS			:=		-Wall -Wextra -Werror -O3
 
@@ -27,13 +27,14 @@ CFLAGS			:=		-Wall -Wextra -Werror -O3
 SRCS			:=		$(addprefix src/main/, main.c)							\
 						$(addprefix src/mlx/, mlx.c)							\
 						$(addprefix src/parsing/, error.c file_check.c 			\
-									get_next_line.c get_next_line_utils.c		\
 									parse_elements.c parse_main.c 				\
 									parse_objects.c parse_utils.c utils.c		\
-									print_elements.c print_objects.c)			\
+									print_elements.c print_objects.c object_utils.c)			\
 						$(addprefix src/ray_casting/, compute_ray_directions.c	\
 									sphere_intersection.c)						\
-						$(addprefix src/vectors/, vector_operations.c)				
+						$(addprefix src/vectors/, vector_operations.c)	
+
+# get_next_line.c get_next_line_utils.c			
 
 OBJS			:=		$(SRCS:src/%.c=$(OBJ_DIR)/%.o)
 RM				:=		rm -f
@@ -69,8 +70,8 @@ $(LIBFT):
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-#	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
-	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -I$(MLX_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+#	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -I$(MLX_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -o $(NAME)
 	@echo "$(GREEN)--> SUCCESS! Everything compiled and linked into executable: $(BLUE)$(NAME)$(DEFAULT_COLOUR)"
 	@echo "\n"
 build_minilibx:
