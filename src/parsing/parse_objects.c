@@ -6,7 +6,7 @@
 /*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/10/19 10:12:02 by sentry           ###   ########.fr       */
+/*   Updated: 2024/10/20 22:19:13 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	parse_sphere(char *line, t_Scene *scene)
 	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_sphere()\n\n");
 	printf("---------------------------------------------------------------\n");
-	return (1);
+	return(SUCCESS); // changed from return (1)
 }
 
 int	parse_plane(char *line, t_Scene *scene)
@@ -104,7 +104,7 @@ int	parse_plane(char *line, t_Scene *scene)
 	printf(G "   SUCCESS - Plane parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_plane()\n\n");
 	printf("---------------------------------------------------------------\n");
-	return (1);
+	return(SUCCESS); // changed from return (1)
 }
 
 int	parse_cylinder(char *line, t_Scene *scene)
@@ -146,5 +146,5 @@ int	parse_cylinder(char *line, t_Scene *scene)
 	printf(G "   SUCCESS - Cylinder parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_cylinder()\n\n");
 	printf("---------------------------------------------------------------\n");
-	return (1);
+	return(SUCCESS); // changed from return (1)
 }

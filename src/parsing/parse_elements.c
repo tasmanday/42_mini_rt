@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/10/20 13:48:07 by atang            ###   ########.fr       */
+/*   Updated: 2024/10/20 22:16:57 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,5 @@ int	parse_light(char *line, t_Light *light)
 	printf(G "   SUCCESS - Light parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_light()\n\n");
 	printf("---------------------------------------------------------------\n");
-	return (1);
+	return(SUCCESS); // changed from return (1)
 }
