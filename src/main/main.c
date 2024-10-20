@@ -27,6 +27,10 @@ int	main(int argc, char **argv)
 		if (file_status(argv[1]) != SUCCESS)
 			return (1);
 		parse_rt_file(argv[1], &scene);
+
+		scene.mlx.height = 1080;
+		scene.mlx.width = 1920;
+
 		compute_ray_directions(&scene);
 
 	/*	initialise_data(&scene);

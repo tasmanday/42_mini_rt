@@ -158,18 +158,18 @@ void	compute_ray_directions(t_Scene *scene)
 	t_Vector3	ray_dir;
 	float	distance = 0;
 
-	int		height = 1080;
-	int		width = 1920;
+	//int		height = 1080;
+	//int		width = 1920;
 
 	//printf("in crd\n");
 	y = 0;
-	//while (y < scene->mlx.height)
-	while (y < height)
+	while (y < scene->mlx.height)
+	//while (y < height)
 	{
 		// Calculate the ray direction for every pixel but process every 100th row
 		x = 0;
-	//	while (x < scene->mlx.width)
-		while (x < width)
+		while (x < scene->mlx.width)
+	//	while (x < width)
 		{
 //			ray_dir = get_ray_direction(mrt, x, y, camera);
 			
