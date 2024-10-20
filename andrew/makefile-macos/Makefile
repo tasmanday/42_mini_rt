@@ -11,29 +11,32 @@
 # **************************************************************************** #
 
 # Variables
+
 NAME 			:=		miniRT
-SRC_DIRS 		:=		src/main src/parsing src/ray_casting src/vectors 		\
-						src/mlx
+SRC_DIRS 		:=		src/main src/parsing
 OBJ_DIR			:=		obj
 INC_DIR 		:=		inc
 LIBFT_DIR		:=		libft
 LIBFT			:=		$(LIBFT_DIR)/libft.a
-# MLX_DIR 		:= 		./minilibx_macos/
-MLX_DIR 		:= 		./minilibx-linux/
+MLX_DIR 		:= 		./minilibx_macos/
 CC				:=		gcc
 CFLAGS			:=		-Wall -Wextra -Werror -O3
 
 # Define source and object files
-SRCS			:=		$(addprefix src/main/, main.c)							\
-						$(addprefix src/mlx/, mlx.c)							\
-						$(addprefix src/parsing/, error.c file_check.c 			\
-									get_next_line.c get_next_line_utils.c		\
-									parse_elements.c parse_main.c 				\
-									parse_objects.c parse_utils.c utils.c		\
-									print_elements.c print_objects.c)			\
-						$(addprefix src/ray_casting/, compute_ray_directions.c	\
-									sphere_intersection.c)						\
-						$(addprefix src/vectors/, vector_operations.c)				
+SRCS			:=		src/main/main.c											\
+						src/mlx/mlx.c											\
+						src/parsing/error.c										\
+						src/parsing/file_check.c								\
+						src/parsing/get_next_line_utils.c						\
+						src/parsing/get_next_line.c								\
+						src/parsing/object_utils.c								\
+						src/parsing/parse_elements.c							\
+						src/parsing/parse_main.c								\
+						src/parsing/parse_objects.c								\
+						src/parsing/parse_utils.c								\
+						src/parsing/utils.c										\
+						src/parsing/print_elements.c							\
+						src/parsing/print_objects.c						
 
 OBJS			:=		$(SRCS:src/%.c=$(OBJ_DIR)/%.o)
 RM				:=		rm -f
@@ -69,8 +72,7 @@ $(LIBFT):
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-#	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
-	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -I$(MLX_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 	@echo "$(GREEN)--> SUCCESS! Everything compiled and linked into executable: $(BLUE)$(NAME)$(DEFAULT_COLOUR)"
 	@echo "\n"
 build_minilibx:

@@ -27,11 +27,7 @@ int	main(int argc, char **argv)
 		if (file_status(argv[1]) != SUCCESS)
 			return (1);
 		parse_rt_file(argv[1], &scene);
-	//	printf("before\n");
-	//	initialise_data(&scene);
-
 		compute_ray_directions(&scene);
-	//	printf("after\n");
 
 	/*	initialise_data(&scene);
 		printf(M "\n---> WINDOW OPENED <---\n\n" RST);
