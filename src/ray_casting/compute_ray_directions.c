@@ -17,13 +17,13 @@
 	Checks if the camera orientation vector is pointing straight up or down.
 
 	Inputs
-	[t_vect] orientation: A vector representing the camera's orientation.
+	[t_Vector3] orientation: A vector representing the camera's orientation.
 
 	Outputs
 	[bool] Returns true if the camera is oriented straight up (y == 1) or 
 	straight down (y == -1), otherwise returns false.
 */
-bool	camera_pointed_straight_up_or_down(t_vect	orientation)
+bool	camera_pointed_straight_up_or_down(t_Vector3 orientation)
 {
 	if (orientation.y == 1 || orientation.y == -1)
 		return (true);
@@ -36,19 +36,19 @@ bool	camera_pointed_straight_up_or_down(t_vect	orientation)
 		Applies the camera's orientation to a given ray direction.
 
 	INPUTS:
-		t_vect ray_dir: The initial direction of the ray.
+		t_Vector3 ray_dir: The initial direction of the ray.
 		t_cam *camera: The camera containing orientation information.
 
 	OUTPUTS:
-		t_vect: The final ray direction after applying the camera's orientation.
+		t_Vector3: The final ray direction after applying the camera's orientation.
 */
-t_vect	apply_camera_orientation(t_vect ray, t_cam *camera)
+t_Vector3	apply_camera_orientation(t_Vector3 ray, t_cam *camera)
 {
-	t_vect	x_axis;
-	t_vect	y_axis;
-	t_vect	z_axis;
-	t_vect	orientation;
-	t_vect	final_ray_dir;
+	t_Vector3	x_axis;
+	t_Vector3	y_axis;
+	t_Vector3	z_axis;
+	t_Vector3	orientation;
+	t_Vector3	final_ray_dir;
 
     // Ensure camera orientation is normalized
 	orientation = vect_normalise(*camera->orientation);
@@ -84,13 +84,13 @@ t_vect	apply_camera_orientation(t_vect ray, t_cam *camera)
 		t_cam *camera: The camera structure containing FOV and orientation.
 
 	OUTPUTS:
-		t_vect: The direction of the ray for the given pixel.
+		t_Vector3: The direction of the ray for the given pixel.
 */
-t_vect	get_ray_direction(t_mrt *mrt, int x, int y, t_cam *camera)
+t_Vector3	get_ray_direction(t_mrt *mrt, int x, int y, t_cam *camera)
 {
 	double	aspect_ratio;
 	double	fov_adjustment;
-	t_vect	ray;
+	t_Vector3	ray;
 
 	aspect_ratio = (double)mrt->width / mrt->height;
 	fov_adjustment = tan((camera->fov * M_PI / 180) / 2);
@@ -119,7 +119,7 @@ t_vect	get_ray_direction(t_mrt *mrt, int x, int y, t_cam *camera)
 {
 	int		y;
 	int		x;
-	t_vect	ray_dir;
+	t_Vector3	ray_dir;
 	double	distance = 0;
 
 	y = 0;
@@ -155,7 +155,7 @@ void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
 {
 	int		y;
 	int		x;
-	t_vect	ray_dir;
+	t_Vector3	ray_dir;
 	double	distance = 0;
 
 	y = 0;
@@ -178,7 +178,7 @@ void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
 					printf("Center Ray doesn't intersect sphere\n");
 			} */
 
-			// Continue processing every 100th pixel for intersection checks
+			// Continue processing every 25th pixel for intersection checks
 			if (y % 25 == 0 && x % 25 == 0)
 			{
 				ray_dir = get_ray_direction(mrt, x, y, camera);

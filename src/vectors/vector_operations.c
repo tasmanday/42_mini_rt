@@ -22,12 +22,12 @@
 	[double] z: The z component of the vector.
 
 	Outputs
-	[t_vect] Returns a t_vect structure initialized with the given x, y, and z
+	[t_Vector3] Returns a t_Vector3 structure initialized with the given x, y, and z
 	components.
 */
-t_vect	vector(double x, double y, double z)
+t_Vector3	vector(double x, double y, double z)
 {
-	t_vect	vector;
+	t_Vector3	vector;
 
 	vector.x = x;
 	vector.y = y;
@@ -40,15 +40,15 @@ t_vect	vector(double x, double y, double z)
 		Normalizes a 3D vector, scaling it to unit length.
 
 	INPUTS:
-		t_vect v: The vector to be normalized, containing x, y, and z components.
+		t_Vector3 v: The vector to be normalized, containing x, y, and z components.
 
 	OUTPUTS:
-		t_vect: The normalized vector with unit length.
+		t_Vector3: The normalized vector with unit length.
 */
-t_vect	vect_normalise(t_vect v)
+t_Vector3	vect_normalise(t_Vector3 v)
 {
 	double	len;
-	t_vect	normalised_vector;
+	t_Vector3	normalised_vector;
 
 	len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 	if (len == 0) // check for zero length
@@ -71,15 +71,15 @@ t_vect	vect_normalise(t_vect v)
 	Calculates and returns the sum of two vectors.
 
 	Inputs
-	[t_vect] a: The first vector to be added.
-	[t_vect] b: The second vector to be added.
+	[t_Vector3] a: The first vector to be added.
+	[t_Vector3] b: The second vector to be added.
 
 	Outputs
-	[t_vect] Returns a vector representing the sum of the two input vectors.
+	[t_Vector3] Returns a vector representing the sum of the two input vectors.
 */
-t_vect	vect_add(t_vect a, t_vect b)
+t_Vector3	vect_add(t_Vector3 a, t_Vector3 b)
 {
-	t_vect	vector;
+	t_Vector3	vector;
 
 	vector.x = a.x + b.x;
 	vector.y = a.y + b.y;
@@ -92,15 +92,15 @@ t_vect	vect_add(t_vect a, t_vect b)
 	Calculates and returns the difference between two vectors.
 
 	Inputs
-	[t_vect] a: The vector to be subtracted from.
-	[t_vect] b: The vector to subtract.
+	[t_Vector3] a: The vector to be subtracted from.
+	[t_Vector3] b: The vector to subtract.
 
 	Outputs
-	[t_vect] Returns a vector representing the difference between the two input vectors.
+	[t_Vector3] Returns a vector representing the difference between the two input vectors.
 */
-t_vect	vect_subtract(t_vect a, t_vect b)
+t_Vector3	vect_subtract(t_Vector3 a, t_Vector3 b)
 {
-	t_vect	vector;
+	t_Vector3	vector;
 
 	vector.x = a.x - b.x;
 	vector.y = a.y - b.y;
@@ -114,15 +114,15 @@ t_vect	vect_subtract(t_vect a, t_vect b)
 	to both input vectors and represents their area in 3D space.
 
 	Inputs
-	[t_vect] a: The first vector.
-	[t_vect] b: The second vector.
+	[t_Vector3] a: The first vector.
+	[t_Vector3] b: The second vector.
 
 	Outputs
-	[t_vect] Returns a vector representing the cross product of the two input vectors.
+	[t_Vector3] Returns a vector representing the cross product of the two input vectors.
 */
-t_vect	vect_cross(t_vect a, t_vect b)
+t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b)
 {
-	t_vect	vector;
+	t_Vector3	vector;
 
 	vector.x = a.y * b.z - a.z * b.y;
 	vector.y = a.z * b.x - a.x * b.z;
@@ -136,13 +136,13 @@ t_vect	vect_cross(t_vect a, t_vect b)
 	representing the magnitude of their projection onto each other.
 
 	Inputs
-	[t_vect] a: The first vector.
-	[t_vect] b: The second vector.
+	[t_Vector3] a: The first vector.
+	[t_Vector3] b: The second vector.
 
 	Outputs
 	[double] Returns a scalar value representing the dot product of the two input vectors.
 */
-double	vect_dot(t_vect a, t_vect b)
+double	vect_dot(t_Vector3 a, t_Vector3 b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }
