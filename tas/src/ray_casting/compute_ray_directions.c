@@ -183,11 +183,7 @@ void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
 			{
 				ray_dir = get_ray_direction(mrt, x, y, camera);
 //				printf("Ray Direction: [%f, %f, %f] ", ray_dir.x, ray_dir.y, ray_dir.z);
-				if (!ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
-//					printf("O"); // Intersection with sphere
-//				else
-					printf("_"); // No intersection
-				printf(" ");
+				ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance);
 			}
 
 //			if ((y % 500 == 0) && (x % 500 == 0))
