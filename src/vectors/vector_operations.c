@@ -53,9 +53,9 @@ t_Vector3	vect_normalise(t_Vector3 v)
 	len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 	if (len == 0) // check for zero length
 	{
-		normalised_vector.x = 0;
-		normalised_vector.y = 0;
-		normalised_vector.z = 0;
+		normalised_vector.x = 0.0;
+		normalised_vector.y = 0.0;
+		normalised_vector.z = 0.0;
 	}
 	else
 	{

@@ -12,16 +12,16 @@
 
 #include "../../inc/minirt.h"
 
-bool	ray_intersects_sphere(t_cam *camera, t_vect ray_dir, t_objs *sphere, \
-	double *distance)
+bool	ray_intersects_sphere(t_Scene *scene, t_Vector3 ray_dir, 				\
+		double *distance)
 {
-	t_vect	sphere_center;
+	t_Vector3	sphere_center;
 	double	radius;
 
-	sphere_center = *(sphere->coordinates);
-	radius = sphere->diameter / 2.0;
+	sphere_center = (scene->objects->u_data.sphere.centre);
+	radius = scene->objects->u_data.sphere.diameter / 2.0;
 
-	t_vect L = vect_subtract(*camera->coordinates, sphere_center);
+	t_Vector3 L = vect_subtract(scene->camera.position, sphere_center);
 	float	tc = vect_dot(L, ray_dir);
 	if (tc < 0.0)
 		return (false); // Ray is pointing away from the sphere printf("Ray is pointing away from the sphere\n"),

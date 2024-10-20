@@ -42,7 +42,7 @@ bool	camera_pointed_straight_up_or_down(t_Vector3 orientation)
 	OUTPUTS:
 		t_Vector3: The final ray direction after applying the camera's orientation.
 */
-t_Vector3	apply_camera_orientation(t_Vector3 ray, t_cam *camera)
+t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene)
 {
 	t_Vector3	x_axis;
 	t_Vector3	y_axis;
@@ -51,7 +51,7 @@ t_Vector3	apply_camera_orientation(t_Vector3 ray, t_cam *camera)
 	t_Vector3	final_ray_dir;
 
     // Ensure camera orientation is normalized
-	orientation = vect_normalise(*camera->orientation);
+	orientation = vect_normalise(scene->camera.orientation);
 	z_axis = orientation;
 	if (camera_pointed_straight_up_or_down(orientation))
 	{
@@ -78,27 +78,26 @@ t_Vector3	apply_camera_orientation(t_Vector3 ray, t_cam *camera)
 		Calculates the ray direction for a given pixel on the screen.
 
 	INPUTS:
-		t_mrt *mrt: The miniRT structure containing width and height of the
+		t_Scene *scene: The miniRT structure containing width and height of the
 			screen.
 		int x, int y: The pixel coordinates.
-		t_cam *camera: The camera structure containing FOV and orientation.
 
 	OUTPUTS:
-		t_Vector3: The direction of the ray for the given pixel.
+		t_Vector3 ray: The direction of the ray for the given pixel.
 */
-t_Vector3	get_ray_direction(t_mrt *mrt, int x, int y, t_cam *camera)
+t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
 {
 	double	aspect_ratio;
 	double	fov_adjustment;
 	t_Vector3	ray;
 
-	aspect_ratio = (double)mrt->width / mrt->height;
-	fov_adjustment = tan((camera->fov * M_PI / 180) / 2);
-	ray.x = (2 * ((double)x / mrt->width) - 1) * aspect_ratio * fov_adjustment;
-	ray.y = (1 - 2 * ((double)y / mrt->height)) * fov_adjustment;
+	aspect_ratio = (double)scene->mlx.width / scene->mlx.height;
+	fov_adjustment = tan((scene->camera.fov * M_PI / 180) / 2);
+	ray.x = (2 * ((double)x / scene->mlx.width) - 1) * aspect_ratio * fov_adjustment;
+	ray.y = (1 - 2 * ((double)y / scene->mlx.height)) * fov_adjustment;
 	ray.z = 1;
 	ray.x *= -1; // inverts the x axis, In many 3D rendering setups, the screen space is mapped so that the left side of the image has negative x-values and the right side has positive x-values.
-	ray = apply_camera_orientation(ray, camera);
+	ray = apply_camera_orientation(ray, scene);
 
 	return (ray);
 }
@@ -108,14 +107,14 @@ t_Vector3	get_ray_direction(t_mrt *mrt, int x, int y, t_cam *camera)
         Computes the normalised ray directions for each pixel on the screen.
 
     INPUTS:
-        t_mrt *mrt: The miniRT structure containing width and height of the
+        t_Scene *scene: The miniRT structure containing width and height of the
 			screen.
         t_cam *camera: The camera structure containing FOV and orientation.
 
     OUTPUTS:
         None.
 */
-/* void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
+/* void	compute_ray_directions(t_Scene *scene, t_cam *camera)
 {
 	int		y;
 	int		x;
@@ -151,7 +150,7 @@ t_Vector3	get_ray_direction(t_mrt *mrt, int x, int y, t_cam *camera)
 	}
 } */
 
-void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
+void	compute_ray_directions(t_Scene *scene)
 {
 	int		y;
 	int		x;
@@ -159,11 +158,11 @@ void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
 	double	distance = 0;
 
 	y = 0;
-	while (y < mrt->height)
+	while (y < scene->mlx.height)
 	{
 		// Calculate the ray direction for every pixel but process every 100th row
 		x = 0;
-		while (x < mrt->width)
+		while (x < scene->mlx.width)
 		{
 //			ray_dir = get_ray_direction(mrt, x, y, camera);
 			
@@ -181,9 +180,9 @@ void	compute_ray_directions(t_mrt *mrt, t_cam *camera)
 			// Continue processing every 25th pixel for intersection checks
 			if (y % 25 == 0 && x % 25 == 0)
 			{
-				ray_dir = get_ray_direction(mrt, x, y, camera);
+				ray_dir = get_ray_direction(scene, x, y);
 //				printf("Ray Direction: [%f, %f, %f] ", ray_dir.x, ray_dir.y, ray_dir.z);
-				if (!ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
+				if (!ray_intersects_sphere(scene, ray_dir, &distance))
 //					printf("O"); // Intersection with sphere
 //				else
 					printf("_"); // No intersection

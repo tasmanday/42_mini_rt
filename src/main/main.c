@@ -27,11 +27,14 @@ int	main(int argc, char **argv)
 		if (file_status(argv[1]) != SUCCESS)
 			return (1);
 		parse_rt_file(argv[1], &scene);
-		initialise_data(&scene);
+
+		compute_ray_directions(&scene);
+
+	/*	initialise_data(&scene);
 		printf(M "\n---> WINDOW OPENED <---\n\n" RST);
 		mlx_key_hook(scene.mlx.win_ptr, deal_key, &scene);
 		mlx_hook(scene.mlx.win_ptr, 17, 0, close_button_hook, &scene);
-		mlx_loop(scene.mlx.mlx_ptr);
+		mlx_loop(scene.mlx.mlx_ptr); */
 	}
 	else
 		return (err_return("File not found"));
