@@ -6,26 +6,32 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:50:33 by tday              #+#    #+#             */
-/*   Updated: 2024/07/21 15:50:36 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/25 00:06:12 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# include "../mlx_linux/mlx.h"
+// # include "../mlx_linux/mlx.h"
 # include "../libft/inc/libft.h"
 # include "parsing.h"
+# include "types.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <math.h>
+# include <stdio.h>
+# include <string.h>
 
 typedef struct s_mrt
 {
 	t_amb		*amb;
 	t_light		*light;
 	t_cam		*cam;
-	t_list		*objs;
+	t_objs		*objs; // change to t_list later, just testing with single sphere
+	int			width;
+	int			height;
 }				t_mrt;
 
 typedef struct s_img
@@ -48,21 +54,6 @@ typedef struct s_data // rename to mlx specific name
 	int			display_img;
 }				t_data;
 
-typedef struct s_coord
-{
-	float		x;
-	float		y;
-	float		z;
-}				t_coord;
-
-typedef struct s_rgb
-{
-	int			r;
-	int			g;
-	int			b;
-}				t_rgb;
-
-
 enum
 {
 	ON_KEYDOWN = 2,
@@ -78,6 +69,8 @@ enum
 
 void	init_window(t_data *data);
 void	init_img(t_data *data);
+t_mrt	*init_mrt(t_mrt *mrt);
+void 	fill_mrt_defaults(t_mrt *mrt); // remove later
 
 /* window */
 
@@ -94,5 +87,20 @@ int		loop_function(t_data *data);
 /* controls */
 
 int		key_hook(int keycode, t_data *data);
+
+/* ray_casting */
+
+void	compute_ray_directions(t_mrt *mrt, t_cam *camera);
+bool	ray_intersects_sphere(t_cam *camera, t_vect ray_dir, t_objs *sphere, \
+		double *distance);
+
+/* vectors */
+
+t_vect	vector(double x, double y, double z);
+t_vect	vect_normalise(t_vect v);
+t_vect	vect_add(t_vect a, t_vect b);
+t_vect	vect_subtract(t_vect a, t_vect b);
+t_vect	vect_cross(t_vect a, t_vect b);
+double	vect_dot(t_vect a, t_vect b);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: tday <tday@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2024/07/19 22:03:33 by tday             ###   ########.fr        #
+#    Updated: 2024/08/25 00:04:01 by tday             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,19 +14,22 @@
 
 NAME 			:=		mini_rt
 SRC_DIRS 		:=		src/main src/initialisation src/frame src/controls		\
-						src/window
+						src/window src/ray_casting
 INC_DIR 		:=		inc
-MLX_DIR			:=		mlx_linux
+#MLX_DIR			:=		mlx_linux
 LIBFT_DIR		:=		libft
 LIBFT			:=		$(LIBFT_DIR)/libft.a
 CC				:=		gcc
 CFLAGS			:=		-Wall -Wextra -Werror -O3
-MLX_FLAGS		:=		-L$(MLX_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
+#MLX_FLAGS		:=		-L$(MLX_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 SRCS			:=		$(addprefix src/main/, main.c)							\
 						$(addprefix src/initialisation/, init.c)				\
 						$(addprefix src/frame/, frame.c)						\
 						$(addprefix src/controls/, controls.c)					\
-						$(addprefix src/window/, window.c)
+						$(addprefix src/window/, window.c)						\
+						$(addprefix src/vectors/, vector_operations.c)			\
+						$(addprefix src/ray_casting/, compute_ray_directions.c	\
+									sphere_intersection.c)
 OBJS			:=		$(SRCS:.c=.o)
 RM				:=		rm -f
 
@@ -55,7 +58,8 @@ WHITE			:=		\033[1;37m
 all: $(NAME)
 
 $(NAME): 		$(LIBFT) $(OBJS)
-				@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -I$(MLX_DIR) $(MLX_FLAGS)	-o $(NAME)
+				@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -lm -o $(NAME)
+#				@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -I$(MLX_DIR) $(MLX_FLAGS)	-o $(NAME)
 				@echo "$(CYAN)Everything compiled and linked into executable: $(BLUE)$(NAME)$(DEFAULT_COLOUR)"
 				@echo "\n"
 
@@ -63,7 +67,8 @@ $(LIBFT):
 				@$(MAKE) -s -C $(LIBFT_DIR)
 
 $(OBJS):		%.o: %.c
-				@$(CC) $(CFLAGS) -I$(INC_DIR) -I$(MLX_DIR) -c $< -o $@
+				@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+#				@$(CC) $(CFLAGS) -I$(INC_DIR) -I$(MLX_DIR) -c $< -o $@
 				@$(call check_dir_change,$<)
 
 clean:			

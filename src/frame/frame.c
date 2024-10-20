@@ -6,11 +6,13 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:38 by tday              #+#    #+#             */
-/*   Updated: 2024/07/21 15:50:42 by tday             ###   ########.fr       */
+/*   Updated: 2024/08/04 22:57:54 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minirt.h"
+
+/* uncomment for mlx
 
 void	swap_images(t_data *data)
 {
@@ -34,3 +36,4 @@ int	loop_function(t_data *data)
 	update_frame(data);
 	return (0);
 }
+*/
