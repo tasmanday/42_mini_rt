@@ -13,10 +13,10 @@
 #include "../../inc/minirt.h"
 
 bool	ray_intersects_sphere(t_Scene *scene, t_Vector3 ray_dir, 				\
-		double *distance)
+		float *distance)
 {
 	t_Vector3	sphere_center;
-	double	radius;
+	float	radius;
 
 
 	sphere_center = (scene->objects->u_data.sphere.centre);

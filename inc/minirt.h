@@ -233,12 +233,12 @@ size_t		ft_strlen(const char *s);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 
 // organise later //
-t_Vector3	vector(double x, double y, double z);
+t_Vector3	vector(float x, float y, float z);
 t_Vector3	vect_normalise(t_Vector3 v);
 t_Vector3	vect_add(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_subtract(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b);
-double		vect_dot(t_Vector3 a, t_Vector3 b);
+float		vect_dot(t_Vector3 a, t_Vector3 b);
 
 void		compute_ray_directions(t_Scene *scene);
 t_Vector3	get_ray_direction(t_Scene *scene, int x, int y);
@@ -246,6 +246,6 @@ t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene);
 bool		camera_pointed_straight_up_or_down(t_Vector3 orientation);
 
 bool		ray_intersects_sphere(t_Scene *scene, t_Vector3 ray_dir, 			\
-			double *distance);
+			float *distance);
 
 #endif

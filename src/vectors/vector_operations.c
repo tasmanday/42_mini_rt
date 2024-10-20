@@ -17,15 +17,15 @@
 	Creates and returns a vector with the specified x, y, and z components.
 
 	Inputs
-	[double] x: The x component of the vector.
-	[double] y: The y component of the vector.
-	[double] z: The z component of the vector.
+	[float] x: The x component of the vector.
+	[float] y: The y component of the vector.
+	[float] z: The z component of the vector.
 
 	Outputs
 	[t_Vector3] Returns a t_Vector3 structure initialized with the given x, y, and z
 	components.
 */
-t_Vector3	vector(double x, double y, double z)
+t_Vector3	vector(float x, float y, float z)
 {
 	t_Vector3	vector;
 
@@ -47,7 +47,7 @@ t_Vector3	vector(double x, double y, double z)
 */
 t_Vector3	vect_normalise(t_Vector3 v)
 {
-	double	len;
+	float	len;
 	t_Vector3	normalised_vector;
 
 	len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
@@ -140,9 +140,9 @@ t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b)
 	[t_Vector3] b: The second vector.
 
 	Outputs
-	[double] Returns a scalar value representing the dot product of the two input vectors.
+	[float] Returns a scalar value representing the dot product of the two input vectors.
 */
-double	vect_dot(t_Vector3 a, t_Vector3 b)
+float	vect_dot(t_Vector3 a, t_Vector3 b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
 }

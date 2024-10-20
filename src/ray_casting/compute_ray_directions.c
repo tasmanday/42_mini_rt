@@ -87,15 +87,15 @@ t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene)
 */
 t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
 {
-	double	aspect_ratio;
-	double	fov_adjustment;
+	float	aspect_ratio;
+	float	fov_adjustment;
 	t_Vector3	ray;
 
 //	printf("in grd\n");
-	aspect_ratio = (double)scene->mlx.width / scene->mlx.height;
+	aspect_ratio = (float)scene->mlx.width / scene->mlx.height;
 	fov_adjustment = tan((scene->camera.fov * M_PI / 180) / 2);
-	ray.x = (2 * ((double)x / scene->mlx.width) - 1) * aspect_ratio * fov_adjustment;
-	ray.y = (1 - 2 * ((double)y / scene->mlx.height)) * fov_adjustment;
+	ray.x = (2 * ((float)x / scene->mlx.width) - 1) * aspect_ratio * fov_adjustment;
+	ray.y = (1 - 2 * ((float)y / scene->mlx.height)) * fov_adjustment;
 	ray.z = 1;
 	ray.x *= -1; // inverts the x axis, In many 3D rendering setups, the screen space is mapped so that the left side of the image has negative x-values and the right side has positive x-values.
 	ray = apply_camera_orientation(ray, scene);
@@ -120,7 +120,7 @@ t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
 	int		y;
 	int		x;
 	t_Vector3	ray_dir;
-	double	distance = 0;
+	float	distance = 0;
 
 	y = 0;
 	while (y < mrt->height)
@@ -156,7 +156,7 @@ void	compute_ray_directions(t_Scene *scene)
 	int		y;
 	int		x;
 	t_Vector3	ray_dir;
-	double	distance = 0;
+	float	distance = 0;
 
 	int		height = 1080;
 	int		width = 1920;
