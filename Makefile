@@ -3,27 +3,25 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: atang <atang@student.42.fr>                +#+  +:+       +#+         #
+#    By: tday <tday@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2024/10/20 13:31:08 by atang            ###   ########.fr        #
+#    Updated: 2024/08/25 00:04:01 by tday             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Variables
-NAME 			:=		miniRT
-SRC_DIRS 		:=		src/main src/parsing src/ray_casting src/vectors 		\
-						src/mlx
-OBJ_DIR			:=		obj
+
+NAME 			:=		mini_rt
+SRC_DIRS 		:=		src/main src/initialisation src/frame src/controls		\
+						src/window src/ray_casting
 INC_DIR 		:=		inc
+MLX_DIR			:=		minilibx_linux
 LIBFT_DIR		:=		libft
 LIBFT			:=		$(LIBFT_DIR)/libft.a
-# MLX_DIR 		:= 		./minilibx_macos/
-MLX_DIR 		:= 		./minilibx-linux/
 CC				:=		gcc
 CFLAGS			:=		-Wall -Wextra -Werror -O3
-
-# Define source and object files
+MLX_FLAGS		:=		-L$(MLX_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 SRCS			:=		$(addprefix src/main/, main.c)							\
 						$(addprefix src/mlx/, mlx.c)							\
 						$(addprefix src/parsing/, error.c file_check.c 			\
@@ -31,68 +29,63 @@ SRCS			:=		$(addprefix src/main/, main.c)							\
 									parse_elements.c parse_main.c 				\
 									parse_objects.c parse_utils.c utils.c		\
 									print_elements.c print_objects.c)			\
+						$(addprefix src/vectors/, vector_operations.c)			\
 						$(addprefix src/ray_casting/, compute_ray_directions.c	\
-									sphere_intersection.c)						\
-						$(addprefix src/vectors/, vector_operations.c)				
-
-OBJS			:=		$(SRCS:src/%.c=$(OBJ_DIR)/%.o)
+									sphere_intersection.c)
+OBJS			:=		$(SRCS:.c=.o)
 RM				:=		rm -f
-
-.SILENT:
-
-# Create object directories
-$(OBJ_DIR)/%.o: src/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
-	@$(call check_dir_change,$<)
 
 # Function definition
 define check_dir_change
 $(eval CUR_DIR := $(patsubst src/%/,%, $(dir $(1))))
-$(if $(filter-out $(LAST_DIR),$(CUR_DIR)), @echo "$(YELLOW)$(CUR_DIR) functions compiled successfully!$(DEFAULT_COLOUR)")
+$(if $(filter-out $(LAST_DIR),$(CUR_DIR)), @echo 								\
+"$(GREEN)$(CUR_DIR) functions compiled successfully!$(DEFAULT_COLOUR)")
 $(eval LAST_DIR := $(CUR_DIR))
 endef
 
 # Colours
+
 DEFAULT_COLOUR	:=		\033[0m
+GRAY			:=		\033[1;30m
+RED				:=		\033[1;31m
 GREEN			:=		\033[1;32m
-MAGENTA			:=		\033[1;35m
 YELLOW			:=		\033[1;33m
-CYAN			:=		\033[1;36m
 BLUE			:=		\033[1;34m
-RED    			:=		\033[1;31m
+MAGENTA			:=		\033[1;35m
+CYAN			:=		\033[1;36m
+WHITE			:=		\033[1;37m
 
 # Targets
-all: build_minilibx $(LIBFT) $(NAME)
+
+all: $(NAME)
+
+$(NAME): 		$(LIBFT) $(OBJS)
+#				@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -lm -o $(NAME)
+				@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -I$(MLX_DIR) $(MLX_FLAGS)	-o $(NAME)
+				@echo "$(CYAN)Everything compiled and linked into executable: $(BLUE)$(NAME)$(DEFAULT_COLOUR)"
+				@echo "\n"
 
 $(LIBFT):		
-	@$(MAKE) -s -C $(LIBFT_DIR)
+				@$(MAKE) -s -C $(LIBFT_DIR)
 
-$(NAME): $(OBJS)
-#	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
-	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -I$(MLX_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -o $(NAME)
-	@echo "$(GREEN)--> SUCCESS! Everything compiled and linked into executable: $(BLUE)$(NAME)$(DEFAULT_COLOUR)"
-	@echo "\n"
-build_minilibx:
-	@echo "Building MiniLibX..."
-	@cd $(MLX_DIR) && $(MAKE)
+$(OBJS):		%.o: %.c
+#				@$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@
+				@$(CC) $(CFLAGS) -I$(INC_DIR) -I$(MLX_DIR) -c $< -o $@
+				@$(call check_dir_change,$<)
 
-fclean_minilibx:
-	@echo "\n"
-	@echo "$(RED)Fully cleaning MiniLibX...$(DEFAULT COLOUR)"
-	@$(MAKE) -C $(MLX_DIR) fclean
+clean:			
+				@$(RM) $(OBJS)
+				@$(foreach dir,$(SRC_DIRS),echo "$(MAGENTA)$(notdir 			\
+				$(patsubst %/,%,$(dir))) object files deleted.					\
+				$(DEFAULT_COLOUR)";)
 
-clean:
-	@$(MAKE) -C $(LIBFT_DIR) clean
-	@$(RM) $(OBJS)
-	@echo "$(RED)--> SUCCESS! Object files deleted$(DEFAULT_COLOUR)"
+fclean: 		
+				@$(MAKE) fclean -s -C $(LIBFT_DIR)
+				@$(MAKE) -s clean
+				@$(RM) $(NAME)
+				@echo "$(YELLOW)$(NAME) deleted.$(DEFAULT_COLOUR)"
+				@echo "\n"
 
-fclean: fclean_minilibx clean
-	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@$(RM) $(OBJS) $(NAME)
-	@echo "$(RED)--> SUCCESS! $(RST)$(BLUE)$(NAME)$(RED) deleted$(DEFAULT_COLOUR)"
-	@echo "\n"
+re: 			fclean all
 
-re: fclean all
-
-.PHONY: all clean fclean re build_minilibx fclean_minilibx
+.PHONY: 		all clean fclean re
