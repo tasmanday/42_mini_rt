@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   vector_operations.c                                :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:46:07 by tday              #+#    #+#             */
-/*   Updated: 2024/08/25 00:04:07 by tday             ###   ########.fr       */
+/*   Updated: 2024/10/20 23:11:56 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../inc/minirt.h"
 
@@ -145,4 +145,25 @@ t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b)
 float	vect_dot(t_Vector3 a, t_Vector3 b)
 {
 	return (a.x * b.x + a.y * b.y + a.z * b.z);
+}
+
+/*
+	Summary
+	Multiplies a vector by a scalar, scaling each of its components by the given scalar value.
+
+	Inputs
+	[t_Vector3] v: The vector to be scaled.
+	[float] scalar: The scalar value to multiply the vector by.
+
+	Outputs
+	[t_Vector3] Returns a vector whose components have been scaled by the scalar value.
+*/
+t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar)
+{
+	t_Vector3	result;
+
+	result.x = v.x * scalar;
+	result.y = v.y * scalar;
+	result.z = v.z * scalar;
+	return (result);
 }
