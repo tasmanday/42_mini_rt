@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/10/20 23:11:58 by tday             ###   ########.fr       */
+/*   Updated: 2024/10/24 23:04:02 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -192,7 +192,7 @@ void	compute_ray_directions(t_Scene *scene)
 
 //				ray_intersects_sphere(scene, ray_dir, &distance);
 
-				ray_intersects_cylinder(scene, ray_dir, &distance);
+				ray_intersects_plane(scene, ray_dir, &distance);
 			}
 
 //			if ((y % 500 == 0) && (x % 500 == 0))
@@ -204,5 +204,12 @@ void	compute_ray_directions(t_Scene *scene)
 			printf("\n"); // delete later
 		y++;
 	}
+	printf("\n");
+	y = scene->mlx.height / 2;
+	x = scene->mlx.width / 2;
+	ray_dir = get_ray_direction(scene, x, y);
+	ray_intersects_plane(scene, ray_dir, &distance);
+	printf("ray_dir: %f, %f, %f\n", ray_dir.x, ray_dir.y, ray_dir.z);
+	printf("distance: %f\n", distance);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/10/20 23:11:58 by tday             ###   ########.fr       */
+/*   Updated: 2024/10/24 23:05:09 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -246,9 +246,11 @@ t_Vector3	get_ray_direction(t_Scene *scene, int x, int y);
 t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene);
 bool		camera_pointed_straight_up_or_down(t_Vector3 orientation);
 
-bool		ray_intersects_sphere(t_Scene *scene, t_Vector3 ray_dir, 			\
+bool		ray_intersects_sphere(t_Scene *scene, t_Vector3 ray_dir, \
 			float *distance);
-bool 		ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, 			\
+/* bool		ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
+			float *distance); */
+bool		ray_intersects_plane(t_Scene *scene, t_Vector3 ray_dir, \
 			float *distance);
 
 #endif
