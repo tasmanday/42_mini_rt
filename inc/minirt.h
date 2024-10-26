@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/10/25 20:09:57 by sentry           ###   ########.fr       */
+/*   Updated: 2024/10/26 12:56:28 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,8 +220,8 @@ int			parse_vector3(char *str, t_Vector3 *vec);
 int			parse_colour(char *str, t_Colour *colour);
 char		*ft_strtok(char *str, const char *delimiters);
 //int			get_next_token(char **token, const char *delim);
-//int			get_next_token(char **token);
-int get_next_token(char **token, char **line);
+int			get_next_token(char **token);
+//int get_next_token(char **token, char **line);
 
 // print_elements.c //
 void		print_ambient_light(t_AmbientLight *ambient);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/10/26 10:39:18 by sentry           ###   ########.fr       */
+/*   Updated: 2024/10/26 12:59:25 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ int	parse_vector3(char *str, t_Vector3 *vec)
 	r, g, and b components
 */
 
-/*
 int	parse_colour(char *str, t_Colour *colour)
 {
 	colour->r = parse_int(&str);
@@ -135,7 +134,9 @@ int	parse_colour(char *str, t_Colour *colour)
 		colour->g, colour->b);
 	return (SUCCESS);
 }
-*/int parse_colour(char *str, t_Colour *colour)
+
+/*
+int parse_colour(char *str, t_Colour *colour)
 {
     char *colour_token;
     int i = 0;
@@ -193,6 +194,7 @@ int	parse_colour(char *str, t_Colour *colour)
     printf("   Parsed colour: R = %d, G = %d, B = %d\n", colour->r, colour->g, colour->b);
     return (SUCCESS);
 }
+*/
 
 
 /*
@@ -238,6 +240,7 @@ char *ft_strtok(char *str, const char *delimiters) {
 }
 */
 
+/*
 int get_next_token(char **token, char **line) {
     // Skip any leading whitespace
     while (**line == ' ' || **line == '\t') {
@@ -280,8 +283,9 @@ int get_next_token(char **token, char **line) {
 
     return SUCCESS;  // Token successfully extracted
 }
+*/
 
-/*
+
 int	get_next_token(char **token)
 {
 	*token = strtok(NULL, " \t");
@@ -295,7 +299,6 @@ int	get_next_token(char **token)
 	printf("Token: %s\n", *token);
 	return (SUCCESS);
 }
-*/
 
 /*
 int	get_next_token(char **token, const char *delim)
