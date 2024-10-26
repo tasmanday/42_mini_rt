@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/10/20 13:50:44 by atang            ###   ########.fr       */
+/*   Updated: 2024/10/25 14:58:42 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+/*
+// KEEP
 int	err_exit(t_Error error)
 {
 	printf(RED "\nError! ");
@@ -22,7 +24,7 @@ int	err_exit(t_Error error)
 	else if (error == 2)
 		printf("Invalid vector\n\n");
 	else if (error == 3)
-		printf("Missing input value(s)\n\n");
+		printf("Missing or extra input value(s)\n\n");
 	else if (error == 4)
 		printf("Colour value outside of range (0 to 255)\n\n");
 	else if (error == 5)
@@ -34,6 +36,36 @@ int	err_exit(t_Error error)
 	printf("Exiting...\n\n" RST);
 	exit(1);
 }
+*/
+
+int	err_exit(t_Error error)
+{
+	printf(RED "\nError! ");
+	if (error == 1)
+		printf("Ambient light error\n\n");
+	else if (error == 2)
+		printf("Camera error\n\n");	
+	else if (error == 3)
+		printf("Light error\n\n");
+	printf("Exiting...\n\n" RST);
+	exit(1);
+}
+
+void	warn_err_exit(const char *message, t_Error error)
+{
+	printf(RED"\n   Warning! %s\n"RST, message);
+	printf(RED "\nError! ");
+	if (error == 1)
+		printf("Ambient light error\n\n");
+	else if (error == 2)
+		printf("Camera error\n\n");	
+	else if (error == 3)
+		printf("Light error\n\n");
+	printf("Exiting...\n\n" RST);
+	exit(1);
+}
+
+
 
 int	err_free_exit(struct Object *current, t_Scene *scene)
 {

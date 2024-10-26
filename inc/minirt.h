@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/10/20 13:51:20 by atang            ###   ########.fr       */
+/*   Updated: 2024/10/25 20:09:57 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@
 
 # define BUFFER_SIZE 1024 
 # define MAX_OBJECTS 100
+# define MAX_TOKEN_LENGTH 32
 # define SUCCESS 0
-# define FAILURE 1
+# define FAILURE -1
 
 # define RST    "\033[0m"      /* Reset to default color */
 # define RED	"\033[1;31m"   /* Bold Red */
@@ -44,14 +45,15 @@
 
 typedef enum s_Error
 {
-	INVALID_FLOAT = 0,
-	INVALID_INT = 1,
-	INVALID_VECTOR = 2,
-	MISSING_INPUT_VALUES = 3,
-	COLOUR_VALUES_OUTSIDE_OF_RANGE = 4,
-	AMBIENT_LIGHT_OUTSIDE_OF_RANGE = 5,
-	LIGHT_BRIGHTNESS_RATIO_OUTSIDE_OF_RANGE = 6,
-	CAMERA_FOV_OUTSIDE_OF_RANGE = 7,
+	//INVALID_FLOAT = 0,
+	//INVALID_INT = 1,
+	//INVALID_VECTOR = 2,
+	//MISSING_OR_EXTRA_INPUT_VALUES = 3,
+	//COLOUR_VALUES_OUTSIDE_OF_RANGE = 4,
+	//AMBIENT_LIGHT_OUTSIDE_OF_RANGE = 5,
+	//LIGHT_BRIGHTNESS_RATIO_OUTSIDE_OF_RANGE = 6,
+	//CAMERA_FOV_OUTSIDE_OF_RANGE = 7,
+	AMBIENT_LIGHT_ERROR = 0,
 }	t_Error;
 
 typedef struct s_Vector3
@@ -165,6 +167,7 @@ typedef struct s_Scene
 int			err_exit(t_Error error);
 int			err_free_exit(struct Object *current, t_Scene *scene);
 int			err_return(const char *message);
+void		warn_err_exit(const char *message, t_Error error);
 
 // file_check.c //
 int			file_exists(char *filename);
@@ -215,7 +218,10 @@ float		parse_float(char **str);
 int			parse_int(char	**str);
 int			parse_vector3(char *str, t_Vector3 *vec);
 int			parse_colour(char *str, t_Colour *colour);
-int			get_next_token(char **token);
+char		*ft_strtok(char *str, const char *delimiters);
+//int			get_next_token(char **token, const char *delim);
+//int			get_next_token(char **token);
+int get_next_token(char **token, char **line);
 
 // print_elements.c //
 void		print_ambient_light(t_AmbientLight *ambient);
