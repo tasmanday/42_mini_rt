@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/10/26 10:39:20 by sentry           ###   ########.fr       */
+/*   Updated: 2024/10/31 20:45:50 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	parse_ambient_light(char *line, t_AmbientLight *ambient_light)
 }
 */
 
-
+/*
 // THIS ONE
 int	parse_ambient_light(char *line, t_AmbientLight *ambient_light)
 {
@@ -95,6 +95,7 @@ int	parse_ambient_light(char *line, t_AmbientLight *ambient_light)
 	(void) line;
 	printf(G "Entering" RST " parse_ambient_light()\n");
 	if (get_next_token(&token) == FAILURE)
+	//  if (get_next_token(&token, &line) == FAILURE)
 		warn_err_exit("No token found", 1);
 	ratio = parse_float(&token);
 	if (ratio == FAILURE)
@@ -104,16 +105,121 @@ int	parse_ambient_light(char *line, t_AmbientLight *ambient_light)
 		warn_err_exit("Ambient light ratio out of range (0.0 to 1.0)", 1);
 	printf("\n   Parsed ratio: %f\n", ambient_light->ratio);
 	if (get_next_token(&token) == FAILURE)
+	//  if (get_next_token(&token, &line) == FAILURE)
 		warn_err_exit("No token found", 1);
 	if (parse_colour(token, &ambient_light->colour) == FAILURE)
 		err_exit(1);
 	if (get_next_token(&token) == SUCCESS)
+	//if (get_next_token(&token, &line) == SUCCESS)
 		warn_err_exit("Excess ambient light values", 1);
 	printf(G "   SUCCESS - Ambient Light parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_ambient_light()\n\n");
 	printf("---------------------------------------------------------------\n");
 	return (SUCCESS);
 }
+*/
+int parse_ambient_light(char *line, t_AmbientLight *ambient_light)
+{
+    char *token;
+    float ratio;
+    int i = 0; // Counter for RGB values
+	(void)line;
+
+    printf(G "Entering" RST " parse_ambient_light()\n\n");
+    if (get_next_token(&token) == FAILURE)
+        warn_err_exit("No token found", 1);
+    ratio = parse_float(&token);
+    if (ratio == FAILURE)
+        err_exit(1);
+    ambient_light->ratio = ratio;
+    if (ambient_light->ratio < 0.0f || ambient_light->ratio > 1.0f)
+        warn_err_exit("Ambient light ratio out of range (0.0 to 1.0)", 1);
+    printf("   -> Parsed ratio: %f\n", ambient_light->ratio);
+    // Get the color token (RGB values)
+    while (i < 3) // Expecting exactly 3 tokens for RGB
+    {
+        if (get_next_token(&token) == FAILURE)
+            warn_err_exit("No more tokens found for RGB values", 1);
+
+        int value = atoi(token); // Assuming parse_colour can handle int values.
+        if (i == 0)
+            ambient_light->colour.r = value;
+        else if (i == 1)
+            ambient_light->colour.g = value;
+        else if (i == 2)
+            ambient_light->colour.b = value;
+        i++; // Increment the counter for each RGB value parsed
+    }
+	printf("   -> Parsed colour: R = %d, G = %d, B = %d\n", ambient_light->colour.r,
+		ambient_light->colour.g, ambient_light->colour.b);
+    if (get_next_token(&token) == SUCCESS)
+        warn_err_exit("Excess ambient light values", 1);
+    printf(G "   SUCCESS - Ambient Light parsed and added!\n\n");
+    printf(RED "Exiting" RST " parse_ambient_light()\n\n");
+    printf("---------------------------------------------------------------\n");
+    return (SUCCESS);
+}
+
+/*
+int parse_ambient_light(char *line, t_AmbientLight *ambient_light)
+{
+    char *token = line;
+    float ratio;
+
+    printf(G "Entering" RST " parse_ambient_light()\n");
+    if (get_next_token(&token) == FAILURE)
+        warn_err_exit("No token found", 1);
+    
+    ratio = strtof(token, NULL);
+    if (ratio == FAILURE)
+        err_exit(1);
+    if (ratio < 0.0f || ratio > 1.0f)
+        warn_err_exit("Ambient light ratio out of range (0.0 to 1.0)", 1); 
+    ambient_light->ratio = ratio; 
+    printf("\n   Parsed ratio: %f\n", ambient_light->ratio);
+    if (get_next_token(&token) == FAILURE)
+        warn_err_exit("No token found", 1);
+    if (parse_colour(token, &ambient_light->colour) == FAILURE)
+        err_exit(1);
+    printf(G "   SUCCESS - Ambient Light parsed and added!\n\n");
+    printf(RED "Exiting" RST " parse_ambient_light()\n\n");
+    printf("---------------------------------------------------------------\n");
+    return (SUCCESS);
+}
+*/
+
+/*
+int parse_ambient_light(char *line, t_AmbientLight *ambient_light)
+{
+    char *token;
+    int values[3];
+    int i = 0;
+
+    // Step 1: Parse the ratio as the first token (float)
+    token = strtok(line, " ");
+    if (!token)
+        return (FAILURE);
+    ambient_light->ratio = strtof(token, NULL);
+
+    // Step 2: Parse the color values separated by commas
+    while ((token = strtok(NULL, ", ")) != NULL && i < 3)
+    {
+        values[i++] = atoi(token); // Convert token to integer and store in values array
+    }
+
+    // Step 3: Check we have exactly 3 color components
+    if (i != 3)
+        return (FAILURE);
+
+    // Step 4: Assign color values to the ambient_light structure
+    ambient_light->colour.r = values[0];
+    ambient_light->colour.g = values[1];
+    ambient_light->colour.b = values[2];
+
+    return (SUCCESS);
+}
+*/
+
 
 /*
 int parse_ambient_light(char *line, t_AmbientLight *ambient_light)
@@ -274,10 +380,6 @@ int parse_ambient_light(char *line, t_AmbientLight *ambient_light)
 }
 */
 
-
-
-
-/*
 // THIS ONE
 int	parse_camera(char *line, t_Camera *camera)
 {
@@ -294,7 +396,7 @@ int	parse_camera(char *line, t_Camera *camera)
 	if (get_next_token(&token) == FAILURE)
 		return (printf("   Failed to get Z position for camera\n"), 0);
 	camera->position.z = atof(token);
-	printf("   Parsed position: x = %f, y = %f, z = %f\n", camera->position.x,
+	printf("   -> Parsed position: x = %f, y = %f, z = %f\n", camera->position.x,
 		camera->position.y, camera->position.z);
 	if (get_next_token(&token) == FAILURE)
 		return (printf("   Failed to get X orientation for camera\n"), 0);
@@ -305,12 +407,12 @@ int	parse_camera(char *line, t_Camera *camera)
 	if (get_next_token(&token) == FAILURE)
 		return (printf("   Failed to get Z orientation for camera\n"), 0);
 	camera->orientation.z = atof(token);
-	printf("   Parsed orientation: x = %f, y = %f, z = %f\n",
+	printf("   -> Parsed orientation: x = %f, y = %f, z = %f\n",
 		camera->orientation.x, camera->orientation.y, camera->orientation.z);
 	if (get_next_token(&token) == FAILURE)
 		return (printf("   Failed to get FOV for camera\n"), 0);
 	camera->fov = atof(token);
-	printf("   Parsed FOV: %f\n", camera->fov);
+	printf("   -> Parsed FOV: %f\n", camera->fov);
 	if (camera->fov < 0 || camera->fov > 180)
 		err_exit(7);
 	printf(G "   SUCCESS - Camera parsed and added!\n\n");
@@ -318,7 +420,6 @@ int	parse_camera(char *line, t_Camera *camera)
 	printf("---------------------------------------------------------------\n");
 	return (SUCCESS);
 }
-*/
 
 /*
 int	parse_light(char *line, t_Light *light)
@@ -362,7 +463,7 @@ int	parse_light(char *line, t_Light *light)
 */
 
 
-/*
+
 // this one
 int	parse_light(char *line, t_Light *light)
 {
@@ -391,4 +492,3 @@ int	parse_light(char *line, t_Light *light)
 	printf("---------------------------------------------------------------\n");
 	return (SUCCESS);
 }
-*/

@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/10/26 12:59:25 by atang            ###   ########.fr       */
+/*   Updated: 2024/10/31 20:45:49 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 	part of the string after the converted number
 */
 
+/*
 float	parse_float(char **str)
 {
 	char	*end;
@@ -41,7 +42,39 @@ float	parse_float(char **str)
 		(*str)++;
 	return (result);
 }
+*/
 
+float parse_float(char **str)
+{
+    char *end;
+    float result;
+
+    // Skip past the 'A' identifier
+    if (**str == 'A' || **str == ' ' || **str == '\t' || **str == ',')
+	{
+		while (**str == 'A' || **str == ' ' || **str == '\t' || **str == ',') 
+		{
+			(*str)++; // Move past the 'A'
+		}
+	}
+    result = strtof(*str, &end);
+    if (end == *str) {
+        printf(RED "\n   Warning! No valid float found in '%s'\n" RST, *str);
+        return FAILURE;
+    }
+
+    if (*end != '\0' && !ft_isspace(*end) && *end != ',') {
+        printf(RED "\n   Warning! Invalid characters within float in '%s'\n" RST, *str);
+        return FAILURE;
+    }
+
+    *str = end;
+    while (**str == ' ' || **str == '\t' || **str == ',') {
+        (*str)++;
+    }
+
+    return result;
+}
 /*
 	parse_int()
 	Converts a str to int and updates the string pointer to point at the next 
@@ -113,6 +146,7 @@ int	parse_vector3(char *str, t_Vector3 *vec)
 	r, g, and b components
 */
 
+/*
 int	parse_colour(char *str, t_Colour *colour)
 {
 	colour->r = parse_int(&str);
@@ -134,6 +168,62 @@ int	parse_colour(char *str, t_Colour *colour)
 		colour->g, colour->b);
 	return (SUCCESS);
 }
+*/
+
+
+int parse_colour(char *str, t_Colour *colour)
+{
+    char *token = str;
+    int values[3];
+    int i = 0;
+    
+    // Parse each RGB component separately
+    while (i < 3)
+    {
+        if (get_next_token(&token) == FAILURE)
+        {
+            printf(RED"\n   Warning! Missing RGB colour value\n"RST);
+            return (FAILURE);
+        }
+        
+        // Convert token to integer
+        char *endptr;
+        long val = strtol(token, &endptr, 10);
+        
+        // Validate conversion
+        if (*endptr != '\0' && !ft_isspace(*endptr) && *endptr != ',')
+        {
+            printf(RED"\n   Warning! Invalid RGB value: %s\n"RST, token);
+            return (FAILURE);
+        }
+        
+        // Validate range
+        if (val < 0 || val > 255)
+        {
+            printf(RED"\n   Warning! Colour value outside of range (0-255): %ld\n"RST, val);
+            return (FAILURE);
+        }
+        
+        values[i++] = (int)val;
+    }
+    
+    // Check for extra tokens
+    if (get_next_token(&token) == SUCCESS)
+    {
+        printf(RED"\n   Warning! Extra RGB values detected\n"RST);
+        return (FAILURE);
+    }
+    
+    // Assign the values to the colour structure
+    colour->r = values[0];
+    colour->g = values[1];
+    colour->b = values[2];
+    
+    printf("   Parsed colour: R = %d, G = %d, B = %d\n", 
+           colour->r, colour->g, colour->b);
+    return (SUCCESS);
+}
+
 
 /*
 int parse_colour(char *str, t_Colour *colour)
@@ -285,20 +375,66 @@ int get_next_token(char **token, char **line) {
 }
 */
 
-
+// NEWEST
 int	get_next_token(char **token)
 {
-	*token = strtok(NULL, " \t");
-	//if (!*token)
-	//	return (0);
-	//return (1);
+	*token = strtok(NULL, " \t,");
 	if (!*token)
 	{
 		return (FAILURE);
 	}
-	printf("Token: %s\n", *token);
+	printf("   Token: %s\n", *token);
 	return (SUCCESS);
 }
+
+/*
+int get_next_token(char **token, char **line) {
+    // Skip any leading whitespace or commas
+    while (**line == ' ' || **line == '\t' || **line == ',') {
+        (*line)++;
+    }
+
+    // Skip past the identifier 'A'
+    if (**line == 'A') {
+        (*line)++; // Move past the identifier 'A'
+    }
+
+    // Check if we've reached the end of the line or encounter an empty line
+    if (**line == '\0' || **line == '\n') {
+        printf("Warning! End of line reached or empty line\n");
+        return FAILURE;  // No more tokens or empty line
+    }
+
+    char *start = *line;  // Start of the token
+
+    // Find the end of the token
+    while (**line && **line != ',' && **line != ' ' && **line != '\t') {
+        (*line)++;
+    }
+
+    // Calculate token length
+    size_t token_length = *line - start;
+
+    // Check token length and ensure it does not exceed the maximum allowed size
+    if (token_length >= MAX_TOKEN_LENGTH) {
+        printf("Warning! Token length exceeded max size\n");
+        return FAILURE;  // Token is too long
+    }
+
+    // Copy the token to the provided buffer
+    strncpy(*token, start, token_length);
+    (*token)[token_length] = '\0';  // Null-terminate the token
+
+    printf("Extracted token: %s\n", *token);
+
+    // Move past any following comma, space, or tab
+    while (**line == ',' || **line == ' ' || **line == '\t') {
+        (*line)++;
+    }
+
+    return SUCCESS;  // Token successfully extracted
+}
+*/
 
 /*
 int	get_next_token(char **token, const char *delim)
@@ -325,3 +461,34 @@ int get_next_token(char **token, const char *delim) {
 }
 */
 
+/*
+int get_next_token(char **token)
+{
+    static char *last_position = NULL;
+    char *current_token;
+    
+    // If we're starting a new string (first call)
+    if (*token != NULL && **token != '\0')
+    {
+        last_position = *token;
+        current_token = strtok(last_position, " \t\n,");
+    }
+    else
+    {
+        // Continue tokenizing from last position
+        current_token = strtok(NULL, " \t\n,");
+    }
+    
+    // If no more tokens found
+    if (!current_token)
+    {
+        *token = NULL;
+        return (FAILURE);
+    }
+    
+    // Update token pointer and return success
+    *token = current_token;
+    printf("Token: %s\n", *token);
+    return (SUCCESS);
+}
+*/

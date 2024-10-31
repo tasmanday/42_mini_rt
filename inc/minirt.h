@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/10/26 12:56:28 by atang            ###   ########.fr       */
+/*   Updated: 2024/10/27 15:22:04 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 # define BUFFER_SIZE 1024 
 # define MAX_OBJECTS 100
-# define MAX_TOKEN_LENGTH 32
+#define MAX_TOKEN_LENGTH 50
 # define SUCCESS 0
 # define FAILURE -1
 
@@ -222,6 +222,7 @@ char		*ft_strtok(char *str, const char *delimiters);
 //int			get_next_token(char **token, const char *delim);
 int			get_next_token(char **token);
 //int get_next_token(char **token, char **line);
+//int			get_next_token(char **token, char **line);
 
 // print_elements.c //
 void		print_ambient_light(t_AmbientLight *ambient);

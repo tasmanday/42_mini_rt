@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:44:24 by atang             #+#    #+#             */
-/*   Updated: 2024/10/25 15:59:37 by sentry           ###   ########.fr       */
+/*   Updated: 2024/10/31 20:26:59 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,10 @@ int	parse_line(char *line, t_Scene *scene)
 	printf(C "\nParsing line with token: %s\n" RST, token);
 	if (strcmp(token, "A") == 0)
 		return (parse_ambient_light(line, &scene->ambient_light));
-	//else if (strcmp(token, "C") == 0)
-	//	return (parse_camera(line, &scene->camera));
-	//else if (strcmp(token, "L") == 0)
-	//	return (parse_light(line, &scene->light));
+	else if (strcmp(token, "C") == 0)
+		return (parse_camera(line, &scene->camera));
+	else if (strcmp(token, "L") == 0)
+		return (parse_light(line, &scene->light));
 	else if (strcmp(token, "sp") == 0 || strcmp(token, "pl") == 0
 		|| strcmp(token, "cy") == 0)
 	{

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sentry <sentry@student.42.fr>              +#+  +:+       +#+         #
+#    By: atang <atang@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/26 11:33:08 by tday              #+#    #+#              #
-#    Updated: 2024/10/20 21:39:24 by sentry           ###   ########.fr        #
+#    Updated: 2024/10/27 13:17:01 by atang            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,7 @@ RM				:=		rm -f
 define check_dir_change
 $(eval CUR_DIR := $(patsubst src/%/,%, $(dir $(1))))
 $(if $(filter-out $(LAST_DIR),$(CUR_DIR)), @echo 								\
-"$(GREEN)$(CUR_DIR) functions compiled successfully!$(DEFAULT_COLOUR)")
+"$(YELLOW)$(CUR_DIR) functions compiled successfully!$(DEFAULT_COLOUR)")
 $(eval LAST_DIR := $(CUR_DIR))
 endef
 
@@ -99,7 +99,7 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS)
 				@$(AR) $(NAME) $(OBJS)
-				@echo "$(CYAN)$(NAME) compiled successfully!$(DEFAULT_COLOUR)"
+				@echo "$(GREEN)--> SUCCESS! $(NAME) compiled successfully!$(DEFAULT_COLOUR)"
 				@echo "\n"
 
 $(OBJS):		%.o: %.c
