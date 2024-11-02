@@ -6,12 +6,13 @@
 /*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/10/20 22:19:13 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/01 17:15:14 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+/*
 static int	is_normalized_vector(t_Vector3 *vector)
 {
 	return ((vector->x >= -1 && vector->x <= 1) && (vector->y >= -1
@@ -148,3 +149,4 @@ int	parse_cylinder(char *line, t_Scene *scene)
 	printf("---------------------------------------------------------------\n");
 	return(SUCCESS); // changed from return (1)
 }
+*/

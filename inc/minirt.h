@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/10/27 15:22:04 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/02 13:28:50 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,10 +216,12 @@ int			parse_cylinder(char *line, t_Scene *scene);
 // parse_utils.c //
 float		parse_float(char **str);
 int			parse_int(char	**str);
-int			parse_vector3(char *str, t_Vector3 *vec);
+int			parse_vector3(t_Vector3 *vec);
+//int			parse_vector3(char *str, t_Vector3 *vec);
 int			parse_colour(char *str, t_Colour *colour);
 char		*ft_strtok(char *str, const char *delimiters);
 //int			get_next_token(char **token, const char *delim);
+int			parse_rgb(t_Colour *colour, char **token);
 int			get_next_token(char **token);
 //int get_next_token(char **token, char **line);
 //int			get_next_token(char **token, char **line);

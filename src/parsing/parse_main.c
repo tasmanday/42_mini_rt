@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:44:24 by atang             #+#    #+#             */
-/*   Updated: 2024/10/31 20:26:59 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/01 17:15:49 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,12 +145,14 @@ int	parse_line(char *line, t_Scene *scene)
 			printf("Error\nExceeded maximum number of objects\n");
 			return (FAILURE);
 		}
+		/*
 		if (strcmp(token, "sp") == 0)
 			return (parse_sphere(line, scene));
 		else if (strcmp(token, "pl") == 0)
 			return (parse_plane(line, scene));
 		else if (strcmp(token, "cy") == 0)
 			return (parse_cylinder(line, scene));
+		*/
 	}
 	else
 	{

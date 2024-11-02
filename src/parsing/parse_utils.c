@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/10/31 20:45:49 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/02 13:30:30 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ float	parse_float(char **str)
 }
 */
 
+/*
+// previous
 float parse_float(char **str)
 {
     char *end;
@@ -75,6 +77,41 @@ float parse_float(char **str)
 
     return result;
 }
+*/
+float parse_float(char **str)
+{
+    char *end;
+    float result;
+
+    // Skip initial spaces, tabs, or commas
+    while (**str == ' ' || **str == '\t' || **str == ',') 
+    {
+        (*str)++;
+    }
+
+    // Parse the float, including handling negative signs
+    result = strtof(*str, &end);
+    if (end == *str) {
+        printf(RED "\n   Warning! No valid float found in '%s'\n" RST, *str);
+        return FAILURE;
+    }
+
+    // Check for invalid characters after the number
+    if (*end != '\0' && !ft_isspace(*end) && *end != ',') {
+        printf(RED "\n   Warning! Invalid characters within float in '%s'\n" RST, *str);
+        return FAILURE;
+    }
+
+    *str = end;  // Move the string pointer to the end of the parsed float
+
+    // Skip any additional spaces, tabs, or commas
+    while (**str == ' ' || **str == '\t' || **str == ',') {
+        (*str)++;
+    }
+
+    return result;
+}
+                                                                                              
 /*
 	parse_int()
 	Converts a str to int and updates the string pointer to point at the next 
@@ -117,6 +154,8 @@ int	parse_vector3(char *str, t_Vector3 *vec)
 }
 */
 
+/*
+// PREVIOUS
 int	parse_vector3(char *str, t_Vector3 *vec)
 {
 	float x_value;
@@ -139,6 +178,45 @@ int	parse_vector3(char *str, t_Vector3 *vec)
 		vec->y, vec->z);
 	return (SUCCESS);
 }
+*/
+
+int parse_vector3(t_Vector3 *vec)
+{
+    char *token;
+    float x_value, y_value, z_value;
+
+    // Get the token for the x value
+    if (get_next_token(&token) == FAILURE)
+        return (FAILURE);
+    x_value = parse_float(&token);
+    if (x_value == FAILURE)
+        return (FAILURE);
+
+    // Get the token for the y value
+    if (get_next_token(&token) == FAILURE)
+        return (FAILURE);
+    y_value = parse_float(&token);
+    if (y_value == FAILURE)
+        return (FAILURE);
+
+    // Get the token for the z value
+    if (get_next_token(&token) == FAILURE)
+        return (FAILURE);
+    z_value = parse_float(&token);
+    if (z_value == FAILURE)
+        return (FAILURE);
+
+    // Assign the parsed values to the vector
+    vec->x = x_value;
+    vec->y = y_value;
+    vec->z = z_value;
+    printf("   Parsed vector: x = %f, y = %f, z = %f\n", vec->x, vec->y, vec->z);
+
+    return (SUCCESS);
+}
+
+
+
 
 /*
 	parse_colour()
@@ -492,3 +570,30 @@ int get_next_token(char **token)
     return (SUCCESS);
 }
 */
+
+int parse_rgb(t_Colour *colour, char **token)
+{
+    int i;
+    int value;
+
+    i = 0;
+    while (i < 3)
+    {
+        if (get_next_token(token) == FAILURE || *token == NULL) 
+            warn_err_exit("No more tokens found for RGB values", 1);
+        value = atoi(*token);
+        if (value < 0 || value > 255)
+        {
+            warn_err_exit("RGB value out of range (0-255)", 1);
+        }
+        if (i == 0)
+            colour->r = value;
+        else if (i == 1)
+            colour->g = value;
+        else if (i == 2) 
+            colour->b = value;
+        i++;
+    }
+    return (SUCCESS);
+}
+

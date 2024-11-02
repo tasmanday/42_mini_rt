@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/10/31 20:45:50 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/02 13:29:55 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int parse_ambient_light(char *line, t_AmbientLight *ambient_light)
 {
     char *token;
     float ratio;
-    int i = 0; // Counter for RGB values
+    //int i = 0; // Counter for RGB values
 	(void)line;
 
     printf(G "Entering" RST " parse_ambient_light()\n\n");
@@ -136,6 +136,7 @@ int parse_ambient_light(char *line, t_AmbientLight *ambient_light)
         warn_err_exit("Ambient light ratio out of range (0.0 to 1.0)", 1);
     printf("   -> Parsed ratio: %f\n", ambient_light->ratio);
     // Get the color token (RGB values)
+    /*
     while (i < 3) // Expecting exactly 3 tokens for RGB
     {
         if (get_next_token(&token) == FAILURE)
@@ -150,7 +151,12 @@ int parse_ambient_light(char *line, t_AmbientLight *ambient_light)
             ambient_light->colour.b = value;
         i++; // Increment the counter for each RGB value parsed
     }
-	printf("   -> Parsed colour: R = %d, G = %d, B = %d\n", ambient_light->colour.r,
+    */
+    if (parse_rgb(&ambient_light->colour, &token) != SUCCESS)
+    {
+        return (FAILURE); // Handle any parsing errors
+    }
+    printf("   -> Parsed colour: R = %d, G = %d, B = %d\n", ambient_light->colour.r,
 		ambient_light->colour.g, ambient_light->colour.b);
     if (get_next_token(&token) == SUCCESS)
         warn_err_exit("Excess ambient light values", 1);
@@ -463,8 +469,8 @@ int	parse_light(char *line, t_Light *light)
 */
 
 
-
-// this one
+/*
+// previous
 int	parse_light(char *line, t_Light *light)
 {
 	char	*token;
@@ -473,8 +479,9 @@ int	parse_light(char *line, t_Light *light)
 	printf(G "Entering" RST " parse_light()\n\n");
 	if (get_next_token(&token) == FAILURE)
 		warn_err_exit("No token found", 3);
-	if (parse_vector3(token, &light->position) == FAILURE)
-		err_exit(3);
+	//if (parse_vector3(token, &light->position) == FAILURE)
+	if (parse_vector3(&light->position) == FAILURE)
+    	err_exit(3);
 	if (get_next_token(&token) == FAILURE)
 		warn_err_exit("No token found", 3);	
 	light->brightness = parse_float(&token);
@@ -491,4 +498,53 @@ int	parse_light(char *line, t_Light *light)
 	printf(RED "Exiting" RST " parse_light()\n\n");
 	printf("---------------------------------------------------------------\n");
 	return (SUCCESS);
+}
+*/
+
+int parse_light(char *line, t_Light *light)
+{
+    char *token;
+    int i = 0;
+
+    (void)line;
+    printf(G "Entering" RST " parse_light()\n\n");
+
+    // Get the token for the light position
+    //if (get_next_token(&token) == FAILURE)
+    //    warn_err_exit("No token found", 3);
+    // Parse the light position using the updated parse_vector3
+    if (parse_vector3(&light->position) == FAILURE)
+        err_exit(3);
+    // Get the token for the brightness
+    if (get_next_token(&token) == FAILURE)
+        warn_err_exit("No token found", 3);
+    // Parse the brightness value
+    light->brightness = parse_float(&token);
+    if (light->brightness < 0.0f || light->brightness > 1.0f)
+        warn_err_exit("Light brightness ratio out of range (0.0 to 1.0)", 3);
+    printf("   -> Parsed brightness: %f\n", light->brightness);
+   while (i < 3) // Expecting exactly 3 tokens for RGB
+    {
+        if (get_next_token(&token) == FAILURE)
+            warn_err_exit("No more tokens found for RGB values", 1);
+
+        int value = atoi(token); // Assuming parse_colour can handle int values.
+        if (i == 0)
+            light->colour.r = value;
+        else if (i == 1)
+            light->colour.g = value;
+        else if (i == 2)
+            light->colour.b = value;
+        i++; // Increment the counter for each RGB value parsed
+    }
+	printf("   -> Parsed colour: R = %d, G = %d, B = %d\n", light->colour.r,
+		light->colour.g, light->colour.b);
+    if (get_next_token(&token) == SUCCESS)
+        warn_err_exit("Excess light values", 3);
+
+    printf(G "   SUCCESS - Light parsed and added!\n\n");
+    printf(RED "Exiting" RST " parse_light()\n\n");
+    printf("---------------------------------------------------------------\n");
+
+    return (SUCCESS);
 }
