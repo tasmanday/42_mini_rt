@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/11/01 17:15:14 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/02 19:03:26 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static int	is_normalized_vector(t_Vector3 *vector)
 	return ((vector->x >= -1 && vector->x <= 1) && (vector->y >= -1
 			&& vector->y <= 1) && (vector->z >= -1 && vector->z <= 1));
 }
-
+*/
+/*
 int	parse_sphere(char *line, t_Scene *scene)
 {
 	struct Object	*new_sphere;
@@ -32,7 +33,8 @@ int	parse_sphere(char *line, t_Scene *scene)
 	new_sphere->type = SPHERE;
 	new_sphere->next = NULL;
 	token = strtok(NULL, " \t\n");
-	if (!token || !parse_vector3(token, &new_sphere->u_data.sphere.centre))
+	if (get_next_token(&token) == FAILURE 
+		|| parse_vector3(&new_sphere->u_data.sphere.centre) == FAILURE)
 		return (err_free_exit(new_sphere, 0));
 	token = strtok(NULL, " \t\n");
 	new_sphere->u_data.sphere.diameter = parse_float(&token);
@@ -40,7 +42,7 @@ int	parse_sphere(char *line, t_Scene *scene)
 		return (err_free_exit(new_sphere, 0));
 	printf("   Parsed diameter: %f\n", new_sphere->u_data.sphere.diameter);
 	token = strtok(NULL, " \t\n");
-	if (!token || !parse_colour(token, &new_sphere->u_data.sphere.colour))
+	if (!token || !parse_rgb(&new_sphere->u_data.sphere.colour, &token))
 	{
 		printf(RED "Exiting" RST " parse_sphere()\n");
 		printf("---------------------------------------------------------\
@@ -57,7 +59,37 @@ int	parse_sphere(char *line, t_Scene *scene)
 	printf("---------------------------------------------------------------\n");
 	return(SUCCESS); // changed from return (1)
 }
+*/
+int	parse_sphere(t_Scene *scene)
+{
+	struct Object	*new_sphere;
+	char			*token;
 
+	printf(G "Entering" RST " parse_sphere()\n\n");
+	new_sphere = malloc(sizeof(struct Object));
+	if (!new_sphere)
+		return (FAILURE);
+	new_sphere->type = SPHERE;
+	new_sphere->next = NULL;
+	if (parse_vector3(&new_sphere->u_data.sphere.centre) == FAILURE)
+		return (err_free_exit(3, new_sphere, 0));
+	if (get_next_token(&token) == FAILURE)
+		return (err_free_exit(3, new_sphere, 0));
+	new_sphere->u_data.sphere.diameter = parse_float(&token);
+	printf("   Parsed diameter: %f\n", new_sphere->u_data.sphere.diameter);
+	if (parse_rgb(&new_sphere->u_data.sphere.colour, &token) == FAILURE)
+		return (err_free_exit(3, new_sphere, 0));
+	//if (get_next_token(&token) == SUCCESS)
+	//	err_free_exit(new_sphere, 0);
+	if (!add_object(scene, new_sphere))
+		return (err_free_exit(3, new_sphere, 0));
+	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
+	printf(RED "Exiting" RST " parse_sphere()\n\n");
+	printf("---------------------------------------------------------------\n");
+	return (SUCCESS);
+}
+
+/*
 int	parse_plane(char *line, t_Scene *scene)
 {
 	struct Object	*new_plane;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/11/02 13:28:50 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/02 18:57:08 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,11 @@ typedef enum s_Error
 	//LIGHT_BRIGHTNESS_RATIO_OUTSIDE_OF_RANGE = 6,
 	//CAMERA_FOV_OUTSIDE_OF_RANGE = 7,
 	AMBIENT_LIGHT_ERROR = 0,
+	CAMERA_ERROR = 1,
+	LIGHT_ERROR = 2,
+	SPHERE_ERROR = 3,
+	PLANE_ERROR = 4,
+	CYLINDER_ERROR = 5,
 }	t_Error;
 
 typedef struct s_Vector3
@@ -165,7 +170,8 @@ typedef struct s_Scene
 
 // error.c //
 int			err_exit(t_Error error);
-int			err_free_exit(struct Object *current, t_Scene *scene);
+//int			err_free_exit(struct Object *current, t_Scene *scene);
+int			err_free_exit(t_Error error, struct Object *current, t_Scene *scene);
 int			err_return(const char *message);
 void		warn_err_exit(const char *message, t_Error error);
 
@@ -199,17 +205,22 @@ int			add_object(t_Scene *scene, struct Object *new_object);
 void		free_objects(t_Scene *scene);
 
 // parse_elements.c //
-int			parse_ambient_light(char *line, t_AmbientLight *ambient_light);
-int			parse_camera(char *line, t_Camera *camera);
-int			parse_light(char *line, t_Light *light);
+int			parse_ambient_light(t_AmbientLight *ambient_light);
+int			parse_camera(t_Camera *camera);
+int			parse_light(t_Light *light);
+int			parse_position(t_Vector3 *position, char **token);
+int			parse_orientation(t_Vector3 *orientation, char **token);
 
 // parse_main.c //
 int			parse_rt_file(const char *filename, t_Scene *scene);
 int			parse_line(char	*line, t_Scene *scene);
 //int			free_and_return(struct Object *obj, int ret_val);
+int			process_file_lines(int fd, t_Scene *scene);
+int			process_line(char *line, t_Scene *scene);
+int			handle_file_error(int fd, const char *filename);
 
 // parse_objects.c //
-int			parse_sphere(char *line, t_Scene *scene);
+int			parse_sphere(t_Scene *scene);
 int			parse_plane(char *line, t_Scene *scene);
 int			parse_cylinder(char *line, t_Scene *scene);
 

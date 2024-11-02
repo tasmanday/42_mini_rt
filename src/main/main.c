@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:29:18 by atang             #+#    #+#             */
-/*   Updated: 2024/10/24 23:20:20 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/02 18:18:25 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int argc, char **argv)
 		scene.mlx.height = 1080;
 		scene.mlx.width = 1920;
 
-		//compute_ray_directions(&scene);
+		compute_ray_directions(&scene);
 
 	/*	initialise_data(&scene);
 		printf(M "\n---> WINDOW OPENED <---\n\n" RST);

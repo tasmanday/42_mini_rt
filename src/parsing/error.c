@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/10/25 14:58:42 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/02 19:05:19 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-/*
-// KEEP
-int	err_exit(t_Error error)
-{
-	printf(RED "\nError! ");
-	if (error == 0)
-		printf("Invalid float value\n\n");
-	else if (error == 1)
-		printf("Invalid integer value\n\n");
-	else if (error == 2)
-		printf("Invalid vector\n\n");
-	else if (error == 3)
-		printf("Missing or extra input value(s)\n\n");
-	else if (error == 4)
-		printf("Colour value outside of range (0 to 255)\n\n");
-	else if (error == 5)
-		printf("Ambient light ratio outside of range (0.0 to 1.0)\n\n");
-	else if (error == 6)
-		printf("Light brightness ratio outside of range (0.0 to 1.0)\n\n");
-	else if (error == 7)
-		printf("Camera FOV outside of range (0 to 180)\n\n");
-	printf("Exiting...\n\n" RST);
-	exit(1);
-}
-*/
 
 int	err_exit(t_Error error)
 {
@@ -44,7 +18,7 @@ int	err_exit(t_Error error)
 	if (error == 1)
 		printf("Ambient light error\n\n");
 	else if (error == 2)
-		printf("Camera error\n\n");	
+		printf("Camera error\n\n");
 	else if (error == 3)
 		printf("Light error\n\n");
 	printf("Exiting...\n\n" RST);
@@ -58,24 +32,27 @@ void	warn_err_exit(const char *message, t_Error error)
 	if (error == 1)
 		printf("Ambient light error\n\n");
 	else if (error == 2)
-		printf("Camera error\n\n");	
+		printf("Camera error\n\n");
 	else if (error == 3)
 		printf("Light error\n\n");
 	printf("Exiting...\n\n" RST);
 	exit(1);
 }
 
-
-
-int	err_free_exit(struct Object *current, t_Scene *scene)
+int	err_free_exit(t_Error error, struct Object *current, t_Scene *scene)
 {
 	struct Object	*next;
 	struct Object	*object;
 
+	printf(RED "\nError! ");
+	if (error == 3)
+		printf("Sphere error\n\nExiting...\n\n"RST);
+	else if (error == 4)
+		printf("Plane error\n\nExiting...\n\n"RST);
+	else if (error == 5)
+		printf("Cylinder error\n\nExiting...\n\n"RST);
 	if (scene && scene->mlx.mlx_ptr && scene->mlx.win_ptr)
-	{
 		mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
-	}
 	if (current)
 	{
 		printf("Freeing current object at address: %p\n", (void *)current);

@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/10/19 14:33:21 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/02 17:48:27 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,59 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		n--;
 	}
 	return (0);
+}
+
+int	get_next_token(char **token)
+{
+	*token = strtok(NULL, " \t,");
+	if (!*token)
+	{
+		return (FAILURE);
+	}
+	printf("   Token: %s\n", *token);
+	return (SUCCESS);
+}
+
+float	parse_float(char **str)
+{
+	char	*end;
+	float	result;
+
+	while (**str == ' ' || **str == '\t' || **str == ',')
+	{
+		(*str)++;
+	}
+	result = strtof(*str, &end);
+	if (end == *str)
+	{
+		printf(RED "\n   Warning! No valid float found in '%s'\n" RST, *str);
+		return (FAILURE);
+	}
+	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
+	{
+		printf(RED
+			"\n   Warning! Invalid characters in float in: '%s'\n" RST, *str);
+		return (FAILURE);
+	}
+	*str = end;
+	while (**str == ' ' || **str == '\t' || **str == ',')
+	{
+		(*str)++;
+	}
+	return (result);
+}
+
+int	parse_int(char	**str)
+{
+	char	*end;
+	int		result;
+
+	result = (int)strtol(*str, &end, 10);
+	if (end == *str)
+		return (0);
+	if (*end == ',' || *end == '\0' || *end == ' ' || *end == '\t')
+		*str = end + 1;
+	else
+		*str = end;
+	return (result);
 }
