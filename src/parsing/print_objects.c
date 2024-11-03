@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:12:23 by atang             #+#    #+#             */
-/*   Updated: 2024/10/16 12:46:50 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 14:31:27 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	print_all_objects(const t_Scene *scene)
 	position = 1;
 	while (current)
 	{
-		printf("\n-> " U "OBJECT LIST POSITION: %d\n" RST, position);
+		printf("\n-> " U "OBJECT LIST POSITION: %d\n\n" RST, position);
 		printf("      Printing object of type: ");
 		if (current->type == SPHERE)
 		{

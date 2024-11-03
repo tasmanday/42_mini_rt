@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/11/02 17:48:27 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 15:55:14 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ float	parse_float(char **str)
 	result = strtof(*str, &end);
 	if (end == *str)
 	{
-		printf(RED "\n   Warning! No valid float found in '%s'\n" RST, *str);
+		printf(RED "\n   Error! No valid float found in '%s'"RST, *str);
 		return (FAILURE);
 	}
 	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
 	{
 		printf(RED
-			"\n   Warning! Invalid characters in float in: '%s'\n" RST, *str);
+			"\n   Error! Invalid characters in float in: '%s'"RST, *str);
 		return (FAILURE);
 	}
 	*str = end;

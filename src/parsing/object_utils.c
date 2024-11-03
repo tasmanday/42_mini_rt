@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:44:56 by atang             #+#    #+#             */
-/*   Updated: 2024/10/19 10:07:13 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/03 16:02:34 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	add_object(t_Scene *scene, struct Object *new_object)
 {
 	struct Object	*current;
 
-	printf(G "   Entering" RST " add_object()\n");
+	printf(G "   Entering" RST " add_object()\n\n");
 	if (!scene)
 	{
 		printf("      Error: Scene is NULL.\n");
@@ -71,7 +71,7 @@ int	add_object(t_Scene *scene, struct Object *new_object)
 	scene->object_count++;
 	printf(G "      Object added! New count: %d\n" RST, scene->object_count);
 	print_objects_in_scene(scene->objects);
-	printf(RED "   Exiting" RST " add_object()\n");
+	printf(RED "\n   Exiting" RST " add_object()\n\n");
 	return (1);
 }
 

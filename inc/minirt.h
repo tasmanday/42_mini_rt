@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/11/02 18:57:08 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 16:17:35 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,20 @@
 
 typedef enum s_Error
 {
-	//INVALID_FLOAT = 0,
-	//INVALID_INT = 1,
-	//INVALID_VECTOR = 2,
-	//MISSING_OR_EXTRA_INPUT_VALUES = 3,
-	//COLOUR_VALUES_OUTSIDE_OF_RANGE = 4,
-	//AMBIENT_LIGHT_OUTSIDE_OF_RANGE = 5,
-	//LIGHT_BRIGHTNESS_RATIO_OUTSIDE_OF_RANGE = 6,
-	//CAMERA_FOV_OUTSIDE_OF_RANGE = 7,
-	AMBIENT_LIGHT_ERROR = 0,
-	CAMERA_ERROR = 1,
-	LIGHT_ERROR = 2,
-	SPHERE_ERROR = 3,
-	PLANE_ERROR = 4,
-	CYLINDER_ERROR = 5,
+	INVALID_FLOAT = 0,
+	INVALID_INT = 1,
+	INVALID_INPUT_VALUE = 2,
+	MISSING_OR_EXTRA_INPUT_VALUES = 3,
+	COLOUR_VALUES_OUTSIDE_OF_RANGE = 4,
+	AMBIENT_LIGHT_OUTSIDE_OF_RANGE = 5,
+	LIGHT_BRIGHTNESS_RATIO_OUTSIDE_OF_RANGE = 6,
+	CAMERA_FOV_OUTSIDE_OF_RANGE = 7,
+	AMBIENT_LIGHT_ERROR = 10,
+	CAMERA_ERROR = 11,
+	LIGHT_ERROR = 12,
+	SPHERE_ERROR = 13,
+	PLANE_ERROR = 14,
+	CYLINDER_ERROR = 15,
 }	t_Error;
 
 typedef struct s_Vector3

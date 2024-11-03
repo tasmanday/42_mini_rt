@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/11/02 17:57:55 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 16:17:31 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,18 @@ int	parse_ambient_light(t_AmbientLight *ambient_light)
 
 	printf(G "Entering" RST " parse_ambient_light()\n\n");
 	if (get_next_token(&token) == FAILURE)
-		warn_err_exit("No token found", 1);
+		warn_err_exit("   No token found", 10);
 	ratio = parse_float(&token);
 	if (ratio == FAILURE)
-		err_exit(1);
+		err_exit(10);
 	ambient_light->ratio = ratio;
 	if (ambient_light->ratio < 0.0f || ambient_light->ratio > 1.0f)
-		warn_err_exit("Ambient light ratio out of range (0.0 to 1.0)", 1);
-	printf("   -> Parsed ratio: %f\n", ambient_light->ratio);
-	parse_rgb(&ambient_light->colour, &token);
-	printf("   -> Parsed colour: R = %d, G = %d, B = %d\n",
-		ambient_light->colour.r, ambient_light->colour.g,
-		ambient_light->colour.b);
+		warn_err_exit("   Ambient light ratio out of range (0.0 to 1.0)", 10);
+	printf("\n   -> Parsed ratio: %f\n\n", ambient_light->ratio);
+	if (parse_rgb(&ambient_light->colour, &token) == FAILURE)
+		err_exit(10);
 	if (get_next_token(&token) == SUCCESS)
-		warn_err_exit("Excess ambient light values", 1);
+		warn_err_exit("   Error! Excess ambient light values", 10);
 	printf(G "   SUCCESS - Ambient Light parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_ambient_light()\n\n");
 	printf("---------------------------------------------------------------\n");
@@ -45,19 +43,21 @@ int	parse_camera(t_Camera *camera)
 
 	printf(G "Entering" RST " parse_camera()\n\n");
 	if (parse_position(&camera->position, &token) == FAILURE)
-		err_exit(2);
-	printf("   -> Parsed position: x = %f, y = %f, z = %f\n",
+		err_exit(11);
+	printf("\n   -> Parsed position: x = %f, y = %f, z = %f\n\n",
 		camera->position.x, camera->position.y, camera->position.z);
 	if (parse_orientation(&camera->orientation, &token) == FAILURE)
-		err_exit(2);
-	printf("   -> Parsed orientation: x = %f, y = %f, z = %f\n",
+		err_exit(11);
+	printf("\n   -> Parsed orientation: x = %f, y = %f, z = %f\n\n",
 		camera->orientation.x, camera->orientation.y, camera->orientation.z);
 	if (get_next_token(&token) == FAILURE)
-		return (printf("   Failed to get FOV for camera\n"), 0);
+		warn_err_exit("   Error! Failed to get FOV for camera", 11);
 	camera->fov = atof(token);
-	printf("   -> Parsed FOV: %f\n", camera->fov);
+	printf("   -> Parsed FOV: %f\n\n", camera->fov);
 	if (camera->fov < 0 || camera->fov > 180)
-		err_exit(7);
+		warn_err_exit("   Error! FOV out of range (0-180)", 11);
+	if (get_next_token(&token) == SUCCESS)
+		warn_err_exit("   Error! Excess camera values", 11);
 	printf(G "   SUCCESS - Camera parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_camera()\n\n");
 	printf("---------------------------------------------------------------\n");
@@ -70,17 +70,15 @@ int	parse_light(t_Light *light)
 
 	printf(G "Entering" RST " parse_light()\n\n");
 	if (parse_vector3(&light->position) == FAILURE)
-		err_exit(3);
+		err_exit(12);
 	if (get_next_token(&token) == FAILURE)
-		warn_err_exit("No token found", 3);
+		warn_err_exit("No token found", 12);
 	light->brightness = parse_float(&token);
 	if (light->brightness < 0.0f || light->brightness > 1.0f)
-		warn_err_exit("Light brightness ratio out of range (0.0 to 1.0)", 3);
-	printf("   -> Parsed brightness: %f\n", light->brightness);
+		warn_err_exit("Light brightness ratio out of range (0.0 to 1.0)", 12);
+	printf("\n   -> Parsed brightness: %f\n\n", light->brightness);
 	if (parse_rgb(&light->colour, &token) != SUCCESS)
-		return (FAILURE);
-	printf("   -> Parsed colour: R = %d, G = %d, B = %d\n", light->colour.r,
-		light->colour.g, light->colour.b);
+		err_exit(12)
 	if (get_next_token(&token) == SUCCESS)
 		warn_err_exit("Excess light values", 3);
 	printf(G "   SUCCESS - Light parsed and added!\n\n");

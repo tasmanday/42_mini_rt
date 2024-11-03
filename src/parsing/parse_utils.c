@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/11/02 19:03:26 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 16:14:13 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	parse_vector3(t_Vector3 *vec)
 			return (FAILURE);
 		i++;
 	}
-	printf("   Parsed vector: x = %f, y = %f, z = %f\n",
+	printf("\n   -> Parsed vector: x = %f, y = %f, z = %f\n\n",
 		vec->x, vec->y, vec->z);
 	return (SUCCESS);
 }
@@ -45,11 +45,15 @@ int	parse_rgb(t_Colour *colour, char **token)
 	while (i < 3)
 	{
 		if (get_next_token(token) == FAILURE || *token == NULL)
-			warn_err_exit("No more tokens found for RGB values", 1);
-		value = atoi(*token);
+		{
+			printf(RED"   No more tokens found for RGB values"RST);
+			return (FAILURE);
+		}
+		value = ft_atoi(*token);
 		if (value < 0 || value > 255)
 		{
-			warn_err_exit("RGB value out of range (0-255)", 1);
+			printf(RED"   Error! RGB value out of range (0-255)"RST);
+			return (FAILURE);
 		}
 		if (i == 0)
 			colour->r = value;
@@ -59,6 +63,8 @@ int	parse_rgb(t_Colour *colour, char **token)
 			colour->b = value;
 		i++;
 	}
+	printf("   -> Parsed colour: R = %d, G = %d, B = %d\n\n", colour->r,
+		colour->g, colour->b);
 	return (SUCCESS);
 }
 
@@ -76,13 +82,13 @@ int	parse_position(t_Vector3 *position, char **token)
 	{
 		if (get_next_token(token) == FAILURE)
 		{
-			printf("   Failed to get x/y/z position\n");
+			printf(RED"   Error! Failed to get x/y/z position"RST);
 			return (FAILURE);
 		}
 		*coords[i] = strtof(*token, &endptr);
 		if (*endptr != '\0')
 		{
-			printf("   Invalid value for x/y/z position\n");
+			printf(RED"   Error! Invalid value for x/y/z position"RST);
 			return (FAILURE);
 		}
 		i++;
@@ -104,13 +110,13 @@ int	parse_orientation(t_Vector3 *orientation, char **token)
 	{
 		if (get_next_token(token) == FAILURE)
 		{
-			printf("   Failed to get x/y/z orientation\n");
+			printf(RED"   Failed to get x/y/z orientation"RST);
 			return (FAILURE);
 		}
 		*coords[i] = strtof(*token, &endptr);
 		if (*endptr != '\0')
 		{
-			printf("   Invalid value for x/y/z orientation\n");
+			printf(RED"   Invalid value for x/y/z orientation"RST);
 			return (FAILURE);
 		}
 		i++;

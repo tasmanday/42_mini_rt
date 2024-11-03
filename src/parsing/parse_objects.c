@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/11/02 19:03:26 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 14:30:04 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ int	parse_sphere(t_Scene *scene)
 	if (get_next_token(&token) == FAILURE)
 		return (err_free_exit(3, new_sphere, 0));
 	new_sphere->u_data.sphere.diameter = parse_float(&token);
-	printf("   Parsed diameter: %f\n", new_sphere->u_data.sphere.diameter);
+	printf("\n   -> Parsed diameter: %f\n\n", new_sphere->u_data.sphere.diameter);
 	if (parse_rgb(&new_sphere->u_data.sphere.colour, &token) == FAILURE)
 		return (err_free_exit(3, new_sphere, 0));
-	//if (get_next_token(&token) == SUCCESS)
-	//	err_free_exit(new_sphere, 0);
+	if (get_next_token(&token) == SUCCESS)
+		err_free_exit(3, new_sphere, 0);
 	if (!add_object(scene, new_sphere))
 		return (err_free_exit(3, new_sphere, 0));
 	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
