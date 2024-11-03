@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:44:56 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 16:02:34 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 18:49:47 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	add_object(t_Scene *scene, struct Object *new_object)
 		printf("      Error: New object is NULL.\n");
 		return (0);
 	}
+	new_object->next = NULL; // added
 	if (!scene->objects)
 	{
 		scene->objects = new_object;

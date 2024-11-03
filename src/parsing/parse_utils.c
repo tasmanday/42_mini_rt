@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 16:14:13 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 18:31:24 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ int	parse_rgb(t_Colour *colour, char **token)
 	{
 		if (get_next_token(token) == FAILURE || *token == NULL)
 		{
-			printf(RED"   No more tokens found for RGB values"RST);
+			printf(RED"\n   No more tokens found for RGB values"RST);
 			return (FAILURE);
 		}
 		value = ft_atoi(*token);
 		if (value < 0 || value > 255)
 		{
-			printf(RED"   Error! RGB value out of range (0-255)"RST);
+			printf(RED"\n   Error! RGB value out of range (0-255)"RST);
 			return (FAILURE);
 		}
 		if (i == 0)
@@ -82,13 +82,13 @@ int	parse_position(t_Vector3 *position, char **token)
 	{
 		if (get_next_token(token) == FAILURE)
 		{
-			printf(RED"   Error! Failed to get x/y/z position"RST);
+			printf(RED"\n   Error! Failed to get x/y/z position"RST);
 			return (FAILURE);
 		}
 		*coords[i] = strtof(*token, &endptr);
 		if (*endptr != '\0')
 		{
-			printf(RED"   Error! Invalid value for x/y/z position"RST);
+			printf(RED"\n   Error! Invalid value for x/y/z position"RST);
 			return (FAILURE);
 		}
 		i++;
@@ -113,10 +113,23 @@ int	parse_orientation(t_Vector3 *orientation, char **token)
 			printf(RED"   Failed to get x/y/z orientation"RST);
 			return (FAILURE);
 		}
+		/*
+		while (ft_isspace((unsigned char)**token)) (*token)++; // Trim leading whitespace
+
+        // Check for newlines
+        if (**token == '\n') {
+            **token = '\0'; // Null-terminate if newline found
+        }
+		*/
 		*coords[i] = strtof(*token, &endptr);
 		if (*endptr != '\0')
 		{
-			printf(RED"   Invalid value for x/y/z orientation"RST);
+			printf(RED"\n   Invalid value for x/y/z orientation: '%s'"RST, *token);
+			return (FAILURE);
+		}
+		if (*coords[i] < -1.0f || *coords[i] > 1.0f)
+		{
+			printf(RED"\n   Orientation value out of range (-1, 1)"RST);
 			return (FAILURE);
 		}
 		i++;

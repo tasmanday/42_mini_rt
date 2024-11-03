@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 15:55:14 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 17:50:20 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
+
 int	get_next_token(char **token)
 {
 	*token = strtok(NULL, " \t,");
@@ -56,6 +57,37 @@ int	get_next_token(char **token)
 	printf("   Token: %s\n", *token);
 	return (SUCCESS);
 }
+
+
+/*
+int get_next_token(char **token, char **input_buffer)
+{
+    // Initialize the tokenizer with the input buffer on the first call
+    if (*token == NULL) {
+        *token = strtok(*input_buffer, " \t,");
+    } else {
+        *token = strtok(NULL, " \t,");
+    }
+
+    // Check if a token was found
+    if (!*token)
+    {
+        return FAILURE;
+    }
+
+    // Trim any leading or trailing whitespace from the token
+    while (isspace((unsigned char)**token)) (*token)++;  // Trim leading
+    char *end = *token + strlen(*token) - 1;  // Set end to the last character
+    while (end > *token && isspace((unsigned char)*end)) end--;  // Trim trailing
+
+    // Null-terminate the token
+    *(end + 1) = '\0';
+
+    printf("   Token: %s\n", *token);
+    return SUCCESS;
+}
+*/
+
 
 float	parse_float(char **str)
 {

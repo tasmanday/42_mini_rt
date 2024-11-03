@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 14:30:04 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 18:27:41 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ int	parse_sphere(char *line, t_Scene *scene)
 	token = strtok(NULL, " \t\n");
 	if (get_next_token(&token) == FAILURE 
 		|| parse_vector3(&new_sphere->u_data.sphere.centre) == FAILURE)
-		return (err_free_exit(new_sphere, 0));
+		return (warn_err_free_exit(new_sphere, 0));
 	token = strtok(NULL, " \t\n");
 	new_sphere->u_data.sphere.diameter = parse_float(&token);
 	if (!token || !new_sphere->u_data.sphere.diameter)
-		return (err_free_exit(new_sphere, 0));
+		return (warn_err_free_exit(new_sphere, 0));
 	printf("   Parsed diameter: %f\n", new_sphere->u_data.sphere.diameter);
 	token = strtok(NULL, " \t\n");
 	if (!token || !parse_rgb(&new_sphere->u_data.sphere.colour, &token))
@@ -47,12 +47,12 @@ int	parse_sphere(char *line, t_Scene *scene)
 		printf(RED "Exiting" RST " parse_sphere()\n");
 		printf("---------------------------------------------------------\
 			------\n");
-		return (err_free_exit(new_sphere, 0));
+		return (warn_err_free_exit(new_sphere, 0));
 	}
 	if (!add_object(scene, new_sphere))
 	{
 		printf(RED "Error: Failed to add sphere to the scene.\n" RST);
-		return (err_free_exit(new_sphere, 0));
+		return (warn_err_free_exit(new_sphere, 0));
 	}
 	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_sphere()\n\n");
@@ -72,17 +72,17 @@ int	parse_sphere(t_Scene *scene)
 	new_sphere->type = SPHERE;
 	new_sphere->next = NULL;
 	if (parse_vector3(&new_sphere->u_data.sphere.centre) == FAILURE)
-		return (err_free_exit(3, new_sphere, 0));
+		warn_err_free_exit("Error! Vector fail", 13, new_sphere, 0);
 	if (get_next_token(&token) == FAILURE)
-		return (err_free_exit(3, new_sphere, 0));
+		warn_err_free_exit("Error! Diameter not input", 13, new_sphere, 0);
 	new_sphere->u_data.sphere.diameter = parse_float(&token);
 	printf("\n   -> Parsed diameter: %f\n\n", new_sphere->u_data.sphere.diameter);
 	if (parse_rgb(&new_sphere->u_data.sphere.colour, &token) == FAILURE)
-		return (err_free_exit(3, new_sphere, 0));
-	if (get_next_token(&token) == SUCCESS)
-		err_free_exit(3, new_sphere, 0);
+		err_free_exit(13, new_sphere, 0);
+	//if (get_next_token(&token) == SUCCESS)
+	//	warn_err_free_exit("Too many values", 13, new_sphere, 0);
 	if (!add_object(scene, new_sphere))
-		return (err_free_exit(3, new_sphere, 0));
+		warn_err_free_exit("Could not add object", 13, new_sphere, 0);
 	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_sphere()\n\n");
 	printf("---------------------------------------------------------------\n");
@@ -109,30 +109,30 @@ int	parse_plane(char *line, t_Scene *scene)
 	if (!token || !parse_vector3(token, &new_plane->u_data.plane.point))
 	{
 		printf(RED "Error: Failed to parse point for plane.\n" RST);
-		return (err_free_exit(new_plane, 0));
+		return (warn_err_free_exit(new_plane, 0));
 	}
 	token = strtok(NULL, " \t\n");
 	if (!token || !parse_vector3(token, &new_plane->u_data.plane.normal))
 	{
 		printf(RED "Error: Failed to parse normal for plane.\n" RST);
-		return (err_free_exit(new_plane, 0));
+		return (warn_err_free_exit(new_plane, 0));
 	}
 	if (!is_normalized_vector(&new_plane->u_data.plane.normal))
 	{
 		printf(RED "Error! Normal vector is not normalised \
 			(range is -1 to 1).\n" RST);
-		return (err_free_exit(new_plane, 0));
+		return (warn_err_free_exit(new_plane, 0));
 	}
 	token = strtok(NULL, " \t\n");
 	if (!token || !parse_colour(token, &new_plane->u_data.plane.colour))
 	{
 		printf(RED "Error: Failed to parse colour for plane.\n" RST);
-		return (err_free_exit(new_plane, 0));
+		return (warn_err_free_exit(new_plane, 0));
 	}
 	if (!add_object(scene, new_plane))
 	{
 		printf(RED "Error: Failed to add plane to the scene.\n" RST);
-		return (err_free_exit(new_plane, 0));
+		return (warn_err_free_exit(new_plane, 0));
 	}
 	printf(G "   SUCCESS - Plane parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_plane()\n\n");
@@ -154,27 +154,27 @@ int	parse_cylinder(char *line, t_Scene *scene)
 	new_cylinder->next = NULL;
 	token = strtok(NULL, " \t\n");
 	if (!token || !parse_vector3(token, &new_cylinder->u_data.cylinder.centre))
-		return (err_free_exit(new_cylinder, 0));
+		return (warn_err_free_exit(new_cylinder, 0));
 	token = strtok(NULL, " \t\n");
 	if (!token || !parse_vector3(token, &new_cylinder->u_data.cylinder.axis))
-		return (err_free_exit(new_cylinder, 0));
+		return (warn_err_free_exit(new_cylinder, 0));
 	token = strtok(NULL, " \t\n");
 	new_cylinder->u_data.cylinder.diameter = parse_float(&token);
 	if (!token || !new_cylinder->u_data.cylinder.diameter)
-		return (err_free_exit(new_cylinder, 0));
+		return (warn_err_free_exit(new_cylinder, 0));
 	printf("   Parsed diameter: %f\n", new_cylinder->u_data.cylinder.diameter);
 	token = strtok(NULL, " \t\n");
 	new_cylinder->u_data.cylinder.height = parse_float(&token);
 	if (!token || !new_cylinder->u_data.cylinder.height)
-		return (err_free_exit(new_cylinder, 0));
+		return (warn_err_free_exit(new_cylinder, 0));
 	printf("   Parsed height: %f\n", new_cylinder->u_data.cylinder.height);
 	token = strtok(NULL, " \t\n");
 	if (!token || !parse_colour(token, &new_cylinder->u_data.cylinder.colour))
-		return (err_free_exit(new_cylinder, 0));
+		return (warn_err_free_exit(new_cylinder, 0));
 	if (!add_object(scene, new_cylinder))
 	{
 		printf(RED "Error: Failed to add cylinder to the scene.\n" RST);
-		return (err_free_exit(new_cylinder, 0));
+		return (warn_err_free_exit(new_cylinder, 0));
 	}
 	printf(G "   SUCCESS - Cylinder parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_cylinder()\n\n");

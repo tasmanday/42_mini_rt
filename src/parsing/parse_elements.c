@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 16:17:31 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 17:57:39 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,22 @@ int	parse_camera(t_Camera *camera)
 int	parse_light(t_Light *light)
 {
 	char	*token;
+	float	brightness;
 
 	printf(G "Entering" RST " parse_light()\n\n");
 	if (parse_vector3(&light->position) == FAILURE)
 		err_exit(12);
 	if (get_next_token(&token) == FAILURE)
 		warn_err_exit("No token found", 12);
-	light->brightness = parse_float(&token);
-	if (light->brightness < 0.0f || light->brightness > 1.0f)
+	brightness = parse_float(&token);
+	if (brightness == FAILURE)
+		warn_err_exit(" for brightness", 12);
+	if (brightness < 0.0f || brightness > 1.0f)
 		warn_err_exit("Light brightness ratio out of range (0.0 to 1.0)", 12);
+	light->brightness = brightness;
 	printf("\n   -> Parsed brightness: %f\n\n", light->brightness);
-	if (parse_rgb(&light->colour, &token) != SUCCESS)
-		err_exit(12)
+	if (parse_rgb(&light->colour, &token) == FAILURE)
+		err_exit(12);
 	if (get_next_token(&token) == SUCCESS)
 		warn_err_exit("Excess light values", 3);
 	printf(G "   SUCCESS - Light parsed and added!\n\n");

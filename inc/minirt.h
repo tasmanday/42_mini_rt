@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 16:17:35 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/03 18:26:28 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ typedef struct s_Scene
 int			err_exit(t_Error error);
 //int			err_free_exit(struct Object *current, t_Scene *scene);
 int			err_free_exit(t_Error error, struct Object *current, t_Scene *scene);
+int			warn_err_free_exit(const char *message, t_Error error, struct Object *current, t_Scene *scene);
 int			err_return(const char *message);
 void		warn_err_exit(const char *message, t_Error error);
 
@@ -234,6 +235,7 @@ char		*ft_strtok(char *str, const char *delimiters);
 //int			get_next_token(char **token, const char *delim);
 int			parse_rgb(t_Colour *colour, char **token);
 int			get_next_token(char **token);
+//int 	get_next_token(char **token, char **input_buffer);
 //int get_next_token(char **token, char **line);
 //int			get_next_token(char **token, char **line);
 
