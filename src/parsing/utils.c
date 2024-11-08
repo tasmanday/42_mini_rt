@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 17:50:20 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/04 00:18:42 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ float	parse_float(char **str)
 	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
 	{
 		printf(RED
-			"\n   Error! Invalid characters in float in: '%s'"RST, *str);
+			"\n   Error! Invalid character in float in '%s'"RST, *str);
 		return (FAILURE);
 	}
 	*str = end;

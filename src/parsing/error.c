@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 18:53:29 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/04 00:17:53 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	err_free_exit(t_Error error, struct Object *current, t_Scene *scene)
 
 	index = 0;
 	if (error == 13)
-		printf(RED" in SPHERE\n\n\n"RST);
+		printf(RED" in SPHERE\n\n"RST);
 	else if (error == 14)
 		printf(RED" in PLANE\n\n"RST);
 	else if (error == 15)
@@ -80,17 +80,17 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
 {
 	struct Object	*next;
 	struct Object	*object;
-	int 			index;
+	//int 			index;
 
 	(void)current;
-	index = 0;
+	//index = 0;
 	printf(RED "\n   Error! %s", message);
 	if (error == 13)
-		printf("in SPHERE\n\nExiting...\n\n"RST);
+		printf(" in SPHERE\n\nExiting...\n\n"RST);
 	else if (error == 14)
-		printf("in PLANE\n\nExiting...\n\n"RST);
+		printf(" in PLANE\n\nExiting...\n\n"RST);
 	else if (error == 15)
-		printf("in CYLINDER\n\nExiting...\n\n"RST);
+		printf(" in CYLINDER\n\nExiting...\n\n"RST);
 	if (scene && scene->mlx.mlx_ptr && scene->mlx.win_ptr)
 		mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
 	/*	

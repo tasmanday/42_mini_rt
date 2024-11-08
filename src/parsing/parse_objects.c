@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 18:27:41 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/05 00:20:35 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,51 +19,12 @@ static int	is_normalized_vector(t_Vector3 *vector)
 			&& vector->y <= 1) && (vector->z >= -1 && vector->z <= 1));
 }
 */
-/*
-int	parse_sphere(char *line, t_Scene *scene)
-{
-	struct Object	*new_sphere;
-	char			*token;
 
-	(void)line;
-	printf(G "Entering" RST " parse_sphere()\n\n");
-	new_sphere = malloc(sizeof(struct Object));
-	if (!new_sphere)
-		return (0);
-	new_sphere->type = SPHERE;
-	new_sphere->next = NULL;
-	token = strtok(NULL, " \t\n");
-	if (get_next_token(&token) == FAILURE 
-		|| parse_vector3(&new_sphere->u_data.sphere.centre) == FAILURE)
-		return (warn_err_free_exit(new_sphere, 0));
-	token = strtok(NULL, " \t\n");
-	new_sphere->u_data.sphere.diameter = parse_float(&token);
-	if (!token || !new_sphere->u_data.sphere.diameter)
-		return (warn_err_free_exit(new_sphere, 0));
-	printf("   Parsed diameter: %f\n", new_sphere->u_data.sphere.diameter);
-	token = strtok(NULL, " \t\n");
-	if (!token || !parse_rgb(&new_sphere->u_data.sphere.colour, &token))
-	{
-		printf(RED "Exiting" RST " parse_sphere()\n");
-		printf("---------------------------------------------------------\
-			------\n");
-		return (warn_err_free_exit(new_sphere, 0));
-	}
-	if (!add_object(scene, new_sphere))
-	{
-		printf(RED "Error: Failed to add sphere to the scene.\n" RST);
-		return (warn_err_free_exit(new_sphere, 0));
-	}
-	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
-	printf(RED "Exiting" RST " parse_sphere()\n\n");
-	printf("---------------------------------------------------------------\n");
-	return(SUCCESS); // changed from return (1)
-}
-*/
 int	parse_sphere(t_Scene *scene)
 {
 	struct Object	*new_sphere;
 	char			*token;
+	float			diameter;
 
 	printf(G "Entering" RST " parse_sphere()\n\n");
 	new_sphere = malloc(sizeof(struct Object));
@@ -72,15 +33,21 @@ int	parse_sphere(t_Scene *scene)
 	new_sphere->type = SPHERE;
 	new_sphere->next = NULL;
 	if (parse_vector3(&new_sphere->u_data.sphere.centre) == FAILURE)
-		warn_err_free_exit("Error! Vector fail", 13, new_sphere, 0);
+		warn_err_free_exit("Failed vector", 13, new_sphere, 0);
 	if (get_next_token(&token) == FAILURE)
-		warn_err_free_exit("Error! Diameter not input", 13, new_sphere, 0);
-	new_sphere->u_data.sphere.diameter = parse_float(&token);
-	printf("\n   -> Parsed diameter: %f\n\n", new_sphere->u_data.sphere.diameter);
+		warn_err_free_exit("No input for diameter", 13, new_sphere, 0);
+	diameter = parse_float(&token);
+	if (diameter == FAILURE)
+		err_free_exit(13, new_sphere, 0);
+	new_sphere->u_data.sphere.diameter = diameter;
+	if (new_sphere->u_data.sphere.diameter < 0.0f)
+		warn_err_free_exit("Invalid diameter", 13, new_sphere, 0);
+	printf("\n   -> Parsed diameter: %f\n\n",
+		new_sphere->u_data.sphere.diameter);
 	if (parse_rgb(&new_sphere->u_data.sphere.colour, &token) == FAILURE)
 		err_free_exit(13, new_sphere, 0);
-	//if (get_next_token(&token) == SUCCESS)
-	//	warn_err_free_exit("Too many values", 13, new_sphere, 0);
+	if (get_next_token(&token) == SUCCESS)
+		warn_err_free_exit("Excess sphere values", 13, new_sphere, 0);
 	if (!add_object(scene, new_sphere))
 		warn_err_free_exit("Could not add object", 13, new_sphere, 0);
 	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
