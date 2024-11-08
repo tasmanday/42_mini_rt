@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/11/04 00:17:53 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/08 18:26:45 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,6 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
 
 int	err_return(const char *message)
 {
-	printf(RED "   Error! %s\n\n" RST, message);
+	printf(RED "\nError! %s\n\n" RST, message);
 	return (FAILURE);
 }

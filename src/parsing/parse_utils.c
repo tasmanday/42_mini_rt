@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/11/04 20:46:03 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/08 19:18:39 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	parse_vector3(t_Vector3 *vec)
 int	parse_rgb(t_Colour *colour, char **token)
 {
 	int	i;
+	int j;
 	int	value;
 
 	i = 0;
@@ -46,14 +47,34 @@ int	parse_rgb(t_Colour *colour, char **token)
 	{
 		if (get_next_token(token) == FAILURE || *token == NULL)
 		{
-			printf(RED"\n   No more tokens found for RGB values"RST);
+			printf(RED"\n   No more tokens found for RGB values (needs 3)"RST);
 			return (FAILURE);
 		}
+		j = 0;
+	    while ((*token)[j] != '\0')
+        {
+            if (!ft_isdigit((unsigned char)(*token)[j]))
+            {
+                printf(RED "\n   Error! '%s' contains non-numeric characters for RGB" RST, *token);
+                return (FAILURE);
+            }
+			j++;
+        }
+
+
 		value = ft_atoi(*token);
-		if (value < 0 || value > 255)
+		if (value < 0 || value > 255 || !value)
 		{
-			printf(RED"\n   Error! RGB value out of range (0-255)"RST);
-			return (FAILURE);
+			if (value < 0 || value > 255)
+			{
+				printf(RED"\n   Error! RGB value out of range (0-255)"RST);
+				return (FAILURE);
+			}
+			else if (!value)
+			{
+				printf(RED"\n   Error! Conversion of RGB value failed"RST);
+				return (FAILURE);
+			}
 		}
 		if (i == 0)
 			colour->r = value;

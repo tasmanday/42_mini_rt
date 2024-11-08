@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 17:57:39 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/08 19:10:18 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ int	parse_ambient_light(t_AmbientLight *ambient_light)
 		err_exit(10);
 	ambient_light->ratio = ratio;
 	if (ambient_light->ratio < 0.0f || ambient_light->ratio > 1.0f)
-		warn_err_exit("   Ambient light ratio out of range (0.0 to 1.0)", 10);
+		warn_err_exit("\n   Ambient light ratio out of range (0.0 to 1.0)", 10);
 	printf("\n   -> Parsed ratio: %f\n\n", ambient_light->ratio);
 	if (parse_rgb(&ambient_light->colour, &token) == FAILURE)
 		err_exit(10);
 	if (get_next_token(&token) == SUCCESS)
-		warn_err_exit("   Error! Excess ambient light values", 10);
+		warn_err_exit("\n   Error! Excess ambient light values", 10);
 	printf(G "   SUCCESS - Ambient Light parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_ambient_light()\n\n");
 	printf("---------------------------------------------------------------\n");
