@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/11/08 19:18:39 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/10 11:39:54 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,15 @@ int	parse_vector3(t_Vector3 *vec)
 	while (i < 3)
 	{
 		if (get_next_token(&token) == FAILURE)
+		{
 			return (FAILURE);
+		}
 		*coords[i] = parse_float(&token);
 		if (*coords[i] == FAILURE)
+		{
+			printf(RED" when parsing vector"RST);
 			return (FAILURE);
+		}
 		i++;
 	}
 	printf("\n   -> Parsed vector: x = %f, y = %f, z = %f\n\n",
@@ -39,7 +44,7 @@ int	parse_vector3(t_Vector3 *vec)
 int	parse_rgb(t_Colour *colour, char **token)
 {
 	int	i;
-	int j;
+	int	j;
 	int	value;
 
 	i = 0;
@@ -51,17 +56,16 @@ int	parse_rgb(t_Colour *colour, char **token)
 			return (FAILURE);
 		}
 		j = 0;
-	    while ((*token)[j] != '\0')
-        {
-            if (!ft_isdigit((unsigned char)(*token)[j]))
-            {
-                printf(RED "\n   Error! '%s' contains non-numeric characters for RGB" RST, *token);
-                return (FAILURE);
-            }
+		while ((*token)[j] != '\0')
+		{
+			if (!ft_isdigit((unsigned char)(*token)[j]))
+			{
+				printf(RED "\n   Error! '%s' contains non-numeric characters for \
+RGB" RST, *token);
+				return (FAILURE);
+			}
 			j++;
-        }
-
-
+		}
 		value = ft_atoi(*token);
 		if (value < 0 || value > 255 || !value)
 		{
@@ -131,21 +135,14 @@ int	parse_orientation(t_Vector3 *orientation, char **token)
 	{
 		if (get_next_token(token) == FAILURE)
 		{
-			printf(RED"   Failed to get x/y/z orientation"RST);
+			printf(RED"\n   Failed to get x/y/z orientation"RST);
 			return (FAILURE);
 		}
-		/*
-		while (ft_isspace((unsigned char)**token)) (*token)++; // Trim leading whitespace
-
-        // Check for newlines
-        if (**token == '\n') {
-            **token = '\0'; // Null-terminate if newline found
-        }
-		*/
 		*coords[i] = strtof(*token, &endptr);
 		if (*endptr != '\0')
 		{
-			printf(RED"\n   Invalid value for x/y/z orientation: '%s'"RST, *token);
+			printf(RED"\n   Invalid value for x/y/z orientation: \
+'%s'"RST, *token);
 			return (FAILURE);
 		}
 		if (*coords[i] < -1.0f || *coords[i] > 1.0f)

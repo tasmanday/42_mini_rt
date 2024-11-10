@@ -6,7 +6,7 @@
 /*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:01:41 by atang             #+#    #+#             */
-/*   Updated: 2024/10/19 10:13:26 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/10 09:42:17 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_camera(const t_Camera *camera)
 		camera->position.y, camera->position.z);
 	printf("      Orientation: %f, %f, %f\n", camera->orientation.x,
 		camera->orientation.y, camera->orientation.z);
-	printf("      FOV: %f\n", camera->fov);
+	printf("      FOV: %d\n", camera->fov);
 }
 
 void	print_light(const t_Light *light)

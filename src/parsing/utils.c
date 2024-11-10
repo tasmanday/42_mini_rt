@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/11/08 19:34:49 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/10 11:39:54 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 
 int	get_next_token(char **token)
 {
-	*token = strtok(NULL, " \t,");
+	*token = strtok(NULL, " ,\t\n");
 	while (*token && **token == '\0') // Skip empty tokens if any
     {
-        *token = strtok(NULL, " \t,");
+        *token = strtok(NULL, " \t\n");
     }
 
 	if (!*token)
@@ -114,6 +114,7 @@ float	parse_float(char **str)
 		printf(RED
 			"\n   Error! Invalid character in float in '%s'"RST, *str);
 		return (FAILURE);
+		//exit(1);
 	}
 	*str = end;
 	while (**str == ' ' || **str == '\t' || **str == ',')
@@ -123,68 +124,55 @@ float	parse_float(char **str)
 	return (result);
 }
 
+/*
 int	parse_int(char	**str)
 {
-	char	*end;
-	int		result;
+	char		*end;
+	long long	result;
 
-	result = (int)strtol(*str, &end, 10);
+	result = ft_atoi(*str);
+	end = *str;
+	while (*end && (ft_isdigit(*end))
+	{
+		end++;
+	}
 	if (end == *str)
-		return (0);
+	{
+		printf(RED "\n   Error! No valid int found in '%s'" RST, *str);
+		return (FAILURE);
+	}
 	if (*end == ',' || *end == '\0' || *end == ' ' || *end == '\t')
 		*str = end + 1;
 	else
 		*str = end;
-	return (result);
+	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
+	{
+		printf(RED "\n   Error! Invalid character in int in '%s'" RST, *str);
+		return (FAILURE);
+	}
+	return ((int)result);
 }
+*/
 
-char *ft_strtok(char *str, const char *delim)
+int	parse_int(char **str)
 {
-    static char *last = NULL;
-    char *start;
-    char *current;
+	char		*end;
+	long long	result;
 
-    // If no string is passed, continue from the last one
-    if (str == NULL)
-        str = last;
-
-    // Skip leading delimiters (spaces, tabs, etc.)
-    while (*str && strchr(delim, *str))
-        str++;
-
-    // If we've reached the end of the string
-    if (*str == '\0')
-        return NULL;
-
-    // Set the start of the token
-    start = str;
-
-    // Move through the string to find the first delimiter or end of string
-    current = str;
-    while (*current && !strchr(delim, *current))
-    {
-        current++;
-    }
-
-    // Null-terminate the token
-    if (*current != '\0')
-    {
-        *current = '\0'; // End the token
-        last = current + 1; // Move the pointer to the next part of the string
-    }
-    else
-    {
-        last = current; // End of string reached
-    }
-
-    // Trim unwanted newline or carriage return characters from the token
-    char *token_end = start + strlen(start) - 1;
-    while (token_end >= start && (*token_end == '\n' || *token_end == '\r' || isspace((unsigned char)*token_end)))
-    {
-        *token_end = '\0'; // Null-terminate at the trimmed point
-        token_end--;
-    }
-
-    return start;
+	result = ft_atoi(*str);
+	end = *str;
+	if (*end == '-' || *end == '+')
+		end++;
+	while (*end && ft_isdigit(*end))
+		end++;
+	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
+	{
+		printf(RED "\n   Error! Invalid character in '%s' when parsing int" RST, *str);
+		return (FAILURE);
+	}
+	if (*end == ',' || *end == '\0' || *end == ' ' || *end == '\t')
+		*str = end + 1;
+	else
+		*str = end;
+	return ((int)result);
 }
-
