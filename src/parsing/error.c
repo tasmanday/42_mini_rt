@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/11/08 18:26:45 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/10 15:41:41 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,9 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
 {
 	struct Object	*next;
 	struct Object	*object;
-	//int 			index;
+	int 			index;
 
-	(void)current;
-	//index = 0;
+	index = 0;
 	printf(RED "\n   Error! %s", message);
 	if (error == 13)
 		printf(" in SPHERE\n\nExiting...\n\n"RST);
@@ -91,14 +90,13 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
 		printf(" in PLANE\n\nExiting...\n\n"RST);
 	else if (error == 15)
 		printf(" in CYLINDER\n\nExiting...\n\n"RST);
-	if (scene && scene->mlx.mlx_ptr && scene->mlx.win_ptr)
-		mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
-	/*	
+	//if (scene && scene->mlx.mlx_ptr && scene->mlx.win_ptr)
+	//	mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
 	if (current)
 	{
 		printf("Freeing current object at index: %d at address: %p\n", index, (void *)current);
 		free(current);
-		//current = NULL;
+		current = NULL;
 	}
 	if (scene && scene->objects)
 	{
@@ -113,7 +111,6 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
 		}
 		scene->objects = NULL;
 	}
-	*/
     if (scene && scene->objects)
     {
         object = scene->objects;
@@ -123,9 +120,9 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
             printf("Freeing object at address: %p\n", (void *)object);
             free(object);
             object = next;
-            scene->object_count--; // Decrement object count
+            scene->object_count--;
         }
-        scene->objects = NULL; // Clear the head pointer
+        scene->objects = NULL;
         printf(G "All objects freed successfully.\n" RST);
     }
 	free(scene);

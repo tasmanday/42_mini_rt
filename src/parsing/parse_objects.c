@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/11/05 00:20:35 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/10 17:45:16 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,23 @@ int	parse_sphere(t_Scene *scene)
 	new_sphere->type = SPHERE;
 	new_sphere->next = NULL;
 	if (parse_vector3(&new_sphere->u_data.sphere.centre) == FAILURE)
-		warn_err_free_exit("Failed vector", 13, new_sphere, 0);
+		warn_err_free_exit("Failed vector", 13, new_sphere, scene);
 	if (get_next_token(&token) == FAILURE)
-		warn_err_free_exit("No input for diameter", 13, new_sphere, 0);
+		warn_err_free_exit("No input for diameter", 13, new_sphere, scene);
 	diameter = parse_float(&token);
 	if (diameter == FAILURE)
 		err_free_exit(13, new_sphere, 0);
 	new_sphere->u_data.sphere.diameter = diameter;
 	if (new_sphere->u_data.sphere.diameter < 0.0f)
-		warn_err_free_exit("Invalid diameter", 13, new_sphere, 0);
+		warn_err_free_exit("Invalid diameter", 13, new_sphere, scene);
 	printf("\n   -> Parsed diameter: %f\n\n",
 		new_sphere->u_data.sphere.diameter);
 	if (parse_rgb(&new_sphere->u_data.sphere.colour, &token) == FAILURE)
-		err_free_exit(13, new_sphere, 0);
+		err_free_exit(13, new_sphere, scene);
 	if (get_next_token(&token) == SUCCESS)
-		warn_err_free_exit("Excess sphere values", 13, new_sphere, 0);
+		warn_err_free_exit("Excess sphere values", 13, new_sphere, scene);
 	if (!add_object(scene, new_sphere))
-		warn_err_free_exit("Could not add object", 13, new_sphere, 0);
+		warn_err_free_exit("Could not add object", 13, new_sphere, scene);
 	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_sphere()\n\n");
 	printf("---------------------------------------------------------------\n");

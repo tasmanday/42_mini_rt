@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/11/10 11:39:54 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/10 17:42:29 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,20 @@ RGB" RST, *token);
 			j++;
 		}
 		value = ft_atoi(*token);
-		if (value < 0 || value > 255 || !value)
+		if (value < 0 || value > 255)
 		{
 			if (value < 0 || value > 255)
 			{
 				printf(RED"\n   Error! RGB value out of range (0-255)"RST);
 				return (FAILURE);
 			}
+			/*
 			else if (!value)
 			{
 				printf(RED"\n   Error! Conversion of RGB value failed"RST);
 				return (FAILURE);
 			}
+			*/
 		}
 		if (i == 0)
 			colour->r = value;
