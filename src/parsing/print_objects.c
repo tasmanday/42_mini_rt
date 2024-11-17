@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   print_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:12:23 by atang             #+#    #+#             */
-/*   Updated: 2024/10/16 12:46:50 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/17 23:17:50 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minirt.h"
 
@@ -17,9 +17,9 @@ void	print_sphere(const struct Object *object)
 	if (object->type != SPHERE)
 		return ;
 	printf("      Center: %f, %f, %f\n",
-		object->u_data.sphere.centre.x,
-		object->u_data.sphere.centre.y,
-		object->u_data.sphere.centre.z);
+		object->u_data.sphere.center.x,
+		object->u_data.sphere.center.y,
+		object->u_data.sphere.center.z);
 	printf("      Diameter: %f\n", object->u_data.sphere.diameter);
 	printf("      Colour: %d, %d, %d",
 		object->u_data.sphere.colour.r,
@@ -50,9 +50,9 @@ void	print_cylinder(const struct Object *object)
 	if (object->type != CYLINDER)
 		return ;
 	printf("      Center: %f, %f, %f\n",
-		object->u_data.cylinder.centre.x,
-		object->u_data.cylinder.centre.y,
-		object->u_data.cylinder.centre.z);
+		object->u_data.cylinder.center.x,
+		object->u_data.cylinder.center.y,
+		object->u_data.cylinder.center.z);
 	printf("      Axis: %f, %f, %f\n",
 		object->u_data.cylinder.axis.x,
 		object->u_data.cylinder.axis.y,

@@ -6,40 +6,43 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2024/11/17 15:03:40 by tday             ###   ########.fr       */
+/*   Updated: 2024/11/18 00:18:07 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
-bool check_end_plane_intersection(t_Vector3 ray_origin, t_Vector3 ray_dir, 
-                                  t_Cylinder *cylinder, float *distance)
+bool check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *distance)
 {
-    float cap_distance;
-    bool hit = false;
+	t_Vector3	offset;
+	t_Vector3	cap_a_center;
+	t_Vector3	cap_b_center;
+	float		temp_distance;
 
-    // Bottom cap
-    t_Vector3 bottom_cap_center = cylinder->centre;
-    if (ray_intersects_plane(ray_origin, ray_dir, bottom_cap_center, cylinder->axis, &cap_distance) &&
-        vect_distance(vect_add(ray_origin, vect_multiply_scalar(ray_dir, cap_distance)), bottom_cap_center) <= cylinder->diameter / 2)
-    {
-        *distance = cap_distance;
-        hit = true;
-    }
+	// Scale the normalised axis by half the height to get the offset
+	offset = vect_multiply_scalar(cylinder.axis, cylinder.height / 2.0f);
 
-    // Top cap
-    t_Vector3 top_cap_center = vect_add(bottom_cap_center, vect_multiply_scalar(cylinder->axis, cylinder->height));
-    if (ray_intersects_plane(ray_origin, ray_dir, top_cap_center, cylinder->axis, &cap_distance) &&
-        vect_distance(vect_add(ray_origin, vect_multiply_scalar(ray_dir, cap_distance)), top_cap_center) <= cylinder->diameter / 2)
-    {
-        if (!hit || cap_distance < *distance)
-        {
-            *distance = cap_distance;
-            hit = true;
-        }
-    }
+	// cap a
+	cap_a_center = vect_add(cylinder.center, offset);
+	if (ray_intersects_plane(ray, cap_a_center, cylinder.axis, &temp_distance) &&
+		vect_distance(vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, temp_distance)), cap_a_center) <= cylinder.diameter / 2)
+	{
+		*distance = temp_distance;
+	}
 
-    return hit;
+	// TODO cap b
+	t_Vector3 cap_b_center = vect_add(cap_a_center, vect_multiply_scalar(cylinder->axis, cylinder->height));
+	if (ray_intersects_plane(ray_origin, ray_dir, cap_b_center, cylinder->axis, &cap_distance) &&
+		vect_distance(vect_add(ray_origin, vect_multiply_scalar(ray_dir, cap_distance)), cap_b_center) <= cylinder->diameter / 2)
+	{
+		if (!hit || cap_distance < *distance)
+		{
+			*distance = cap_distance;
+			hit = true;
+		}
+	}
+
+	return hit;
 }
 
 
@@ -54,18 +57,18 @@ bool	ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
 	bool hit_cap = false;
 
 	// Bottom cap
-	t_Vector3 bottom_cap_center = cylinder->centre;
+	t_Vector3 cap_a_center = cylinder->center;
 	if (ray_intersects_plane(scene, ray_dir, &cap_distance) && \
-		vect_distance(vect_add(ray_origin, vect_multiply(ray_dir, cap_distance)), bottom_cap_center) <= cylinder->diameter / 2)
+		vect_distance(vect_add(ray_origin, vect_multiply(ray_dir, cap_distance)), cap_a_center) <= cylinder->diameter / 2)
 	{
 		*distance = cap_distance;
 		hit_cap = true;
 	}
 
 	// Top cap
-	t_Vector3 top_cap_center = vect_add(bottom_cap_center, vect_multiply(cylinder->axis, cylinder->height));
+	t_Vector3 cap_b_center = vect_add(cap_a_center, vect_multiply(cylinder->axis, cylinder->height));
 	if (ray_intersects_plane(scene, ray_dir, &cap_distance) && \
-		vect_distance(vect_add(ray_origin, vect_multiply(ray_dir, cap_distance)), top_cap_center) <= cylinder->diameter / 2)
+		vect_distance(vect_add(ray_origin, vect_multiply(ray_dir, cap_distance)), cap_b_center) <= cylinder->diameter / 2)
 	{
 		if (!hit_cap || cap_distance < *distance)
 		{
@@ -75,7 +78,7 @@ bool	ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
 	}
 
 	// Step 2: Check intersection with the cylinder's curved surface
-	t_Vector3 oc = vect_subtract(ray_origin, cylinder->centre);
+	t_Vector3 oc = vect_subtract(ray_origin, cylinder->center);
 	t_Vector3 ray_dir_proj = vect_cross(ray_dir, cylinder->axis);
 	t_Vector3 oc_proj = vect_cross(oc, cylinder->axis);
 
@@ -94,7 +97,7 @@ bool	ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
 		if (t > 0)
 		{
 			t_Vector3 intersection = vect_add(ray_origin, vect_multiply(ray_dir, t));
-			float dist_to_axis = vect_dot(vect_subtract(intersection, cylinder->centre), cylinder->axis);
+			float dist_to_axis = vect_dot(vect_subtract(intersection, cylinder->center), cylinder->axis);
 
 			if (fabs(dist_to_axis) <= cylinder->height / 2)
 			{

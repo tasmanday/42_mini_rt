@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 22:09:09 by tday              #+#    #+#             */
-/*   Updated: 2024/11/17 18:56:59 by tday             ###   ########.fr       */
+/*   Updated: 2024/11/17 23:17:50 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -18,7 +18,7 @@ bool	ray_intersects_sphere(t_ray *ray, t_Sphere sphere, float *distance)
 
 	radius = sphere.diameter / 2.0;
 
-	t_Vector3 L = vect_subtract(ray->ray_origin, sphere.centre);
+	t_Vector3 L = vect_subtract(ray->ray_origin, sphere.center);
 	float	tc = vect_dot(L, ray->ray_dir);
 	if (tc < 0.0)
 		return (false); // Ray is pointing away from the sphere printf("Ray is pointing away from the sphere\n"),

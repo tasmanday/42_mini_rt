@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parse_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/10/19 10:12:02 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/17 23:17:50 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minirt.h"
 
@@ -31,7 +31,7 @@ int	parse_sphere(char *line, t_Scene *scene)
 	new_sphere->type = SPHERE;
 	new_sphere->next = NULL;
 	token = strtok(NULL, " \t\n");
-	if (!token || !parse_vector3(token, &new_sphere->u_data.sphere.centre))
+	if (!token || !parse_vector3(token, &new_sphere->u_data.sphere.center))
 		return (err_free_exit(new_sphere, 0));
 	token = strtok(NULL, " \t\n");
 	new_sphere->u_data.sphere.diameter = parse_float(&token);
@@ -120,7 +120,7 @@ int	parse_cylinder(char *line, t_Scene *scene)
 	new_cylinder->type = CYLINDER;
 	new_cylinder->next = NULL;
 	token = strtok(NULL, " \t\n");
-	if (!token || !parse_vector3(token, &new_cylinder->u_data.cylinder.centre))
+	if (!token || !parse_vector3(token, &new_cylinder->u_data.cylinder.center))
 		return (err_free_exit(new_cylinder, 0));
 	token = strtok(NULL, " \t\n");
 	if (!token || !parse_vector3(token, &new_cylinder->u_data.cylinder.axis))
