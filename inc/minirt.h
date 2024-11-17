@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/10/24 23:05:09 by tday             ###   ########.fr       */
+/*   Updated: 2024/11/17 19:10:40 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -130,6 +130,16 @@ typedef struct Object
 	struct Object	*next;
 }	t_Object;
 
+typedef struct s_ray
+{
+	t_Vector3	ray_origin;
+	t_Vector3	ray_dir;
+	bool		intersects_object;
+	float		closest_intersection;
+	t_Object	*closest_object;
+	t_Colour	colour;
+}				t_ray;
+
 typedef struct s_Mlx
 {
 	int				width;
@@ -240,17 +250,19 @@ t_Vector3	vect_subtract(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b);
 float		vect_dot(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar);
+float		vect_distance(t_Vector3 a, t_Vector3 b);
 
 void		compute_ray_directions(t_Scene *scene);
+void		init_ray(t_Scene *scene, t_ray *ray, int x, int y);
 t_Vector3	get_ray_direction(t_Scene *scene, int x, int y);
 t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene);
 bool		camera_pointed_straight_up_or_down(t_Vector3 orientation);
 
-bool		ray_intersects_sphere(t_Scene *scene, t_Vector3 ray_dir, \
+bool		ray_intersects_sphere(t_ray *ray, t_Sphere sphere, \
 			float *distance);
 /* bool		ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
 			float *distance); */
-bool		ray_intersects_plane(t_Scene *scene, t_Vector3 ray_dir, \
-			float *distance);
+bool		ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
+			t_Vector3	plane_norm_vect, float *distance);
 
 #endif

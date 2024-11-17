@@ -6,25 +6,20 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 22:09:09 by tday              #+#    #+#             */
-/*   Updated: 2024/10/20 23:11:59 by tday             ###   ########.fr       */
+/*   Updated: 2024/11/17 18:56:59 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
-bool	ray_intersects_sphere(t_Scene *scene, t_Vector3 ray_dir, 				\
-		float *distance)
+bool	ray_intersects_sphere(t_ray *ray, t_Sphere sphere, float *distance)
 {
-	t_Vector3	sphere_center;
 	float	radius;
 
+	radius = sphere.diameter / 2.0;
 
-	sphere_center = (scene->objects->u_data.sphere.centre);
-	radius = scene->objects->u_data.sphere.diameter / 2.0;
-//	printf("%f", radius);
-
-	t_Vector3 L = vect_subtract(scene->camera.position, sphere_center);
-	float	tc = vect_dot(L, ray_dir);
+	t_Vector3 L = vect_subtract(ray->ray_origin, sphere.centre);
+	float	tc = vect_dot(L, ray->ray_dir);
 	if (tc < 0.0)
 		return (false); // Ray is pointing away from the sphere printf("Ray is pointing away from the sphere\n"),
 	float l2 = vect_dot(L, L);

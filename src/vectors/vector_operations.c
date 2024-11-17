@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:46:07 by tday              #+#    #+#             */
-/*   Updated: 2024/10/20 23:11:56 by tday             ###   ########.fr       */
+/*   Updated: 2024/11/17 15:03:38 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -166,4 +166,25 @@ t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar)
 	result.y = v.y * scalar;
 	result.z = v.z * scalar;
 	return (result);
+}
+
+/*
+	Summary
+	Calculates and returns the Euclidean distance between two vectors in 3D space.
+
+	Inputs
+	[t_Vector3] a: The first vector (point).
+	[t_Vector3] b: The second vector (point).
+
+	Outputs
+	[float] Returns the distance between the two input vectors.
+*/
+float	vect_distance(t_Vector3 a, t_Vector3 b)
+{
+	t_Vector3	difference;
+	float		distance;
+
+	difference = vect_subtract(a, b);
+	distance = sqrt(vect_dot(difference, difference));
+	return (distance);
 }
