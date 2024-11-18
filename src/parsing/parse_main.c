@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:44:24 by atang             #+#    #+#             */
-/*   Updated: 2024/11/02 18:17:21 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/18 15:05:31 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,8 @@ int	parse_line(char *line, t_Scene *scene)
 			return (parse_sphere(scene));
 		//else if (strcmp(token, "pl") == 0)
 		//	return (parse_plane(line, scene));
-		//else if (strcmp(token, "cy") == 0)
-		//	return (parse_cylinder(line, scene));
+		else if (strcmp(token, "cy") == 0)
+			return (parse_cylinder(line, scene));
 	}
 	else
 	{

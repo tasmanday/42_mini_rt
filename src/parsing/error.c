@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/11/10 15:41:41 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/18 13:51:31 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,35 @@ int	err_free_exit(t_Error error, struct Object *current, t_Scene *scene)
 		printf(RED" in CYLINDER\n\n"RST);
 	if (scene && scene->mlx.mlx_ptr && scene->mlx.win_ptr)
 		mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
+	/*
 	if (current)
 	{
-		printf("Freeing current object at index: %d at address: %p\n", index, (void *)current);
+		printf("Freeing initial current object at index: %d\n", index);
 		free(current);
 		current = NULL;
 	}
+	*/
 	if (scene && scene->objects)
 	{
 		object = scene->objects;
 		while (object)
 		{
 			next = object->next;
-			printf("Freeing current object at index: %d at address: %p\n", index, (void *)current);
+			if (object == current)
+			{
+                object = next;
+                index++;
+                continue;
+            }
+			printf("Freeing current object at index: %d\n", index);
 			free(object);
 			object = next;
 			index++;
 		}
 		scene->objects = NULL;
+		printf(G "All objects freed successfully.\n" RST);
 	}
-	free(scene);
+	//free(scene);
 	printf(RED"\nExiting...\n\n"RST);
 	exit(1);
 }
@@ -82,6 +91,7 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
 	struct Object	*object;
 	int 			index;
 
+	(void) current;
 	index = 0;
 	printf(RED "\n   Error! %s", message);
 	if (error == 13)
@@ -92,24 +102,27 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
 		printf(" in CYLINDER\n\nExiting...\n\n"RST);
 	//if (scene && scene->mlx.mlx_ptr && scene->mlx.win_ptr)
 	//	mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
+	/*
 	if (current)
 	{
 		printf("Freeing current object at index: %d at address: %p\n", index, (void *)current);
 		free(current);
 		current = NULL;
 	}
+	*/
 	if (scene && scene->objects)
 	{
 		object = scene->objects;
 		while (object)
 		{
 			next = object->next;
-			printf("Freeing current object at index: %d at address: %p\n", index, (void *)current);
+			printf("Freeing current object at index: %d\n", index);
 			free(object);
 			object = next;
 			index++;
 		}
 		scene->objects = NULL;
+		printf(G "All objects freed successfully.\n" RST);
 	}
     if (scene && scene->objects)
     {
@@ -125,7 +138,7 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
         scene->objects = NULL;
         printf(G "All objects freed successfully.\n" RST);
     }
-	free(scene);
+	//free(scene);
 	exit(1);
 }
 

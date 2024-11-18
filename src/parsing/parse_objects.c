@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/11/10 17:45:16 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/18 16:05:38 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	parse_sphere(t_Scene *scene)
 	new_sphere->type = SPHERE;
 	new_sphere->next = NULL;
 	if (parse_vector3(&new_sphere->u_data.sphere.centre) == FAILURE)
-		warn_err_free_exit("Failed vector", 13, new_sphere, scene);
+		warn_err_free_exit("Failed sphere centre", 13, new_sphere, scene);
 	if (get_next_token(&token) == FAILURE)
 		warn_err_free_exit("No input for diameter", 13, new_sphere, scene);
 	diameter = parse_float(&token);
@@ -56,7 +56,6 @@ int	parse_sphere(t_Scene *scene)
 	return (SUCCESS);
 }
 
-/*
 int	parse_plane(char *line, t_Scene *scene)
 {
 	struct Object	*new_plane;
@@ -66,21 +65,14 @@ int	parse_plane(char *line, t_Scene *scene)
 	printf(G "Entering" RST " parse_plane()\n\n");
 	new_plane = malloc(sizeof(struct Object));
 	if (!new_plane)
-	{
-		printf(RED "Error: Memory allocation failed for plane object.\n" RST);
-		return (0);
-	}
+		return (FAILURE);
 	new_plane->type = PLANE;
 	new_plane->next = NULL;
 	token = strtok(NULL, " \t\n");
-	if (!token || !parse_vector3(token, &new_plane->u_data.plane.point))
-	{
-		printf(RED "Error: Failed to parse point for plane.\n" RST);
-		return (warn_err_free_exit(new_plane, 0));
-	}
-	token = strtok(NULL, " \t\n");
+	if (parse_vector3(&new_plane->u_data.plane.point) == FAILURE)
+		warn_err_free_exit("Error: Failed to parse point", 14, new_plane, scene);
 	if (!token || !parse_vector3(token, &new_plane->u_data.plane.normal))
-	{
+		warn_err_free_exit("Error: Failed to parse poin", 14, new_plane, scene);
 		printf(RED "Error: Failed to parse normal for plane.\n" RST);
 		return (warn_err_free_exit(new_plane, 0));
 	}
@@ -107,6 +99,7 @@ int	parse_plane(char *line, t_Scene *scene)
 	return(SUCCESS); // changed from return (1)
 }
 
+/*
 int	parse_cylinder(char *line, t_Scene *scene)
 {
 	struct Object	*new_cylinder;
@@ -149,3 +142,51 @@ int	parse_cylinder(char *line, t_Scene *scene)
 	return(SUCCESS); // changed from return (1)
 }
 */
+
+int	parse_cylinder(char *line, t_Scene *scene)
+{
+	struct Object	*new_cylinder;
+	char			*token;
+	float			diameter;
+	float			height;
+
+	(void)line;
+	printf(G "Entering" RST " parse_cylinder()\n\n");
+	new_cylinder = malloc(sizeof(struct Object));
+	if (!new_cylinder)
+		return (FAILURE);
+	new_cylinder->type = CYLINDER;
+	new_cylinder->next = NULL;
+	if (parse_vector3(&new_cylinder->u_data.cylinder.centre) == FAILURE)
+		warn_err_free_exit("Failed cylinder centre", 15, new_cylinder, scene);
+	if (parse_vector3(&new_cylinder->u_data.cylinder.axis) == FAILURE)
+		warn_err_free_exit("Failed cylinder axis", 15, new_cylinder, scene);
+	if (get_next_token(&token) == FAILURE)
+		warn_err_free_exit("No input for diameter", 13, new_cylinder, scene);
+	diameter = parse_float(&token);
+	if (diameter == FAILURE)
+		err_free_exit(15, new_cylinder, 0);
+	new_cylinder->u_data.cylinder.diameter = diameter;
+	if (new_cylinder->u_data.cylinder.diameter < 0.0f)
+		warn_err_free_exit("Invalid diameter", 15, new_cylinder, scene);
+	printf("   Parsed diameter: %f\n", new_cylinder->u_data.cylinder.diameter);
+	if (get_next_token(&token) == FAILURE)
+		warn_err_free_exit("No input for height", 13, new_cylinder, scene);
+	height = parse_float(&token);
+	if (height == FAILURE)
+		err_free_exit(15, new_cylinder, 0);
+	new_cylinder->u_data.cylinder.height = height;
+	if (new_cylinder->u_data.cylinder.height < 0.0f)
+		warn_err_free_exit("Invalid height", 15, new_cylinder, scene);
+	printf("   Parsed height: %f\n", new_cylinder->u_data.cylinder.height);
+	if (parse_rgb(&new_cylinder->u_data.cylinder.colour, &token) == FAILURE)
+		err_free_exit(15, new_cylinder, scene);
+	if (get_next_token(&token) == SUCCESS)
+		warn_err_free_exit("Excess cylinder values", 15, new_cylinder, scene);
+	if (!add_object(scene, new_cylinder))
+		warn_err_free_exit("Could not add object", 15, new_cylinder, scene);
+	printf(G "   SUCCESS - Cylinder parsed and added!\n\n" RST);
+	printf(RED "Exiting" RST " parse_cylinder()\n\n");
+	printf("---------------------------------------------------------------\n");
+	return (SUCCESS);
+}
