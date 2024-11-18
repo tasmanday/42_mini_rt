@@ -6,13 +6,22 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2024/11/18 00:18:07 by tday             ###   ########.fr       */
+/*   Updated: 2024/11/19 08:33:00 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
-bool check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *distance)
+bool	intersection_within_radius(t_ray *ray, t_Cylinder cylinder, t_Vector3 cap_center, float temp_distance)
+{
+	if (vect_distance(vect_add(ray->ray_origin, \
+	vect_multiply_scalar(ray->ray_dir, temp_distance)), cap_center) \
+	<= cylinder.diameter / 2)
+		return (true);
+	return (false);
+}
+
+float	*check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *distance)
 {
 	t_Vector3	offset;
 	t_Vector3	cap_a_center;
@@ -24,25 +33,22 @@ bool check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *distan
 
 	// cap a
 	cap_a_center = vect_add(cylinder.center, offset);
-	if (ray_intersects_plane(ray, cap_a_center, cylinder.axis, &temp_distance) &&
-		vect_distance(vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, temp_distance)), cap_a_center) <= cylinder.diameter / 2)
+	if (ray_intersects_plane(ray, cap_a_center, cylinder.axis, &temp_distance) \
+	&& intersection_within_radius(ray, cylinder, cap_a_center, temp_distance))		
 	{
 		*distance = temp_distance;
 	}
 
 	// TODO cap b
-	t_Vector3 cap_b_center = vect_add(cap_a_center, vect_multiply_scalar(cylinder->axis, cylinder->height));
-	if (ray_intersects_plane(ray_origin, ray_dir, cap_b_center, cylinder->axis, &cap_distance) &&
-		vect_distance(vect_add(ray_origin, vect_multiply_scalar(ray_dir, cap_distance)), cap_b_center) <= cylinder->diameter / 2)
+	t_Vector3 cap_b_center = vect_subtract(cylinder.center, offset);
+	if (ray_intersects_plane(ray, cap_b_center, cylinder.axis, &temp_distance) \
+	&& intersection_within_radius(ray, cylinder, cap_a_center, temp_distance) \
+	&& temp_distance < *distance)
 	{
-		if (!hit || cap_distance < *distance)
-		{
-			*distance = cap_distance;
-			hit = true;
-		}
+		*distance = temp_distance;
 	}
 
-	return hit;
+	return (distance);
 }
 
 
