@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/11/10 11:40:30 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/20 15:11:50 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	parse_ambient_light(t_AmbientLight *ambient_light)
 	if (parse_rgb(&ambient_light->colour, &token) == FAILURE)
 		err_exit(10);
 	if (get_next_token(&token) == SUCCESS)
-		warn_err_exit("\n   Error! Excess ambient light values", 10);
+		warn_err_exit("\n   Error! Excess ambient light value(s)", 10);
 	printf(G "   SUCCESS - Ambient Light parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_ambient_light()\n\n");
 	printf("---------------------------------------------------------------\n");
@@ -61,7 +61,7 @@ int	parse_camera(t_Camera *camera)
 		warn_err_exit("   Error! FOV out of range (0-180)", 11);
 	printf("\n   -> Parsed FOV: %d\n\n", camera->fov);
 	if (get_next_token(&token) == SUCCESS)
-		warn_err_exit("\n   Error! Excess camera values", 11);
+		warn_err_exit("\n   Error! Excess camera value(s)", 11);
 	printf(G "   SUCCESS - Camera parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_camera()\n\n");
 	printf("---------------------------------------------------------------\n");
@@ -88,7 +88,7 @@ int	parse_light(t_Light *light)
 	if (parse_rgb(&light->colour, &token) == FAILURE)
 		err_exit(12);
 	if (get_next_token(&token) == SUCCESS)
-		warn_err_exit("\n   Excess light values", 12);
+		warn_err_exit("\n   Excess light value(s)", 12);
 	printf(G "   SUCCESS - Light parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_light()\n\n");
 	printf("---------------------------------------------------------------\n");

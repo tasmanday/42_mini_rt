@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/11/10 17:42:29 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/20 11:33:39 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ RGB" RST, *token);
 			colour->b = value;
 		i++;
 	}
-	printf("   -> Parsed colour: R = %d, G = %d, B = %d\n\n", colour->r,
+	printf("\n   -> Parsed colour: R = %d, G = %d, B = %d\n\n", colour->r,
 		colour->g, colour->b);
 	return (SUCCESS);
 }

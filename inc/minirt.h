@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/11/10 09:41:06 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/20 11:22:50 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,9 @@ typedef struct s_Scene
 	t_AmbientLight	ambient_light;
 	t_Camera		camera;
 	t_Light			light;
+	int				ambient_light_parsed;
+	int				camera_parsed;
+	int				light_parsed;
 	struct Object	*objects;
 	int				object_count;
 	t_Mlx			mlx;
