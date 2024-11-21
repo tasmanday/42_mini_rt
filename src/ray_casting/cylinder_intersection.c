@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2024/11/21 22:15:17 by tday             ###   ########.fr       */
+/*   Updated: 2024/11/21 23:45:15 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -39,7 +39,7 @@ float	*check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *dist
 		*distance = temp_distance;
 	}
 
-	// TODO cap b
+	// cap b
 	t_Vector3 cap_b_center = vect_subtract(cylinder.center, offset);
 	if (ray_intersects_plane(ray, cap_b_center, cylinder.axis, &temp_distance) \
 	&& intersection_within_radius(ray, cylinder, cap_a_center, temp_distance) \
@@ -51,70 +51,69 @@ float	*check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *dist
 	return (distance);
 }
 
-
-bool	ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
-		float *distance)
+float	get_quadratic_discriminant(t_ray *ray, t_Cylinder cyl, t_Vector3 dp, float *a)
 {
-	t_Vector3 ray_origin = scene->camera.position;
-	t_Cylinder *cylinder = &scene->objects->u_data.cylinder;
+	float	b;
+	float	c;
+	float	dot_dir_axis;
+	float	dot_dp_axis;
 
-	// Step 1: Check intersection with cylinder caps (top and bottom planes)
-	float cap_distance;
-	bool hit_cap = false;
+	dot_dir_axis = vect_dot(ray->ray_dir, cyl.axis);
+	dot_dp_axis = vect_dot(dp, cyl.axis);
+	*a = vect_dot(ray->ray_dir, ray->ray_dir) - pow(dot_dir_axis, 2);
+	b = 2 * (vect_dot(ray->ray_dir, dp) - dot_dir_axis * dot_dp_axis);
+	c = vect_dot(dp, dp) - pow(dot_dp_axis, 2) - pow(cyl.diameter / 2, 2);
+	return (b * b - 4 * *a * c);
+}
 
-	// Bottom cap
-	t_Vector3 cap_a_center = cylinder->center;
-	if (ray_intersects_plane(scene, ray_dir, &cap_distance) && \
-		vect_distance(vect_add(ray_origin, vect_multiply(ray_dir, cap_distance)), cap_a_center) <= cylinder->diameter / 2)
-	{
-		*distance = cap_distance;
-		hit_cap = true;
-	}
+bool	is_valid_intersection(t_Vector3 point, t_Cylinder cyl)
+{
+	float		dot;
+	t_Vector3	v;
+	float		h;
 
-	// Top cap
-	t_Vector3 cap_b_center = vect_add(cap_a_center, vect_multiply(cylinder->axis, cylinder->height));
-	if (ray_intersects_plane(scene, ray_dir, &cap_distance) && \
-		vect_distance(vect_add(ray_origin, vect_multiply(ray_dir, cap_distance)), cap_b_center) <= cylinder->diameter / 2)
-	{
-		if (!hit_cap || cap_distance < *distance)
-		{
-			*distance = cap_distance;
-			hit_cap = true;
-		}
-	}
+	v = vect_subtract(point, cyl.center);
+	dot = vect_dot(v, cyl.axis);
+	h = cyl.height / 2;
+	return (fabs(dot) <= h);
+}
 
-	// Step 2: Check intersection with the cylinder's curved surface
-	t_Vector3 oc = vect_subtract(ray_origin, cylinder->center);
-	t_Vector3 ray_dir_proj = vect_cross(ray_dir, cylinder->axis);
-	t_Vector3 oc_proj = vect_cross(oc, cylinder->axis);
+float	*check_cylinder_body_intersection(t_ray *ray, t_Cylinder cyl, float *distance)
+{
+	float		a;
+	float		discriminant;
+	float		t1;
+	float		t2;
+	t_Vector3	dp;
 
-	float a = vect_dot(ray_dir_proj, ray_dir_proj);
-	float b = 2 * vect_dot(ray_dir_proj, oc_proj);
-	float c = vect_dot(oc_proj, oc_proj) - pow(cylinder->diameter / 2, 2);
+	dp = vect_subtract(ray->ray_origin, cyl.center);
+	discriminant = get_quadratic_discriminant(ray, cyl, dp, &a);
+	if (discriminant < 0)
+		return (distance);
+	t1 = (-sqrt(discriminant)) / (2 * a);
+	t2 = (sqrt(discriminant)) / (2 * a);
+	if (t1 > 0 && t1 < *distance && \
+		is_valid_intersection(vect_add(ray->ray_origin, \
+		vect_multiply_scalar(ray->ray_dir, t1)), cyl))
+		*distance = t1;
+	if (t2 > 0 && t2 < *distance && \
+		is_valid_intersection(vect_add(ray->ray_origin, \
+		vect_multiply_scalar(ray->ray_dir, t2)), cyl))
+		*distance = t2;
+	return (distance);
+}
 
-	float discriminant = b * b - 4 * a * c;
-	if (discriminant >= 0)
-	{
-		float sqrt_discriminant = sqrt(discriminant);
-		float t1 = (-b - sqrt_discriminant) / (2 * a);
-		float t2 = (-b + sqrt_discriminant) / (2 * a);
+bool	ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, float *distance)
+{
+	t_ray	ray;
+	float	orig_dist;
 
-		float t = t1 > 0 ? t1 : (t2 > 0 ? t2 : -1);
-		if (t > 0)
-		{
-			t_Vector3 intersection = vect_add(ray_origin, vect_multiply(ray_dir, t));
-			float dist_to_axis = vect_dot(vect_subtract(intersection, cylinder->center), cylinder->axis);
-
-			if (fabs(dist_to_axis) <= cylinder->height / 2)
-			{
-				if (!hit_cap || t < *distance)
-				{
-					*distance = t;
-					hit_cap = true;
-				}
-			}
-		}
-	}
-
-	return (hit_cap);
+	orig_dist = *distance;
+	ray.ray_origin = scene->camera.position;
+	ray.ray_dir = ray_dir;
+	check_end_plane_intersection(&ray, scene->objects->u_data.cylinder, \
+		distance);
+	check_cylinder_body_intersection(&ray, scene->objects->u_data.cylinder, \
+		distance);
+	return (*distance < orig_dist);
 }
