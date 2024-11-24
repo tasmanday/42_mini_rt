@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/11/20 15:18:59 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/24 18:42:38 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	parse_sphere(t_Scene *scene)
 	if (diameter == FAILURE)
 		err_free_exit(13, new_sphere, 0);
 	new_sphere->u_data.sphere.diameter = diameter;
-	if (new_sphere->u_data.sphere.diameter < 0.0f)
+	if (new_sphere->u_data.sphere.diameter <= 0.0f)
 		warn_err_free_exit("Invalid diameter", 13, new_sphere, scene);
 	printf("\n   -> Parsed diameter: %f\n\n",
 		new_sphere->u_data.sphere.diameter);
@@ -193,13 +193,15 @@ int	parse_cylinder(char *line, t_Scene *scene)
 		warn_err_free_exit("Failed cylinder centre", 15, new_cylinder, scene);
 	if (parse_vector3(&new_cylinder->u_data.cylinder.axis) == FAILURE)
 		warn_err_free_exit("Failed cylinder axis", 15, new_cylinder, scene);
+	if (!is_normalized_vector(&new_cylinder->u_data.cylinder.axis))
+		warn_err_free_exit("Vector is not normalised (-1 to 1)", 15, new_cylinder, scene);
 	if (get_next_token(&token) == FAILURE)
 		warn_err_free_exit("No input for diameter", 13, new_cylinder, scene);
 	diameter = parse_float(&token);
 	if (diameter == FAILURE)
 		err_free_exit(15, new_cylinder, 0);
 	new_cylinder->u_data.cylinder.diameter = diameter;
-	if (new_cylinder->u_data.cylinder.diameter < 0.0f)
+	if (new_cylinder->u_data.cylinder.diameter <= 0.0f)
 		warn_err_free_exit("Invalid diameter", 15, new_cylinder, scene);
 	printf("\n   -> Parsed diameter: %f\n\n", new_cylinder->u_data.cylinder.diameter);
 	if (get_next_token(&token) == FAILURE)
@@ -208,7 +210,7 @@ int	parse_cylinder(char *line, t_Scene *scene)
 	if (height == FAILURE)
 		err_free_exit(15, new_cylinder, 0);
 	new_cylinder->u_data.cylinder.height = height;
-	if (new_cylinder->u_data.cylinder.height < 0.0f)
+	if (new_cylinder->u_data.cylinder.height <= 0.0f)
 		warn_err_free_exit("Invalid height", 15, new_cylinder, scene);
 	printf("\n   -> Parsed height: %f\n\n", new_cylinder->u_data.cylinder.height);
 	if (parse_rgb(&new_cylinder->u_data.cylinder.colour, &token) == FAILURE)

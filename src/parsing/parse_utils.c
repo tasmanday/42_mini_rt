@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/11/20 11:33:39 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/24 17:39:44 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	parse_vector3(t_Vector3 *vec)
 		*coords[i] = parse_float(&token);
 		if (*coords[i] == FAILURE)
 		{
-			printf(RED" when parsing vector"RST);
+			//printf(RED" when parsing vector"RST);
 			return (FAILURE);
 		}
 		i++;

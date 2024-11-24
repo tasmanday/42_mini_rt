@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/11/20 15:11:50 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/24 17:23:30 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	parse_camera(t_Camera *camera)
 		err_exit(10);
 	camera->fov = fov;
 	if (camera->fov < 0 || camera->fov > 180)
-		warn_err_exit("   Error! FOV out of range (0-180)", 11);
+		warn_err_exit("\n   Error! FOV out of range (0-180)", 11);
 	printf("\n   -> Parsed FOV: %d\n\n", camera->fov);
 	if (get_next_token(&token) == SUCCESS)
 		warn_err_exit("\n   Error! Excess camera value(s)", 11);

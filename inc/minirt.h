@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/11/20 11:22:50 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/24 16:47:44 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # define MAX_OBJECTS 100
 #define MAX_TOKEN_LENGTH 50
 # define SUCCESS 0
-# define FAILURE -1
+# define FAILURE -99
 
 # define RST    "\033[0m"      /* Reset to default color */
 # define RED	"\033[1;31m"   /* Bold Red */
@@ -238,6 +238,7 @@ char		*ft_strtok(char *str, const char *delimiters);
 //int			get_next_token(char **token, const char *delim);
 int			parse_rgb(t_Colour *colour, char **token);
 int			get_next_token(char **token);
+char		*my_strtok(char *str, const char *delim);
 //int 	get_next_token(char **token, char **input_buffer);
 //int get_next_token(char **token, char **line);
 //int			get_next_token(char **token, char **line);

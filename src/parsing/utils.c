@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/11/10 11:39:54 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/24 17:26:36 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,11 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 int	get_next_token(char **token)
 {
 	*token = strtok(NULL, " ,\t\n");
+	//*token = my_strtok(NULL, " ,\t\n");
 	while (*token && **token == '\0') // Skip empty tokens if any
     {
         *token = strtok(NULL, " \t\n");
+		//*token = my_strtok(NULL, " ,\t\n");
     }
 
 	if (!*token)
@@ -92,6 +94,57 @@ int get_next_token(char **token, char **input_buffer)
     return SUCCESS;
 }
 */
+
+char *my_strtok(char *str, const char *delim)
+{
+    static char *last = NULL;
+    char *start;
+    
+    if (str != NULL) {
+        last = str;
+		printf("New input string: '%s'\n", str);
+    }
+
+    if (last == NULL) {
+		printf("If last == NULL\n");
+        return NULL;
+    }
+
+    // Skip leading delimiters
+    while (*last && strchr(delim, *last)) {
+        printf("Skipping delimiter: '%c'\n", *last);
+		last++;
+    }
+
+    // If we reached the end of the string
+    if (*last == '\0') {
+		last = NULL;
+		printf("Returning NULL (after skipping delimiters)\n");
+        return NULL;
+    }
+
+    // Set start of the token
+    start = last;
+	printf("Token start: '%s'\n", start);
+
+    // Find the end of the token
+    while (*last && !strchr(delim, *last)) {
+        last++;
+    }
+
+    // If we found a delimiter, terminate the token
+    if (*last) {
+        *last = '\0';
+        last++;  // Move past the delimiter
+		printf("Token end, next starts at: '%s'\n", last);
+    }
+	else {
+        last = NULL;  // Reset for future calls
+		printf("Token end, no more tokens\n");
+    }
+	printf("Returning token: '%s'\n", start);
+    return start;
+}
 
 
 float	parse_float(char **str)
@@ -167,7 +220,7 @@ int	parse_int(char **str)
 		end++;
 	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
 	{
-		printf(RED "\n   Error! Invalid character in '%s' when parsing int" RST, *str);
+		printf(RED "\n   Error! Invalid character in '%s'" RST, *str);
 		return (FAILURE);
 	}
 	if (*end == ',' || *end == '\0' || *end == ' ' || *end == '\t')
