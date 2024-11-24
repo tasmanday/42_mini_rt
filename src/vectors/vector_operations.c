@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:46:07 by tday              #+#    #+#             */
-/*   Updated: 2024/11/17 15:03:38 by tday             ###   ########.fr       */
+/*   Updated: 2024/11/25 00:19:21 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -134,6 +134,8 @@ t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b)
 	Summary
 	Calculates and returns the dot product of two vectors, which is a scalar
 	representing the magnitude of their projection onto each other.
+
+	The scalar value (float just representing magnitude not direction) result of the dot product tells us how much of vector b aligns with vector a.
 
 	Inputs
 	[t_Vector3] a: The first vector.
