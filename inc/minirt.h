@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/11/24 16:47:44 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/25 13:49:23 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,12 +172,11 @@ typedef struct s_Scene
 // PROTOTYPES //
 
 // error.c //
+int			err_return(const char *message);
 int			err_exit(t_Error error);
-//int			err_free_exit(struct Object *current, t_Scene *scene);
+void		warn_err_exit(const char *message, t_Error error);
 int			err_free_exit(t_Error error, struct Object *current, t_Scene *scene);
 int			warn_err_free_exit(const char *message, t_Error error, struct Object *current, t_Scene *scene);
-int			err_return(const char *message);
-void		warn_err_exit(const char *message, t_Error error);
 
 // file_check.c //
 int			file_exists(char *filename);
@@ -209,19 +208,17 @@ int			add_object(t_Scene *scene, struct Object *new_object);
 void		free_objects(t_Scene *scene);
 
 // parse_elements.c //
-int			parse_ambient_light(t_AmbientLight *ambient_light);
+//int			parse_ambient_light(t_AmbientLight *ambient_light);
+int			parse_ambient_light(char **line, t_AmbientLight *ambient_light); // For line
 int			parse_camera(t_Camera *camera);
 int			parse_light(t_Light *light);
 int			parse_position(t_Vector3 *position, char **token);
 int			parse_orientation(t_Vector3 *orientation, char **token);
 
 // parse_main.c //
+int			process_line(char *line, t_Scene *scene);
 int			parse_rt_file(const char *filename, t_Scene *scene);
 int			parse_line(char	*line, t_Scene *scene);
-//int			free_and_return(struct Object *obj, int ret_val);
-int			process_file_lines(int fd, t_Scene *scene);
-int			process_line(char *line, t_Scene *scene);
-int			handle_file_error(int fd, const char *filename);
 
 // parse_objects.c //
 int			parse_sphere(t_Scene *scene);
@@ -229,19 +226,15 @@ int			parse_plane(char *line, t_Scene *scene);
 int			parse_cylinder(char *line, t_Scene *scene);
 
 // parse_utils.c //
-float		parse_float(char **str);
-int			parse_int(char	**str);
-int			parse_vector3(t_Vector3 *vec);
-//int			parse_vector3(char *str, t_Vector3 *vec);
-int			parse_colour(char *str, t_Colour *colour);
-char		*ft_strtok(char *str, const char *delimiters);
-//int			get_next_token(char **token, const char *delim);
-int			parse_rgb(t_Colour *colour, char **token);
-int			get_next_token(char **token);
-char		*my_strtok(char *str, const char *delim);
-//int 	get_next_token(char **token, char **input_buffer);
-//int get_next_token(char **token, char **line);
-//int			get_next_token(char **token, char **line);
+int			parse_rgb(t_Colour *colour, char **line);
+int 		parse_vector3(char **line, t_Vector3 *vec);
+int			parse_position(t_Vector3 *position, char **line);
+int			parse_orientation(t_Vector3 *orientation, char **line);
+// --> OG below
+//int			parse_vector3_OG(t_Vector3 *vec); //OG
+//int			parse_rgb_OG(t_Colour *colour, char **token); //OG
+//int			parse_position_OG(t_Vector3 *position, char **token); //OG
+//int			parse_orientation_OG(t_Vector3 *orientation, char **token); //OG
 
 // print_elements.c //
 void		print_ambient_light(t_AmbientLight *ambient);
@@ -257,6 +250,13 @@ void		print_all_objects(const t_Scene *scene);
 // utils.c //
 size_t		ft_strlen(const char *s);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
+//int			get_next_token(char **token);
+int			get_next_token(char **line, char **token); // For line parameter
+char		*ft_strtok(char **line, const char *delim);
+float		parse_float(char **str);
+int			parse_int(char	**str);
+
+// miscellaneous //
 
 // organise later //
 t_Vector3	vector(float x, float y, float z);

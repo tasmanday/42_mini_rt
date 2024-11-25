@@ -6,11 +6,17 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/11/20 15:27:55 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/25 11:57:13 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int	err_return(const char *message)
+{
+	printf(RED "\nError! %s\n\n" RST, message);
+	return (FAILURE);
+}
 
 int	err_exit(t_Error error)
 {
@@ -52,14 +58,6 @@ int	err_free_exit(t_Error error, struct Object *current, t_Scene *scene)
 		printf(RED" in CYLINDER\n\n"RST);
 	if (scene && scene->mlx.mlx_ptr && scene->mlx.win_ptr)
 		mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
-	/*
-	if (current)
-	{
-		printf("Freeing initial current object at index: %d\n", index);
-		free(current);
-		current = NULL;
-	}
-	*/
 	if (scene && scene->objects)
 	{
 		object = scene->objects;
@@ -80,7 +78,6 @@ int	err_free_exit(t_Error error, struct Object *current, t_Scene *scene)
 		scene->objects = NULL;
 		printf(G "All objects freed successfully.\n" RST);
 	}
-	//free(scene);
 	printf(RED"\nExiting...\n\n"RST);
 	exit(1);
 }
@@ -100,16 +97,6 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
 		printf(" in PLANE\n\nExiting...\n\n"RST);
 	else if (error == 15)
 		printf(" in CYLINDER\n\nExiting...\n\n"RST);
-	//if (scene && scene->mlx.mlx_ptr && scene->mlx.win_ptr)
-	//	mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
-	/*
-	if (current)
-	{
-		printf("Freeing current object at index: %d at address: %p\n", index, (void *)current);
-		free(current);
-		current = NULL;
-	}
-	*/
 	if (scene && scene->objects)
 	{
 		object = scene->objects;
@@ -138,12 +125,5 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
         scene->objects = NULL;
         printf(G "All objects freed successfully.\n" RST);
     }
-	//free(scene);
 	exit(1);
-}
-
-int	err_return(const char *message)
-{
-	printf(RED "\nError! %s\n\n" RST, message);
-	return (FAILURE);
 }

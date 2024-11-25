@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/11/24 17:26:36 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/25 13:49:59 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,16 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-
+/*
+--> WORKING OG get_net_token
 int	get_next_token(char **token)
 {
 	*token = strtok(NULL, " ,\t\n");
-	//*token = my_strtok(NULL, " ,\t\n");
 	while (*token && **token == '\0') // Skip empty tokens if any
     {
         *token = strtok(NULL, " \t\n");
-		//*token = my_strtok(NULL, " ,\t\n");
-    }
 
+    }
 	if (!*token)
 	{
 		return (FAILURE);
@@ -64,88 +63,66 @@ int	get_next_token(char **token)
 	printf("   Token: %s\n", *token);
 	return (SUCCESS);
 }
-
-
-/*
-int get_next_token(char **token, char **input_buffer)
-{
-    // Initialize the tokenizer with the input buffer on the first call
-    if (*token == NULL) {
-        *token = strtok(*input_buffer, " \t,");
-    } else {
-        *token = strtok(NULL, " \t,");
-    }
-
-    // Check if a token was found
-    if (!*token)
-    {
-        return FAILURE;
-    }
-
-    // Trim any leading or trailing whitespace from the token
-    while (isspace((unsigned char)**token)) (*token)++;  // Trim leading
-    char *end = *token + strlen(*token) - 1;  // Set end to the last character
-    while (end > *token && isspace((unsigned char)*end)) end--;  // Trim trailing
-
-    // Null-terminate the token
-    *(end + 1) = '\0';
-
-    printf("   Token: %s\n", *token);
-    return SUCCESS;
-}
 */
 
-char *my_strtok(char *str, const char *delim)
+//adapted for new line parameter
+int	get_next_token(char **line, char **token)
 {
-    static char *last = NULL;
-    char *start;
-    
-    if (str != NULL) {
-        last = str;
-		printf("New input string: '%s'\n", str);
+	*token = ft_strtok(line, " ,\t\n");
+	while (*token && **token == '\0')
+	{
+        *token = ft_strtok(NULL, " \t\n");;
     }
-
-    if (last == NULL) {
-		printf("If last == NULL\n");
-        return NULL;
-    }
-
-    // Skip leading delimiters
-    while (*last && strchr(delim, *last)) {
-        printf("Skipping delimiter: '%c'\n", *last);
-		last++;
-    }
-
-    // If we reached the end of the string
-    if (*last == '\0') {
-		last = NULL;
-		printf("Returning NULL (after skipping delimiters)\n");
-        return NULL;
-    }
-
-    // Set start of the token
-    start = last;
-	printf("Token start: '%s'\n", start);
-
-    // Find the end of the token
-    while (*last && !strchr(delim, *last)) {
-        last++;
-    }
-
-    // If we found a delimiter, terminate the token
-    if (*last) {
-        *last = '\0';
-        last++;  // Move past the delimiter
-		printf("Token end, next starts at: '%s'\n", last);
-    }
-	else {
-        last = NULL;  // Reset for future calls
-		printf("Token end, no more tokens\n");
-    }
-	printf("Returning token: '%s'\n", start);
-    return start;
+	if (!*token)
+	{
+		return (FAILURE);
+	}
+	*line = NULL; 
+	printf("   Token: %s\n", *token);
+	return (SUCCESS);
 }
 
+
+char *ft_strtok(char **line, const char *delim)
+{
+    char *start;
+    
+    if (line == NULL || *line == NULL)
+	{
+		printf("If last == NULL of the content is NULL\n");
+		return (NULL);
+	}
+    while (**line && strchr(delim, **line))
+	{
+        printf("Skipping delimiter: '%s'\n", *line);
+		(*line)++;
+    }
+    if (**line == '\0')
+	{
+		printf("End of string reached after skipping delimiters\n");
+        *line = NULL;
+        return (NULL);
+    }
+    start = *line;
+	printf("Start of token: '%s'\n", start);
+    while (**line && !strchr(delim, **line)) // find end of token
+	{
+        (*line)++;
+    }
+    if (**line)
+	{
+		printf("Delimiter found: '%c'\n", **line);
+        **line = '\0';
+        (*line)++;  // Move past the delimiter
+    }
+	else
+	{
+		printf("End of string reached while parsing token\n");
+        *line = NULL;  // No more tokens
+    }
+	printf("Returning token: '%s'\n", start);
+    return (start);
+}
 
 float	parse_float(char **str)
 {
@@ -176,36 +153,6 @@ float	parse_float(char **str)
 	}
 	return (result);
 }
-
-/*
-int	parse_int(char	**str)
-{
-	char		*end;
-	long long	result;
-
-	result = ft_atoi(*str);
-	end = *str;
-	while (*end && (ft_isdigit(*end))
-	{
-		end++;
-	}
-	if (end == *str)
-	{
-		printf(RED "\n   Error! No valid int found in '%s'" RST, *str);
-		return (FAILURE);
-	}
-	if (*end == ',' || *end == '\0' || *end == ' ' || *end == '\t')
-		*str = end + 1;
-	else
-		*str = end;
-	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
-	{
-		printf(RED "\n   Error! Invalid character in int in '%s'" RST, *str);
-		return (FAILURE);
-	}
-	return ((int)result);
-}
-*/
 
 int	parse_int(char **str)
 {

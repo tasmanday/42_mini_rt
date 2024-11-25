@@ -6,19 +6,21 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/11/24 17:23:30 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/25 14:09:04 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	parse_ambient_light(t_AmbientLight *ambient_light)
+//int	parse_ambient_light(t_AmbientLight *ambient_light)
+int	parse_ambient_light(char **line, t_AmbientLight *ambient_light)
 {
 	char	*token;
 	float	ratio;
 
 	printf(G "Entering" RST " parse_ambient_light()\n\n");
-	if (get_next_token(&token) == FAILURE)
+	//if (get_next_token(&token) == FAILURE)
+	if (get_next_token(line, &token) == FAILURE)
 		warn_err_exit("   No token found", 10);
 	ratio = parse_float(&token);
 	if (ratio == FAILURE)
@@ -29,7 +31,8 @@ int	parse_ambient_light(t_AmbientLight *ambient_light)
 	printf("\n   -> Parsed ratio: %f\n\n", ambient_light->ratio);
 	if (parse_rgb(&ambient_light->colour, &token) == FAILURE)
 		err_exit(10);
-	if (get_next_token(&token) == SUCCESS)
+	//if (get_next_token(&token) == SUCCESS)
+	if (get_next_token(line, &token) == SUCCESS)
 		warn_err_exit("\n   Error! Excess ambient light value(s)", 10);
 	printf(G "   SUCCESS - Ambient Light parsed and added!\n\n");
 	printf(RED "Exiting" RST " parse_ambient_light()\n\n");
@@ -37,6 +40,7 @@ int	parse_ambient_light(t_AmbientLight *ambient_light)
 	return (SUCCESS);
 }
 
+/*
 int	parse_camera(t_Camera *camera)
 {
 	char	*token;
@@ -94,3 +98,4 @@ int	parse_light(t_Light *light)
 	printf("---------------------------------------------------------------\n");
 	return (SUCCESS);
 }
+*/
