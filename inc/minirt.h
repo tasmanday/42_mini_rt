@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/11/25 13:49:23 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/28 20:49:54 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,8 +210,10 @@ void		free_objects(t_Scene *scene);
 // parse_elements.c //
 //int			parse_ambient_light(t_AmbientLight *ambient_light);
 int			parse_ambient_light(char **line, t_AmbientLight *ambient_light); // For line
-int			parse_camera(t_Camera *camera);
-int			parse_light(t_Light *light);
+//int			parse_camera(t_Camera *camera);
+int			parse_camera(char **line, t_Camera *camera);
+//int			parse_light(t_Light *light);
+int			parse_light(char **line, t_Light *light);
 int			parse_position(t_Vector3 *position, char **token);
 int			parse_orientation(t_Vector3 *orientation, char **token);
 
@@ -221,9 +223,11 @@ int			parse_rt_file(const char *filename, t_Scene *scene);
 int			parse_line(char	*line, t_Scene *scene);
 
 // parse_objects.c //
-int			parse_sphere(t_Scene *scene);
-int			parse_plane(char *line, t_Scene *scene);
-int			parse_cylinder(char *line, t_Scene *scene);
+//int			parse_sphere(t_Scene *scene);
+int			parse_sphere(char **line, t_Scene *scene);
+//int			parse_plane(char *line, t_Scene *scene);
+int			parse_plane(char **line, t_Scene *scene);
+int			parse_cylinder(char **line, t_Scene *scene);
 
 // parse_utils.c //
 int			parse_rgb(t_Colour *colour, char **line);

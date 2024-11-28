@@ -3,40 +3,50 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: atang <atang@student.42.fr>                +#+  +:+       +#+         #
+#    By: sentry <sentry@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2024/11/10 15:24:10 by atang            ###   ########.fr        #
+#    Updated: 2024/11/28 15:36:48 by sentry           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Variables
-NAME 			:=		miniRT
-SRC_DIRS 		:=		src/main src/parsing src/ray_casting src/vectors 		\
-						src/mlx
-OBJ_DIR			:=		obj
-INC_DIR 		:=		inc
-LIBFT_DIR		:=		libft
-LIBFT			:=		$(LIBFT_DIR)/libft.a
-MLX_DIR 		:= 		./minilibx_macos/
-#MLX_DIR 		:= 		./minilibx_linux/
-CC				:=		gcc
-CFLAGS			:=		-Wall -Wextra -Werror -O3
+NAME            :=      miniRT
+SRC_DIRS        :=      src/main src/parsing src/ray_casting src/vectors       \
+                        src/mlx
+OBJ_DIR         :=      obj
+INC_DIR         :=      inc
+LIBFT_DIR       :=      libft
+LIBFT           :=      $(LIBFT_DIR)/libft.a
+
+# Detect Operating System
+OS := $(shell uname)
+
+ifeq ($(OS), Darwin)
+    MLX_DIR     :=      ./minilibx_macos/
+    MLX_FLAGS   :=      -framework OpenGL -framework AppKit
+else
+    MLX_DIR     :=      ./minilibx_linux/
+    MLX_FLAGS   :=      -lXext -lX11 -lm
+endif
+
+CC              :=      gcc
+CFLAGS          :=      -Wall -Wextra -Werror -O3
 
 # Define source and object files
-SRCS			:=		$(addprefix src/main/, main.c)							\
-						$(addprefix src/mlx/, mlx.c)							\
-						$(addprefix src/parsing/, error.c file_check.c 			\
-									object_utils.c								\
-									parse_elements.c parse_main.c 				\
-									parse_objects.c parse_utils.c utils.c		\
-									print_elements.c print_objects.c)			\
-						$(addprefix src/ray_casting/, compute_ray_directions.c	\
-									sphere_intersection.c)						\
-						$(addprefix src/vectors/, vector_operations.c)				
+SRCS            :=      $(addprefix src/main/, main.c)                         \
+                        $(addprefix src/mlx/, mlx.c)                           \
+                        $(addprefix src/parsing/, error.c file_check.c         \
+                                    object_utils.c                             \
+                                    parse_elements.c parse_main.c              \
+                                    parse_objects.c parse_utils.c utils.c      \
+                                    print_elements.c print_objects.c)          \
+                        $(addprefix src/ray_casting/, compute_ray_directions.c \
+                                    sphere_intersection.c)                     \
+                        $(addprefix src/vectors/, vector_operations.c)
 
-OBJS			:=		$(SRCS:src/%.c=$(OBJ_DIR)/%.o)
-RM				:=		rm -f
+OBJS            :=      $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
+RM              :=      rm -f
 
 .SILENT:
 
@@ -54,34 +64,33 @@ $(eval LAST_DIR := $(CUR_DIR))
 endef
 
 # Colours
-DEFAULT_COLOUR	:=		\033[0m
-GREEN			:=		\033[1;32m
-MAGENTA			:=		\033[1;35m
-YELLOW			:=		\033[1;33m
-CYAN			:=		\033[1;36m
-BLUE			:=		\033[1;34m
-RED    			:=		\033[1;31m
+DEFAULT_COLOUR  :=      \033[0m
+GREEN           :=      \033[1;32m
+MAGENTA         :=      \033[1;35m
+YELLOW          :=      \033[1;33m
+CYAN            :=      \033[1;36m
+BLUE            :=      \033[1;34m
+RED             :=      \033[1;31m
 
 # Targets
 all: build_minilibx $(LIBFT) $(NAME)
 
-$(LIBFT):		
+$(LIBFT):        
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
-#	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -I$(MLX_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx $(MLX_FLAGS) -o $(NAME)
 	@echo "$(GREEN)--> SUCCESS! Everything compiled and linked into executable: $(BLUE)$(NAME)$(DEFAULT_COLOUR)"
 	@echo "\n"
+
 build_minilibx:
 	@echo "Building MiniLibX..."
 	@cd $(MLX_DIR) && $(MAKE)
 
 fclean_minilibx:
 	@echo "\n"
-	@echo "$(RED)Fully cleaning MiniLibX...$(DEFAULT COLOUR)"
-#	@$(MAKE) -C $(MLX_DIR) fclean
-	@$(MAKE) -C $(MLX_DIR) clean
+	@echo "$(RED)Fully cleaning MiniLibX...$(DEFAULT_COLOUR)"
+	@cd $(MLX_DIR) && $(MAKE) clean
 	@cd $(MLX_DIR) && rm -f *.o libmlx.a libmlx_Linux.a
 
 clean:

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:44:24 by atang             #+#    #+#             */
-/*   Updated: 2024/11/25 14:08:26 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/28 21:06:16 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,20 +90,19 @@ int	parse_line(char *line, t_Scene *scene)
 		//return (parse_ambient_light(&scene->ambient_light));
 		return (parse_ambient_light(&line, &scene->ambient_light));
 	}
-	/*
 	else if (strcmp(token, "C") == 0)
 	{
 		if (scene->camera_parsed)
 			warn_err_exit("\n   Multiple camera definitions", 11);
 		scene->camera_parsed = 1;
-		return (parse_camera(&scene->camera));
+		return (parse_camera(&line, &scene->camera));
 	}
 	else if (strcmp(token, "L") == 0)
 	{
 		if (scene->light_parsed)
 			warn_err_exit("\n   Multiple light definitions", 12);
 		scene->light_parsed = 1;
-		return (parse_light(&scene->light));
+		return (parse_light(&line, &scene->light));
 	}
 	else if (strcmp(token, "sp") == 0 || strcmp(token, "pl") == 0 || strcmp(token, "cy") == 0)
 	{
@@ -113,13 +112,12 @@ int	parse_line(char *line, t_Scene *scene)
 			return (FAILURE);
 		}
 		if (strcmp(token, "sp") == 0)
-			return (parse_sphere(scene));
+			return (parse_sphere(&line, scene));
 		else if (strcmp(token, "pl") == 0)
-			return (parse_plane(line, scene));
+			return (parse_plane(&line, scene));
 		else if (strcmp(token, "cy") == 0)
-			return (parse_cylinder(line, scene));
+			return (parse_cylinder(&line, scene));
 	}
-	*/
 	else
 	{
 		printf(RED "Error\nUnknown identifier: %s\n\n" RST, token);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/11/25 11:57:13 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/28 22:10:06 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	warn_err_free_exit(const char *message, t_Error error, struct Object *curren
             scene->object_count--;
         }
         scene->objects = NULL;
-        printf(G "All objects freed successfully.\n" RST);
+        printf(G "All objects freed successfully!\n" RST);
     }
 	exit(1);
 }

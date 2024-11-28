@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/11/25 13:49:59 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/28 20:38:19 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	get_next_token(char **token)
 //adapted for new line parameter
 int	get_next_token(char **line, char **token)
 {
+	if (!line || !*line)
+		return (FAILURE);
 	*token = ft_strtok(line, " ,\t\n");
 	while (*token && **token == '\0')
 	{
@@ -77,7 +79,7 @@ int	get_next_token(char **line, char **token)
 	{
 		return (FAILURE);
 	}
-	*line = NULL; 
+	//*line = NULL; 
 	printf("   Token: %s\n", *token);
 	return (SUCCESS);
 }
@@ -89,38 +91,38 @@ char *ft_strtok(char **line, const char *delim)
     
     if (line == NULL || *line == NULL)
 	{
-		printf("If last == NULL of the content is NULL\n");
+		//printf("If last == NULL of the content is NULL\n");
 		return (NULL);
 	}
     while (**line && strchr(delim, **line))
 	{
-        printf("Skipping delimiter: '%s'\n", *line);
+        //printf("Skipping delimiter: '%s'\n", *line);
 		(*line)++;
     }
     if (**line == '\0')
 	{
-		printf("End of string reached after skipping delimiters\n");
+		//printf("End of string reached after skipping delimiters\n");
         *line = NULL;
         return (NULL);
     }
     start = *line;
-	printf("Start of token: '%s'\n", start);
+	//printf("\nStart of token: '%s'\n", start);
     while (**line && !strchr(delim, **line)) // find end of token
 	{
         (*line)++;
     }
     if (**line)
 	{
-		printf("Delimiter found: '%c'\n", **line);
+		//printf("Delimiter found: '%c'\n", **line);
         **line = '\0';
         (*line)++;  // Move past the delimiter
     }
 	else
 	{
-		printf("End of string reached while parsing token\n");
+		//printf("End of string reached while parsing token\n");
         *line = NULL;  // No more tokens
     }
-	printf("Returning token: '%s'\n", start);
+	//printf("Returning token: '%s'\n", start);
     return (start);
 }
 
