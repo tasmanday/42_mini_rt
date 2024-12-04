@@ -6,37 +6,37 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 23:12:25 by tday              #+#    #+#             */
-/*   Updated: 2024/12/04 23:33:15 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 08:26:02 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
-void free_everything(t_pixel **pixels, t_ray **corners, int width, int height)
+void free_everything(t_mem *mem, t_Scene scene)
 {
-	// Free the pixels array
-	if (pixels)
+	// Free the mem->pixels array
+	if (mem->pixels)
 	{
 		int i = 0;
-		while (i < height)
+		while (i < scene.mlx.height)
 		{
-			if (pixels[i])
-				free(pixels[i]); // Free each row in the pixels array
+			if (mem->pixels[i])
+				free(mem->pixels[i]); // Free each row in the mem->pixels array
 			i++;
 		}
-		free(pixels); // Free the top-level pointer
+		free(mem->pixels); // Free the top-level pointer
 	}
 
-	// Free the corners array
-	if (corners)
+	// Free the mem->corners array
+	if (mem->corners)
 	{
 		int i = 0;
-		while (i <= height)
+		while (i <= scene.mlx.height)
 		{
-			if (corners[i])
-				free(corners[i]); // Free each row in the corners array
+			if (mem->corners[i])
+				free(mem->corners[i]); // Free each row in the mem->corners array
 			i++;
 		}
-		free(corners); // Free the top-level pointer
+		free(mem->corners); // Free the top-level pointer
 	}
 }

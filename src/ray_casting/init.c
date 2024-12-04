@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 23:06:45 by tday              #+#    #+#             */
-/*   Updated: 2024/12/04 23:34:20 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 08:31:44 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -36,3 +36,8 @@ t_ray **allocate_corner_array(int width, int height)
 	return corners;
 }
 
+void	init_mem(t_mem *mem, t_Scene scene)
+{
+	mem->pixels = allocate_pixel_array(scene.mlx.width, scene.mlx.height);
+	mem->corners = allocate_corner_array(scene.mlx.width, scene.mlx.height);
+}

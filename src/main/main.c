@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:29:18 by atang             #+#    #+#             */
-/*   Updated: 2024/11/17 19:10:43 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 08:31:45 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -15,6 +15,7 @@
 int	main(int argc, char **argv)
 {
 	t_Scene	scene;
+	t_mem	mem;
 
 	if (argc != 2 || filename_error(argv[1]))
 	{
@@ -30,6 +31,8 @@ int	main(int argc, char **argv)
 
 		scene.mlx.height = 1080;
 		scene.mlx.width = 1920;
+
+		init_mem(&mem, scene);
 
 		compute_ray_directions(&scene);
 

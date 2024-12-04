@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/12/04 23:09:04 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 08:15:34 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -149,6 +149,12 @@ typedef struct s_pixel
 	t_ray		mid;
 	t_Colour	avg_colour;
 }				t_pixel;
+
+typedef	struct s_mem
+{
+	t_pixel		**pixels;
+	t_ray		**corners;
+}				t_mem;
 
 typedef struct s_Mlx
 {
