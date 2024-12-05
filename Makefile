@@ -6,7 +6,7 @@
 #    By: tday <tday@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2024/10/24 23:04:15 by tday             ###   ########.fr        #
+#    Updated: 2024/12/05 23:15:03 by tday             ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -26,6 +26,7 @@ CFLAGS			:=		-Wall -Wextra -Werror -O3
 # Define source and object files
 SRCS			:=		$(addprefix src/main/, main.c)							\
 						$(addprefix src/mlx/, mlx.c)							\
+						$(addprefix src/free/, free_everything.c)				\
 						$(addprefix src/parsing/, error.c file_check.c 			\
 									object_utils.c								\
 									parse_elements.c parse_main.c 				\
@@ -33,7 +34,7 @@ SRCS			:=		$(addprefix src/main/, main.c)							\
 									print_elements.c print_objects.c)			\
 						$(addprefix src/ray_casting/, compute_ray_directions.c	\
 									sphere_intersection.c 						\
-									plane_intersection.c)						\
+									plane_intersection.c trace_rays.c init.c)	\
 						$(addprefix src/vectors/, vector_operations.c)				
 
 OBJS			:=		$(SRCS:src/%.c=$(OBJ_DIR)/%.o)

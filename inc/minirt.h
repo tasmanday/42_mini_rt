@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/12/05 15:13:07 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 23:14:54 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -147,7 +147,7 @@ typedef struct s_pixel
 	t_ray		*BL;
 	t_ray		*BR;
 	t_ray		mid;
-	t_Colour	avg_colour;
+	int			avg_colour;
 }				t_pixel;
 
 typedef	struct s_mem
@@ -158,21 +158,21 @@ typedef	struct s_mem
 
 typedef struct s_Mlx
 {
-	int				width;
-	int				height;
-	int				**z_matrix;
-	int				zoom;
-	int				colour;
-	int				amplify;
-	int				shift_x;
-	int				shift_y;
-	void			*mlx_ptr;
-	void			*win_ptr;
-	void			*img_ptr;
-	unsigned int	*img_data;
-	int				bpp;
-	int				size_line;
-	int				endian;
+	int			width;
+	int			height;
+	int			**z_matrix;
+	int			zoom;
+	int			colour;
+	int			amplify;
+	int			shift_x;
+	int			shift_y;
+	void		*mlx_ptr;
+	void		*win_ptr;
+	void		*img_ptr;
+	char		*img_data;
+	int			bpp;
+	int			size_line;
+	int			endian;
 }			t_Mlx;
 
 typedef struct s_Scene
@@ -268,7 +268,7 @@ float		vect_dot(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar);
 float		vect_distance(t_Vector3 a, t_Vector3 b);
 
-void		compute_ray_directions(t_Scene *scene);
+//void		compute_ray_directions(t_Scene *scene);
 void		init_ray(t_Scene *scene, t_ray *ray, int x, int y);
 t_Vector3	get_ray_direction(t_Scene *scene, int x, int y);
 t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene);
@@ -280,5 +280,17 @@ bool		ray_intersects_sphere(t_ray *ray, t_Sphere sphere, \
 			float *distance); */
 bool		ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
 			t_Vector3	plane_norm_vect, float *distance);
+
+void		put_pixels_to_image(t_mem *mem, t_Scene *scene);
+t_pixel		**allocate_pixel_array(int width, int height);
+t_ray		**allocate_corner_array(int width, int height);
+void		init_mem(t_mem *mem, t_Scene *scene);
+void		init_pixel_array(t_mem *mem, t_Scene *scene);
+void		check_object_intersection(t_Scene *scene, t_ray *ray);
+void		check_corner_intersections(t_mem *mem, t_Scene *scene);
+void		check_mid_intersections(t_mem *mem, t_Scene *scene);
+void		average_pixel_colours(t_mem *mem, t_Scene *scene);
+void		trace_rays(t_mem *mem, t_Scene *scene);
+void		free_everything(t_mem *mem, t_Scene *scene);
 
 #endif

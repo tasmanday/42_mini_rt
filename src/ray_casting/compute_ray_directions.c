@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/12/05 18:24:43 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 23:14:58 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -140,7 +140,13 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
 			ray->closest_object = current_object;
 		}
 		current_object = current_object->next;
-		// TODO: if closest object, colour = specific object colour. change later to be colour of object + shadow/lighting modifiers
+	}
+	if (ray->intersects_object)
+	{
+		if (ray->closest_object->type == SPHERE)
+			ray->colour = ray->closest_object->u_data.sphere.colour;
+		else if (ray->closest_object->type == PLANE)
+			ray->colour = ray->closest_object->u_data.plane.colour;
 	}
 }
 
@@ -155,7 +161,7 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
     OUTPUTS:
         None.
 */
-void	compute_ray_directions(t_Scene *scene) // rename to ray_trace()
+/*void	compute_ray_directions(t_Scene *scene) // rename to ray_trace()
 {
 	int		y;
 	int		x;
@@ -173,10 +179,10 @@ void	compute_ray_directions(t_Scene *scene) // rename to ray_trace()
 				init_ray(scene, &ray, x, y);
 				check_object_intersection(scene, &ray);
 
-/*				if (!ray->intersects_object)
+				if (!ray->intersects_object)
 					my_mlx_pixel_put(x, y, BLACK);
 				else
-					my_mlx_pixel_put(x, y, get_pixel_colour()); */
+					my_mlx_pixel_put(x, y, get_pixel_colour());
 
 //				ray_intersects_sphere(scene, ray_dir, &distance);
 
@@ -188,11 +194,11 @@ void	compute_ray_directions(t_Scene *scene) // rename to ray_trace()
 			printf("\n"); // delete later
 		y++;
 	}
-/*	printf("\n");
+	printf("\n");
 	y = scene->mlx.height / 2;
 	x = scene->mlx.width / 2;
 	ray_dir = get_ray_direction(scene, x, y);
 	ray_intersects_plane(scene, ray_dir, &distance);
 	printf("ray_dir: %f, %f, %f\n", ray_dir.x, ray_dir.y, ray_dir.z);
-	printf("distance: %f\n", distance); */
-}
+	printf("distance: %f\n", distance); 
+} */
