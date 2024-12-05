@@ -6,19 +6,19 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 23:12:25 by tday              #+#    #+#             */
-/*   Updated: 2024/12/05 15:13:00 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 17:50:45 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
-void free_everything(t_mem *mem, t_Scene scene)
+void	free_everything(t_mem *mem, t_Scene *scene)
 {
 	// Free the mem->pixels array
 	if (mem->pixels)
 	{
 		int i = 0;
-		while (i < scene.mlx.height)
+		while (i < scene->mlx.height)
 		{
 			if (mem->pixels[i])
 				free(mem->pixels[i]); // Free each row in the mem->pixels array
@@ -31,7 +31,7 @@ void free_everything(t_mem *mem, t_Scene scene)
 	if (mem->corners)
 	{
 		int i = 0;
-		while (i <= scene.mlx.height)
+		while (i <= scene->mlx.height)
 		{
 			if (mem->corners[i])
 				free(mem->corners[i]); // Free each row in the mem->corners array

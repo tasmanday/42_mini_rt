@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 22:09:09 by tday              #+#    #+#             */
-/*   Updated: 2024/11/17 23:17:50 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/03 23:24:55 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -35,13 +35,24 @@ bool	ray_intersects_sphere(t_ray *ray, t_Sphere sphere, float *distance)
     if (t1 > 0)
 	{
         *distance = t1;  // t1 is the closest positive intersection point
-		return (printf("O "), true); // Intersection found printf("t1 closest intersection\n"), 
+		ray->colour.r = 0;
+		ray->colour.g = 122;
+		ray->colour.b = 10;
+		return (true); // Intersection found printf("t1 closest intersection\n"), 
 	}
     else if (t2 > 0)
 	{
         *distance = t2;  // t1 is negative, so t2 is the closest positive intersection
-		return (printf(". "), true); // Intersection found printf("t2 closest intersection\n"), 
+		ray->colour.r = 177;
+		ray->colour.g = 235;
+		ray->colour.b = 52;
+		return (true); // Intersection found printf("t2 closest intersection\n"), 
 	}
     else
-        return (printf("* "), false);  // Both t1 and t2 are negative, no intersection in front of the camera printf("Both t1 and t2 are negative, no intersection in front of the camera\n"), 
+	{
+		ray->colour.r = 0;
+		ray->colour.g = 0;
+		ray->colour.b = 0;	
+        return (false);  // Both t1 and t2 are negative, no intersection in front of the camera printf("Both t1 and t2 are negative, no intersection in front of the camera\n"), 
+	}
 }

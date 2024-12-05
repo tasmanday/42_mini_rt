@@ -12,9 +12,19 @@ bool	ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
 	*distance = (vect_dot(plane_norm_vect, \
 		vect_subtract(point_on_plane, ray->ray_origin))) / denominator;
 	if (*distance > 0)
-		return (printf("8 "), true); // ray intersects plane in front of camera
+	{
+		ray->colour.r = 90;
+		ray->colour.g = 60;
+		ray->colour.b = 163;
+		return (true); // ray intersects plane in front of camera
+	}
 	else
-		return (printf("* "), false);  // ray intersects plane behind camera // TODO set distance infinity
+	{
+		ray->colour.r = 0;
+		ray->colour.g = 0;
+		ray->colour.b = 0;
+		return (false);  // ray intersects plane behind camera // TODO set distance infinity
+	}
 }
 
 /* bool	ray_intersects_plane(t_Scene *scene, t_Vector3 ray_dir, 				\

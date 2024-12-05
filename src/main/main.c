@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:29:18 by atang             #+#    #+#             */
-/*   Updated: 2024/12/05 15:13:05 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 18:26:07 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -32,7 +32,7 @@ int	main(int argc, char **argv)
 		scene.mlx.height = 1080;
 		scene.mlx.width = 1920;
 
-		init_mem(&mem, scene);
+		init_mem(&mem, &scene);
 
 	//	compute_ray_directions(&scene);
 
@@ -42,7 +42,7 @@ int	main(int argc, char **argv)
 		mlx_hook(scene.mlx.win_ptr, 17, 0, close_button_hook, &scene);
 		mlx_loop(scene.mlx.mlx_ptr); */
 
-		free_everything(mem, scene);
+		free_everything(&mem, &scene);
 	}
 	else
 		return (err_return("File not found"));

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/12/05 15:12:58 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 18:24:43 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -140,6 +140,7 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
 			ray->closest_object = current_object;
 		}
 		current_object = current_object->next;
+		// TODO: if closest object, colour = specific object colour. change later to be colour of object + shadow/lighting modifiers
 	}
 }
 
