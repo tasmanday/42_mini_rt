@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 23:06:45 by tday              #+#    #+#             */
-/*   Updated: 2024/12/05 08:31:44 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/05 14:42:13 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,11 +14,13 @@
 
 t_pixel **allocate_pixel_array(int width, int height)
 {
-	t_pixel **pixels = malloc(height * sizeof(t_pixel *));
+	t_pixel **pixels = safe_malloc(height * sizeof(t_pixel *), \
+		"pixels array malloc error");
 	int i = 0;
 	while (i < height)
 	{
-		pixels[i] = malloc(width * sizeof(t_pixel));
+		pixels[i] = safe_malloc(width * sizeof(t_pixel), \
+			"pixels array malloc error");
 		i++;
 	}
 	return pixels;
@@ -26,11 +28,13 @@ t_pixel **allocate_pixel_array(int width, int height)
 
 t_ray **allocate_corner_array(int width, int height)
 {
-	t_ray **corners = malloc((height + 1) * sizeof(t_ray *));
+	t_ray **corners = safe_malloc((height + 1) * sizeof(t_ray *), \
+		"corners array malloc error");
 	int i = 0;
 	while (i <= height)
 	{
-		corners[i] = malloc((width + 1) * sizeof(t_ray));
+		corners[i] = safe_malloc((width + 1) * sizeof(t_ray), \
+			"corners array malloc error");
 		i++;
 	}
 	return corners;
