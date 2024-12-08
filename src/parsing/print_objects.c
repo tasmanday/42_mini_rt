@@ -6,7 +6,7 @@
 /*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:12:23 by atang             #+#    #+#             */
-/*   Updated: 2024/11/28 21:06:31 by sentry           ###   ########.fr       */
+/*   Updated: 2024/12/07 22:35:23 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	print_cylinder(const struct Object *object)
 		object->u_data.cylinder.colour.g,
 		object->u_data.cylinder.colour.b);
 }
-
+/*
 void	print_all_objects(const t_Scene *scene)
 {
 	struct Object	*current;
@@ -97,6 +97,52 @@ void	print_all_objects(const t_Scene *scene)
 		}
 		else
 			printf("Unknown object type\n");
+		current = current->next;
+		position++;
+	}
+	printf(RED "\n\nExiting" RST " print_all_objects()\n");
+}
+*/
+
+static void	print_object_details(const struct Object *object, int position)
+{
+	printf("\n-> " U "OBJECT LIST POSITION: %d\n\n" RST, position);
+	printf("      Printing object of type: ");
+	if (object->type == SPHERE)
+	{
+		printf(Y "SPHERE\n" RST);
+		print_sphere(object);
+	}
+	else if (object->type == PLANE)
+	{
+		printf(B "PLANE\n" RST);
+		print_plane(object);
+	}
+	else if (object->type == CYLINDER)
+	{
+		printf(C "CYLINDER\n" RST);
+		print_cylinder(object);
+	}
+	else
+	{
+		printf("Unknown object type\n");
+	}
+}
+
+void	print_all_objects(const t_Scene *scene)
+{
+	struct Object	*current;
+	int				position;
+
+	current = scene->objects;
+	printf(G "\nEntering" RST " print_all_objects()\n\n");
+	printf("   NUMBER OF OBJECTS IN SCENE: %d\n", scene->object_count);
+	if (!current)
+		printf("\n   No objects in the scene!");
+	position = 1;
+	while (current)
+	{
+		print_object_details(current, position);
 		current = current->next;
 		position++;
 	}

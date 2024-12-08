@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:44:56 by atang             #+#    #+#             */
-/*   Updated: 2024/11/03 18:49:47 by atang            ###   ########.fr       */
+/*   Updated: 2024/12/08 11:51:25 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,37 +24,32 @@ const char	*get_object_type_str(int type)
 		return ("Unknown");
 }
 
-void	print_objects_in_scene(struct Object *objects)
+static int	handle_null_object_error(const char *message)
 {
-	struct Object	*temp;
-	const char		*type_str;
+	printf("      Error: %s\n", message);
+	return (FAILURE);
+}
 
-	temp = objects;
-	printf("      Current objects in scene:\n");
-	while (temp)
+static void	append_object_to_scene(t_Scene *scene, struct Object *new_object)
+{
+	struct Object	*current;
+
+	current = scene->objects;
+	while (current->next)
 	{
-		type_str = get_object_type_str(temp->type);
-		printf("      Object type: %s\n", type_str);
-		temp = temp->next;
+		current = current->next;
 	}
+	current->next = new_object;
 }
 
 int	add_object(t_Scene *scene, struct Object *new_object)
 {
-	struct Object	*current;
-
 	printf(G "   Entering" RST " add_object()\n\n");
 	if (!scene)
-	{
-		printf("      Error: Scene is NULL.\n");
-		return (0);
-	}
+		return (handle_null_object_error("Error: Scene is NULL."));
 	if (!new_object)
-	{
-		printf("      Error: New object is NULL.\n");
-		return (0);
-	}
-	new_object->next = NULL; // added
+		return (handle_null_object_error("Error: New object is NULL."));
+	new_object->next = NULL;
 	if (!scene->objects)
 	{
 		scene->objects = new_object;
@@ -62,18 +57,13 @@ int	add_object(t_Scene *scene, struct Object *new_object)
 	}
 	else
 	{
-		current = scene->objects;
-		while (current->next)
-		{
-			current = current->next;
-		}
-		current->next = new_object;
+		append_object_to_scene(scene, new_object);
 	}
 	scene->object_count++;
 	printf(G "      Object added! New count: %d\n" RST, scene->object_count);
 	print_objects_in_scene(scene->objects);
 	printf(RED "\n   Exiting" RST " add_object()\n\n");
-	return (1);
+	return (SUCCESS);
 }
 
 void	free_objects(t_Scene *scene)

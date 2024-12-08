@@ -6,7 +6,7 @@
 /*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/11/28 20:49:54 by sentry           ###   ########.fr       */
+/*   Updated: 2024/12/08 11:41:35 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@
 # include <string.h>
 # include <sys/types.h> // for ssize_t
 # include <math.h>
+# include <errno.h>
 # include "../minilibx/mlx.h"
 
 // DEFINITIONS //
 
 # define BUFFER_SIZE 1024 
 # define MAX_OBJECTS 100
-#define MAX_TOKEN_LENGTH 50
+# define MAX_TOKEN_LENGTH 50
 # define SUCCESS 0
 # define FAILURE -99
 
@@ -250,6 +251,9 @@ void		print_sphere(const struct Object *object);
 void		print_plane(const struct Object *object);
 void		print_cylinder(const struct Object *object);
 void		print_all_objects(const t_Scene *scene);
+
+// print_utils.c //
+int			print_error_and_return(const char *message, const char *token);
 
 // utils.c //
 size_t		ft_strlen(const char *s);

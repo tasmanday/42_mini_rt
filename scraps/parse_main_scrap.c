@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_main.c                                       :+:      :+:    :+:   */
+/*   parse_main_scrap.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:44:24 by atang             #+#    #+#             */
-/*   Updated: 2024/11/01 17:15:49 by sentry           ###   ########.fr       */
+/*   Updated: 2024/12/08 11:27:45 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,3 +161,59 @@ int	parse_line(char *line, t_Scene *scene)
 	}
 	return (SUCCESS);
 }
+
+
+/*
+--> OG parse_line	
+int	parse_line(char *line, t_Scene *scene)
+{
+	char	*token;
+
+	token = ft_strtok(&line, " \t\n");
+	if (!token)
+		return (SUCCESS);
+	printf(C "\nParsing line with token: %s\n" RST, token);
+	if (strcmp(token, "A") == 0)
+	{
+		if (scene->ambient_light_parsed)
+			warn_err_exit("\n   Multiple ambient light definitions", 10);
+		scene->ambient_light_parsed = 1;
+		return (parse_ambient_light(&line, &scene->ambient_light));
+	}
+	else if (strcmp(token, "C") == 0)
+	{
+		if (scene->camera_parsed)
+			warn_err_exit("\n   Multiple camera definitions", 11);
+		scene->camera_parsed = 1;
+		return (parse_camera(&line, &scene->camera));
+	}
+	else if (strcmp(token, "L") == 0)
+	{
+		if (scene->light_parsed)
+			warn_err_exit("\n   Multiple light definitions", 12);
+		scene->light_parsed = 1;
+		return (parse_light(&line, &scene->light));
+	}
+	else if (strcmp(token, "sp") == 0 || strcmp(token, "pl")
+		== 0 || strcmp(token, "cy") == 0)
+	{
+		if (scene->object_count >= MAX_OBJECTS)
+		{
+			printf("Error\nExceeded maximum number of objects\n");
+			return (FAILURE);
+		}
+		if (strcmp(token, "sp") == 0)
+			return (parse_sphere(&line, scene));
+		else if (strcmp(token, "pl") == 0)
+			return (parse_plane(&line, scene));
+		else if (strcmp(token, "cy") == 0)
+			return (parse_cylinder(&line, scene));
+	}
+	else
+	{
+		printf(RED "Error\nUnknown identifier: %s\n\n" RST, token);
+		return (FAILURE);
+	}
+	return (SUCCESS);
+}
+*/

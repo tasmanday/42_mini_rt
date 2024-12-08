@@ -6,7 +6,7 @@
 #    By: sentry <sentry@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2024/11/28 15:36:48 by sentry           ###   ########.fr        #
+#    Updated: 2024/12/08 12:16:07 by sentry           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,10 +37,11 @@ CFLAGS          :=      -Wall -Wextra -Werror -O3
 SRCS            :=      $(addprefix src/main/, main.c)                         \
                         $(addprefix src/mlx/, mlx.c)                           \
                         $(addprefix src/parsing/, error.c file_check.c         \
-                                    object_utils.c                             \
+                                    object_utils.c error_utils.c               \
                                     parse_elements.c parse_main.c              \
                                     parse_objects.c parse_utils.c utils.c      \
-                                    print_elements.c print_objects.c)          \
+                                    print_elements.c print_objects.c           \
+									print_utils.c)                       	   \
                         $(addprefix src/ray_casting/, compute_ray_directions.c \
                                     sphere_intersection.c)                     \
                         $(addprefix src/vectors/, vector_operations.c)
