@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/12/05 23:14:58 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/09 21:31:02 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -133,7 +133,10 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
 			if (ray_intersects_sphere(ray, \
 					current_object->u_data.sphere, &distance))
 				ray->intersects_object = true;
-
+		if (current_object->type == CYLINDER)
+			if (ray_intersects_cylinder(ray, \
+					current_object->u_data.cylinder, &distance))
+				ray->intersects_object = true;
 		if (distance < ray->closest_intersection)
 		{
 			ray->closest_intersection = distance;

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2024/11/21 23:45:15 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/09 21:33:40 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -21,13 +21,15 @@ bool	intersection_within_radius(t_ray *ray, t_Cylinder cylinder, t_Vector3 cap_c
 	return (false);
 }
 
-float	*check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *distance)
+bool	check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *distance)
 {
 	t_Vector3	offset;
 	t_Vector3	cap_a_center;
 	t_Vector3	cap_b_center;
 	float		temp_distance;
+	bool		intersection_flag;
 
+	intersection_flag = false;
 	// Scale the normalised axis by half the height to get the offset
 	offset = vect_multiply_scalar(cylinder.axis, cylinder.height / 2.0f);
 
@@ -37,21 +39,23 @@ float	*check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *dist
 	&& intersection_within_radius(ray, cylinder, cap_a_center, temp_distance))		
 	{
 		*distance = temp_distance;
+		intersection_flag = true;
 	}
 
 	// cap b
-	t_Vector3 cap_b_center = vect_subtract(cylinder.center, offset);
+	cap_b_center = vect_subtract(cylinder.center, offset);
 	if (ray_intersects_plane(ray, cap_b_center, cylinder.axis, &temp_distance) \
 	&& intersection_within_radius(ray, cylinder, cap_a_center, temp_distance) \
 	&& temp_distance < *distance)
 	{
 		*distance = temp_distance;
+		intersection_flag = true;
 	}
 
-	return (distance);
+	return (intersection_flag);
 }
 
-float	get_quadratic_discriminant(t_ray *ray, t_Cylinder cyl, t_Vector3 dp, float *a)
+/*float	get_quadratic_discriminant(t_ray *ray, t_Cylinder cyl, t_Vector3 dp, float *a)
 {
 	float	b;
 	float	c;
@@ -116,4 +120,11 @@ bool	ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, float *distance)
 	check_cylinder_body_intersection(&ray, scene->objects->u_data.cylinder, \
 		distance);
 	return (*distance < orig_dist);
+} */
+
+bool	ray_intersects_cylinder(t_ray *ray, t_Cylinder cylinder, float *distance)
+{
+	if (check_end_plane_intersection(ray, cylinder, distance))
+		return (true);
+	return (false);
 }
