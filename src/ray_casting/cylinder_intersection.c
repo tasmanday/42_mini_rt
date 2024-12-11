@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2024/12/09 21:33:40 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/11 23:30:55 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -23,6 +23,7 @@ bool	intersection_within_radius(t_ray *ray, t_Cylinder cylinder, t_Vector3 cap_c
 
 bool	check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *distance)
 {
+//	printf("check_end_plane_intersection called\n"); // TODO remove
 	t_Vector3	offset;
 	t_Vector3	cap_a_center;
 	t_Vector3	cap_b_center;
@@ -35,21 +36,37 @@ bool	check_end_plane_intersection(t_ray *ray, t_Cylinder cylinder, float *distan
 
 	// cap a
 	cap_a_center = vect_add(cylinder.center, offset);
-	if (ray_intersects_plane(ray, cap_a_center, cylinder.axis, &temp_distance) \
-	&& intersection_within_radius(ray, cylinder, cap_a_center, temp_distance))		
+/*	if (ray_intersects_plane(ray, cap_a_center, cylinder.axis, &temp_distance) \
+	&& intersection_within_radius(ray, cylinder, cap_a_center, temp_distance)) */	// TODO restore
+
+	if (ray_intersects_plane(ray, cap_a_center, cylinder.axis, &temp_distance)) // TODO remove
 	{
-		*distance = temp_distance;
-		intersection_flag = true;
+	//	printf("%f\n", temp_distance); // TODO remove
+	//	printf("ray intersects cylinder cap a plane\n"); // TODO remove
+		if (intersection_within_radius(ray, cylinder, cap_a_center, temp_distance)) // TODO remove
+		{
+			printf("ray intersects cylinder cap a within radius\n"); // TODO remove
+			*distance = temp_distance;
+			intersection_flag = true;
+		}
 	}
 
 	// cap b
 	cap_b_center = vect_subtract(cylinder.center, offset);
-	if (ray_intersects_plane(ray, cap_b_center, cylinder.axis, &temp_distance) \
+/*	if (ray_intersects_plane(ray, cap_b_center, cylinder.axis, &temp_distance) \
 	&& intersection_within_radius(ray, cylinder, cap_a_center, temp_distance) \
-	&& temp_distance < *distance)
+	&& temp_distance < *distance) */	// TODO restore
+
+	if (ray_intersects_plane(ray, cap_b_center, vect_multiply_scalar(cylinder.axis, -1), &temp_distance)) // TODO remove
 	{
-		*distance = temp_distance;
-		intersection_flag = true;
+	//	printf("ray intersects cylinder cap b plane\n"); // TODO remove
+		if (intersection_within_radius(ray, cylinder, cap_b_center, temp_distance) \
+		&& temp_distance < *distance) // TODO remove
+		{
+			printf("ray intersects cylinder cap b within radius\n"); // TODO remove
+			*distance = temp_distance;
+			intersection_flag = true;
+		}
 	}
 
 	return (intersection_flag);
@@ -125,6 +142,6 @@ bool	ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, float *distance)
 bool	ray_intersects_cylinder(t_ray *ray, t_Cylinder cylinder, float *distance)
 {
 	if (check_end_plane_intersection(ray, cylinder, distance))
-		return (true);
+		return (printf("ray intersects cylinder caps\n"), true);
 	return (false);
 }

@@ -6,9 +6,11 @@ bool	ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
 {
 	float		denominator;
 
+	plane_norm_vect = vect_normalise(plane_norm_vect);
+
 	denominator = vect_dot(plane_norm_vect, ray->ray_dir);
 	if (denominator == 0)
-		return (false); // miss, ray parallel to plane
+		return (false); // miss, ray parallel to plane, plane_norm_vect perpendicular to ray_dir
 	*distance = (vect_dot(plane_norm_vect, \
 		vect_subtract(point_on_plane, ray->ray_origin))) / denominator;
 	if (*distance > 0)
