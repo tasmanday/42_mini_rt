@@ -9,17 +9,19 @@ bool	ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
 	plane_norm_vect = vect_normalise(plane_norm_vect);
 
 	denominator = vect_dot(plane_norm_vect, ray->ray_dir);
-	if (denominator == 0)
+	if (fabs(denominator) < 1e-6)
 		return (false); // miss, ray parallel to plane, plane_norm_vect perpendicular to ray_dir
-	*distance = (vect_dot(plane_norm_vect, \
-		vect_subtract(point_on_plane, ray->ray_origin))) / denominator;
-	if (*distance > 0)
+	*distance = vect_dot(plane_norm_vect, \
+		vect_subtract(point_on_plane, ray->ray_origin)) / denominator;
+	if (*distance <= 0) //because the camera looks towards the negative z by default
 	{
+		*distance *= -1; // fixes the negative distance
 		return (true); // ray intersects plane in front of camera
 	}
 	else
 	{
-		return (false);  // ray intersects plane behind camera // TODO set distance infinity
+		*distance = INFINITY;
+		return (false);  // ray intersects plane behind camera
 	}
 }
 

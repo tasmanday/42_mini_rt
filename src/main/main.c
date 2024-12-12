@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:29:18 by atang             #+#    #+#             */
-/*   Updated: 2024/12/11 21:59:45 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/12 20:03:08 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -34,6 +34,9 @@ int	main(int argc, char **argv)
 
 		initialise_data(&scene);
 		printf("initialise_data called\n"); // TODO remove
+		printf("camera orientation: %f, %f, %f\n", scene.camera.orientation.x, scene.camera.orientation.y, scene.camera.orientation.z);
+		printf("plane coordinates: %f, %f, %f\n", scene.objects->u_data.plane.point.x, scene.objects->u_data.plane.point.y, scene.objects->u_data.plane.point.z);
+		printf("plane normal: %f, %f, %f\n", scene.objects->u_data.plane.normal.x, scene.objects->u_data.plane.normal.y, scene.objects->u_data.plane.normal.z);
 		init_mem(&mem, &scene);
 		printf("init_mem called\n"); // TODO remove
 		trace_rays(&mem, &scene);
