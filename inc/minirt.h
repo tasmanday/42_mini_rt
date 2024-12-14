@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/12/08 11:41:35 by sentry           ###   ########.fr       */
+/*   Updated: 2024/12/14 14:36:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,11 +209,8 @@ int			add_object(t_Scene *scene, struct Object *new_object);
 void		free_objects(t_Scene *scene);
 
 // parse_elements.c //
-//int			parse_ambient_light(t_AmbientLight *ambient_light);
 int			parse_ambient_light(char **line, t_AmbientLight *ambient_light); // For line
-//int			parse_camera(t_Camera *camera);
 int			parse_camera(char **line, t_Camera *camera);
-//int			parse_light(t_Light *light);
 int			parse_light(char **line, t_Light *light);
 int			parse_position(t_Vector3 *position, char **token);
 int			parse_orientation(t_Vector3 *orientation, char **token);
@@ -224,9 +221,7 @@ int			parse_rt_file(const char *filename, t_Scene *scene);
 int			parse_line(char	*line, t_Scene *scene);
 
 // parse_objects.c //
-//int			parse_sphere(t_Scene *scene);
 int			parse_sphere(char **line, t_Scene *scene);
-//int			parse_plane(char *line, t_Scene *scene);
 int			parse_plane(char **line, t_Scene *scene);
 int			parse_cylinder(char **line, t_Scene *scene);
 
@@ -258,8 +253,7 @@ int			print_error_and_return(const char *message, const char *token);
 // utils.c //
 size_t		ft_strlen(const char *s);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
-//int			get_next_token(char **token);
-int			get_next_token(char **line, char **token); // For line parameter
+int			get_next_token(char **line, char **token);
 char		*ft_strtok(char **line, const char *delim);
 float		parse_float(char **str);
 int			parse_int(char	**str);

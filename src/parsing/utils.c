@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/12/04 10:44:39 by sentry           ###   ########.fr       */
+/*   Updated: 2024/12/14 14:27:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*ft_strtok(char **line, const char *delim)
 	{
 		return (NULL);
 	}
-	while (**line && strchr(delim, **line))
+	while (**line && ft_strchr(delim, **line))
 		(*line)++;
 	if (**line == '\0')
 	{
@@ -69,7 +69,7 @@ char	*ft_strtok(char **line, const char *delim)
 		return (NULL);
 	}
 	start = *line;
-	while (**line && !strchr(delim, **line))
+	while (**line && !ft_strchr(delim, **line))
 		(*line)++;
 	if (**line)
 	{

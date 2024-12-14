@@ -12,13 +12,13 @@
 
 #include "minirt.h"
 
-int print_error_and_return(const char *message, const char *token)
+int	print_error_and_return(const char *message, const char *token)
 {
-    if (token)
-        printf(RED "\n   %s: '%s'" RST, message, token);
-    else
-        printf(RED "\n   %s" RST, message);
-    return (FAILURE);
+	if (token)
+		printf(RED "\n   %s: '%s'" RST, message, token);
+	else
+		printf(RED "\n   %s" RST, message);
+	return (FAILURE);
 }
 
 void	print_objects_in_scene(struct Object *objects)

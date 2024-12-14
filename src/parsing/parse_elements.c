@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/12/07 22:35:24 by sentry           ###   ########.fr       */
+/*   Updated: 2024/12/14 10:49:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-//int	parse_ambient_light(t_AmbientLight *ambient_light)
 int	parse_ambient_light(char **line, t_AmbientLight *ambient_light)
 {
 	char	*token;

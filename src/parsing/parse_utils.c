@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/12/07 22:44:39 by sentry           ###   ########.fr       */
+/*   Updated: 2024/12/14 10:24:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int parse_rgb(t_Colour *colour, char **line)
                 "No more tokens found for RGB values (needs 3)", NULL));
         if (validate_rgb(token) == FAILURE)
             return print_error_and_return("RGB value contains \
-non-numeric characters", token);
+    non-numeric characters", token);
         value = ft_atoi(token);
         if (value < 0 || value > 255)
             return (print_error_and_return("RGB value out of range (0-255)", token));
@@ -128,14 +128,14 @@ int parse_orientation(t_Vector3 *orientation, char **line)
     {
         if (get_next_token(line, &token) == FAILURE)
             return (print_error_and_return("Failed to get x/y/z \
-orientation", NULL));
+    orientation", NULL));
         *coords[i] = strtof(token, &endptr);
         if (*endptr != '\0')
             return (print_error_and_return("Invalid value for x/y/z \
-orientation", token));
+    orientation", token));
         if (*coords[i] < -1.0f || *coords[i] > 1.0f)
             return (print_error_and_return("Orientation value out of range \
-(-1, 1)", NULL));
+    (-1, 1)", NULL));
         i++;
     }
     return (SUCCESS);

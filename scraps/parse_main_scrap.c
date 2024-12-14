@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main_scrap.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:44:24 by atang             #+#    #+#             */
-/*   Updated: 2024/12/08 11:27:45 by sentry           ###   ########.fr       */
+/*   Updated: 2024/12/14 11:36:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,5 +215,45 @@ int	parse_line(char *line, t_Scene *scene)
 		return (FAILURE);
 	}
 	return (SUCCESS);
+}
+*/
+
+/*
+--> OG parse_rt_file
+int	parse_rt_file(const char *filename, t_Scene *scene)
+{
+	int		fd;
+	char	*line;
+	int		result;
+
+	scene->objects = NULL;
+	scene->object_count = 0;
+	printf(M "\n---> PARSING ELEMENTS AND OBJECTS <---\n" RST);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+	{
+		printf("Error\nCould not open file: %s\n", filename);
+		return (FAILURE);
+	}
+	result = 1;
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (line == NULL)
+		{
+			printf(Y "\nLine read: get_next_line returned NULL \
+				- EOF or error!\n\n" RST);
+			result = 0;
+			free(line);
+			break ;
+		}
+		printf(Y "\nLine read: %s" RST, line);
+		if (process_line(line, scene) == FAILURE)
+			result = 0;
+		free(line);
+	}
+	close(fd);
+	print_scene_info(scene);
+	return (result);
 }
 */
