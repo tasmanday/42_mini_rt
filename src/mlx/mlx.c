@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 17:58:17 by atang             #+#    #+#             */
-/*   Updated: 2024/12/05 23:18:16 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/23 00:31:03 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -52,6 +52,7 @@ void	handle_exit(t_Scene *scene)
 {
 	mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
 	printf(RED "\nExiting...\n\n" RST);
+//	free_everything(&mem, &scene); // TODO make this work &mem not being passed to this function
 	exit(1);
 }
 

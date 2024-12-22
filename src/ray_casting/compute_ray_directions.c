@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/12/11 21:58:38 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/23 00:31:04 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -150,6 +150,8 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
 			ray->colour = ray->closest_object->u_data.sphere.colour;
 		else if (ray->closest_object->type == PLANE)
 			ray->colour = ray->closest_object->u_data.plane.colour;
+		else if (ray->closest_object->type == CYLINDER)
+			ray->colour = ray->closest_object->u_data.cylinder.colour;
 	}
 }
 
