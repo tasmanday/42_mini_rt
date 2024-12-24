@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2024/12/23 00:31:05 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/24 13:32:19 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -163,15 +163,18 @@ float calculate_t_for_cap(t_ray *ray, t_Vector3 cap_center, t_Vector3 axis)
     return (numerator / denominator);
 }
 
-bool	intersection_within_radius(t_Vector3 intersection_point, t_Vector3 cap_center, float radius)
+bool	intersection_within_radius(t_Vector3 intersection_point, t_Vector3 cap_center, float radius) // **** this is the issue, distance squared is way bigger than radius squared ****
 {
 	t_Vector3	diff;
 	float		distance_squared;
+	float		radius_squared;
 
     diff = vect_subtract(intersection_point, cap_center);
     distance_squared = vect_dot(diff, diff);
-	if (distance_squared < (radius * radius))
-		return (true);
+	radius_squared = radius * radius;
+	printf("distance_squared = %f, radius_squared = %f\n", distance_squared, radius_squared); // TODO remove
+	if (distance_squared < radius_squared)
+		return (printf("intersection_within_radius true\n"), true);
 	return (false);
 }
 
@@ -196,14 +199,14 @@ void	check_end_cap_intersection(t_ray *ray, t_Cylinder cylinder, float intersect
 	{
 //		printf("t[0] = %f\n", t[0]); // TODO remove
 		intersection_point = vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, t[0]));
-		if (intersection_within_radius(intersection_point, cap_a_center, cylinder.diameter / 2))
+		if (intersection_within_radius(intersection_point, cap_a_center, cylinder.diameter / 2) || true)
 			intersections[0] = t[0];
 	}
 	if (t[1] > 0)
 	{
 //		printf("t[1] = %f\n", t[1]); // TODO remove
 		intersection_point = vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, t[1]));
-		if (intersection_within_radius(intersection_point, cap_b_center, cylinder.diameter / 2))
+		if (intersection_within_radius(intersection_point, cap_b_center, cylinder.diameter / 2) || true)
 			intersections[1] = t[1];
 	}
 }
@@ -241,8 +244,8 @@ bool	ray_intersects_cylinder(t_ray *ray, t_Cylinder cylinder, float *distance)
 	} */
 
 	check_end_cap_intersection(ray, cylinder, intersections);
-	printf("intersections[0] = %f\n", intersections[0]); // TODO remove
-	printf("intersections[1] = %f\n", intersections[1]); // TODO remove
+//	printf("intersections[0] = %f\n", intersections[0]); // TODO remove
+//	printf("intersections[1] = %f\n", intersections[1]); // TODO remove
 
 	while (i < 4)
 	{
