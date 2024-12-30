@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:29:18 by atang             #+#    #+#             */
-/*   Updated: 2024/10/19 10:14:15 by sentry           ###   ########.fr       */
+/*   Updated: 2024/11/20 15:19:03 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ int	main(int argc, char **argv)
 		printf(M "\n---> FILE FOUND <---\n" RST);
 		if (file_status(argv[1]) != SUCCESS)
 			return (1);
+		scene.ambient_light_parsed = 0;
+		scene.camera_parsed = 0;
+		scene.light_parsed = 0;
+		scene.object_count = 0;
 		parse_rt_file(argv[1], &scene);
 
 		scene.mlx.height = 1080;

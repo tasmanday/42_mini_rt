@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 16:18:33 by tday              #+#    #+#             */
-/*   Updated: 2024/01/21 16:40:27 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/08 11:25:04 by sentry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@
 	Returns a positive integer if s1 is greater than s2.
 	Returns 0 if s1 is equal to `s2.
 */
-int	ft_strcmp(char *s1, char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (s1[i] != '\0' && s2[i] != '\0')

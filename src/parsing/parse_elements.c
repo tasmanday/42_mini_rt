@@ -3,101 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:59:55 by atang             #+#    #+#             */
-/*   Updated: 2024/10/20 13:48:07 by atang            ###   ########.fr       */
+/*   Updated: 2024/12/14 10:49:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	parse_ambient_light(char *line, t_AmbientLight *ambient_light)
+int	parse_ambient_light(char **line, t_AmbientLight *ambient_light)
 {
 	char	*token;
 	float	ratio;
 
-	(void) line;
 	printf(G "Entering" RST " parse_ambient_light()\n\n");
-	if (!get_next_token(&token))
-		return (0);
+	if (get_next_token(line, &token) == FAILURE)
+		warn_err_exit("   No token found", 10);
 	ratio = parse_float(&token);
-	if (!ratio)
-		err_exit(0);
+	if (ratio == FAILURE)
+		err_exit(10);
 	ambient_light->ratio = ratio;
 	if (ambient_light->ratio < 0.0f || ambient_light->ratio > 1.0f)
-		err_exit(5);
-	printf("   Parsed ratio: %f\n", ambient_light->ratio);
-	if (!get_next_token(&token))
-		err_exit(3);
-	parse_colour(token, &ambient_light->colour);
+		warn_err_exit("\n   Ambient light ratio out of range (0.0 to 1.0)", 10);
+	printf("\n   -> Parsed ratio: %f\n\n", ambient_light->ratio);
+	if (parse_rgb(&ambient_light->colour, line) == FAILURE)
+		err_exit(10);
+	if (get_next_token(line, &token) == SUCCESS)
+		warn_err_exit("\n   Error! Excess ambient light value(s)", 10);
 	printf(G "   SUCCESS - Ambient Light parsed and added!\n\n");
-	printf(RED "Exiting" RST " parse_ambient_light()\n\n");
-	printf("---------------------------------------------------------------\n");
 	return (SUCCESS);
 }
 
-int	parse_camera(char *line, t_Camera *camera)
+int	parse_camera(char **line, t_Camera *camera)
 {
 	char	*token;
+	int		fov;
 
-	(void) line;
 	printf(G "Entering" RST " parse_camera()\n\n");
-	if (!get_next_token(&token))
-		return (printf("   Failed to get X position for camera\n"), 0);
-	camera->position.x = atof(token);
-	if (!get_next_token(&token))
-		return (printf("   Failed to get Y position for camera\n"), 0);
-	camera->position.y = atof(token);
-	if (!get_next_token(&token))
-		return (printf("   Failed to get Z position for camera\n"), 0);
-	camera->position.z = atof(token);
-	printf("   Parsed position: x = %f, y = %f, z = %f\n", camera->position.x,
-		camera->position.y, camera->position.z);
-	if (!get_next_token(&token))
-		return (printf("   Failed to get X orientation for camera\n"), 0);
-	camera->orientation.x = atof(token);
-	if (!get_next_token(&token))
-		return (printf("   Failed to get Y orientation for camera\n"), 0);
-	camera->orientation.y = atof(token);
-	if (!get_next_token(&token))
-		return (printf("   Failed to get Z orientation for camera\n"), 0);
-	camera->orientation.z = atof(token);
-	printf("   Parsed orientation: x = %f, y = %f, z = %f\n",
+	if (parse_position(&camera->position, line) == FAILURE)
+		err_exit(11);
+	printf("\n   -> Parsed position: x = %f, y = %f, z = %f\n\n",
+		camera->position.x, camera->position.y, camera->position.z);
+	if (parse_orientation(&camera->orientation, line) == FAILURE)
+		err_exit(11);
+	printf("\n   -> Parsed orientation: x = %f, y = %f, z = %f\n\n",
 		camera->orientation.x, camera->orientation.y, camera->orientation.z);
-	if (!get_next_token(&token))
-		return (printf("   Failed to get FOV for camera\n"), 0);
-	camera->fov = atof(token);
-	printf("   Parsed FOV: %f\n", camera->fov);
+	if (get_next_token(line, &token) == FAILURE)
+		warn_err_exit("   Error! Failed to get FOV for camera", 11);
+	fov = parse_int(&token);
+	if (fov == FAILURE)
+		err_exit(10);
+	camera->fov = fov;
 	if (camera->fov < 0 || camera->fov > 180)
-	//	err_exit("Camera FOV out of range (0 to 180)");
-		err_exit(7);
+		warn_err_exit("\n   Error! FOV out of range (0-180)", 11);
+	printf("\n   -> Parsed FOV: %d\n\n", camera->fov);
+	if (get_next_token(line, &token) == SUCCESS)
+		warn_err_exit("\n   Error! Excess camera value(s)", 11);
 	printf(G "   SUCCESS - Camera parsed and added!\n\n");
-	printf(RED "Exiting" RST " parse_camera()\n\n");
-	printf("---------------------------------------------------------------\n");
 	return (SUCCESS);
 }
 
-int	parse_light(char *line, t_Light *light)
+int	parse_light(char **line, t_Light *light)
 {
 	char	*token;
+	float	brightness;
 
-	(void) line;
 	printf(G "Entering" RST " parse_light()\n\n");
-	if (!get_next_token(&token))
-		return (0);
-	parse_vector3(token, &light->position);
-	if (!get_next_token(&token))
-		return (0);
-	light->brightness = parse_float(&token);
-	if (light->brightness < 0.0f || light->brightness > 1.0f)
-		//err_exit("Light brightness ratio out of range (0.0 to 1.0)");
-		err_exit(6);
-	if (!get_next_token(&token))
-		return (0);
-	parse_colour(token, &light->colour);
+	if (parse_vector3(line, &light->position) == FAILURE)
+		warn_err_exit("\n   Error! Failed to get position for light point", 12);
+	if (get_next_token(line, &token) == FAILURE)
+		warn_err_exit("   No brightness value found", 12);
+	brightness = parse_float(&token);
+	if (brightness == FAILURE)
+		warn_err_exit(" for brightness", 12);
+	if (brightness < 0.0f || brightness > 1.0f)
+		warn_err_exit("\n   Light brightness ratio out of range (0.0 to 1.0)",
+			12);
+	light->brightness = brightness;
+	printf("\n   -> Parsed brightness: %f\n\n", light->brightness);
+	if (parse_rgb(&light->colour, line) == FAILURE)
+		err_exit(12);
+	if (get_next_token(line, &token) == SUCCESS)
+		warn_err_exit("\n   Excess light value(s)", 12);
 	printf(G "   SUCCESS - Light parsed and added!\n\n");
-	printf(RED "Exiting" RST " parse_light()\n\n");
-	printf("---------------------------------------------------------------\n");
-	return (1);
+	return (SUCCESS);
 }

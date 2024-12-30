@@ -6,18 +6,11 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:26:47 by atang             #+#    #+#             */
-/*   Updated: 2024/10/20 13:48:06 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/20 15:30:08 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-/*
-Checks if a file with a given name exists. Fn opens the file in read only mode 
-with fopen. If successfully opened, the file exists). Fn then closes file using 
-fclose and returns 1 to indicate the file exists (returns 0 if file does not 
-exist). 
-*/
 
 int	file_exists(char *filename)
 {
@@ -49,13 +42,6 @@ int	file_status(const char	*filename)
 		return (err_return("File is empty"));
 	return (SUCCESS);
 }
-
-/*
-Checks if a given file name has the correct format i.e. ".rt". 1 is returned 
-if the file name is invalid, 0 if valid. Length of file name is calculated
-using ft_strlen() before the last three characters of the file name 
-are checked to ensure they are the correct .rt format using ft_strn_cmp()
-*/
 
 int	filename_error(char	*filename)
 {
