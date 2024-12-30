@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/10/20 13:51:20 by atang            ###   ########.fr       */
+/*   Updated: 2024/11/17 23:17:50 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINIRT_H
 # define MINIRT_H
@@ -88,7 +88,7 @@ typedef struct s_Light
 
 typedef struct s_Sphere
 {
-	t_Vector3	centre;
+	t_Vector3	center;
 	float		diameter;
 	t_Colour	colour;
 }	t_Sphere;
@@ -102,7 +102,7 @@ typedef struct s_Plane
 
 typedef struct s_Cylinder
 {
-	t_Vector3	centre;
+	t_Vector3	center;
 	t_Vector3	axis;
 	float		diameter;
 	float		height;

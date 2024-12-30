@@ -1,14 +1,14 @@
-# **************************************************************************** #
+#******************************************************************************#
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sentry <sentry@student.42.fr>              +#+  +:+       +#+         #
+#    By: tday <tday@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2024/12/08 12:16:07 by sentry           ###   ########.fr        #
+#    Updated: 2024/12/30 22:04:45 by tday             ###   ########.fr        #
 #                                                                              #
-# **************************************************************************** #
+#******************************************************************************#
 
 # Variables
 NAME            :=      miniRT
@@ -34,17 +34,20 @@ CC              :=      gcc
 CFLAGS          :=      -Wall -Wextra -Werror -O3
 
 # Define source and object files
-SRCS            :=      $(addprefix src/main/, main.c)                         \
-                        $(addprefix src/mlx/, mlx.c)                           \
-                        $(addprefix src/parsing/, error.c file_check.c         \
-                                    object_utils.c error_utils.c               \
-                                    parse_elements.c parse_main.c              \
-                                    parse_objects.c parse_utils.c utils.c      \
-                                    print_elements.c print_objects.c           \
-									print_utils.c)                       	   \
-                        $(addprefix src/ray_casting/, compute_ray_directions.c \
-                                    sphere_intersection.c)                     \
-                        $(addprefix src/vectors/, vector_operations.c)
+SRCS			:=		$(addprefix src/main/, main.c)							\
+						$(addprefix src/mlx/, mlx.c)							\
+						$(addprefix src/free/, free_everything.c)				\
+						$(addprefix src/parsing/, error.c file_check.c 			\
+									object_utils.c error_utils.c				\
+									parse_elements.c parse_main.c 				\
+									parse_objects.c parse_utils.c utils.c		\
+									print_elements.c print_objects.c			\
+									print_utils.c)								\
+						$(addprefix src/ray_casting/, compute_ray_directions.c	\
+									sphere_intersection.c 						\
+									cylinder_intersection.c						\
+									plane_intersection.c trace_rays.c init.c)	\
+						$(addprefix src/vectors/, vector_operations.c)				
 
 OBJS            :=      $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
 RM              :=      rm -f
@@ -80,7 +83,8 @@ $(LIBFT):
 	@$(MAKE) -s -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx $(MLX_FLAGS) -o $(NAME)
+#	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -I$(INC_DIR) -I$(MLX_DIR) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -o $(NAME)
 	@echo "$(GREEN)--> SUCCESS! Everything compiled and linked into executable: $(BLUE)$(NAME)$(DEFAULT_COLOUR)"
 	@echo "\n"
 

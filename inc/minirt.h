@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/12/14 14:36:58 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/30 21:59:53 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINIRT_H
 # define MINIRT_H
@@ -98,7 +98,7 @@ typedef struct s_Light
 
 typedef struct s_Sphere
 {
-	t_Vector3	centre;
+	t_Vector3	center;
 	float		diameter;
 	t_Colour	colour;
 }	t_Sphere;
@@ -112,7 +112,7 @@ typedef struct s_Plane
 
 typedef struct s_Cylinder
 {
-	t_Vector3	centre;
+	t_Vector3	center;
 	t_Vector3	axis;
 	float		diameter;
 	float		height;
@@ -138,23 +138,49 @@ typedef struct Object
 	struct Object	*next;
 }	t_Object;
 
+typedef struct s_ray
+{
+	t_Vector3	ray_origin;
+	t_Vector3	ray_dir;
+	bool		intersects_object;
+	float		closest_intersection;
+	t_Object	*closest_object;
+	t_Colour	colour;
+}				t_ray;
+
+typedef struct s_pixel
+{
+	t_ray		*TL;
+	t_ray		*TR;
+	t_ray		*BL;
+	t_ray		*BR;
+	t_ray		mid;
+	int			avg_colour;
+}				t_pixel;
+
+typedef	struct s_mem
+{
+	t_pixel		**pixels;
+	t_ray		**corners;
+}				t_mem;
+
 typedef struct s_Mlx
 {
-	int				width;
-	int				height;
-	int				**z_matrix;
-	int				zoom;
-	int				colour;
-	int				amplify;
-	int				shift_x;
-	int				shift_y;
-	void			*mlx_ptr;
-	void			*win_ptr;
-	void			*img_ptr;
-	unsigned int	*img_data;
-	int				bpp;
-	int				size_line;
-	int				endian;
+	int			width;
+	int			height;
+	int			**z_matrix;
+	int			zoom;
+	int			colour;
+	int			amplify;
+	int			shift_x;
+	int			shift_y;
+	void		*mlx_ptr;
+	void		*win_ptr;
+	void		*img_ptr;
+	char		*img_data;
+	int			bpp;
+	int			size_line;
+	int			endian;
 }			t_Mlx;
 
 typedef struct s_Scene
@@ -267,13 +293,34 @@ t_Vector3	vect_add(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_subtract(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b);
 float		vect_dot(t_Vector3 a, t_Vector3 b);
+t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar);
+float		vect_distance(t_Vector3 a, t_Vector3 b);
 
-void		compute_ray_directions(t_Scene *scene);
+//void		compute_ray_directions(t_Scene *scene);
+void		init_ray(t_Scene *scene, t_ray *ray, int x, int y);
 t_Vector3	get_ray_direction(t_Scene *scene, int x, int y);
 t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene);
 bool		camera_pointed_straight_up_or_down(t_Vector3 orientation);
 
-bool		ray_intersects_sphere(t_Scene *scene, t_Vector3 ray_dir, 			\
+bool		ray_intersects_sphere(t_ray *ray, t_Sphere sphere, \
 			float *distance);
+bool		ray_intersects_cylinder(t_ray *ray, t_Cylinder cylinder, \
+			float *distance);
+/* bool		ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
+			float *distance); */
+bool		ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
+			t_Vector3	plane_norm_vect, float *distance);
+
+void		put_pixels_to_image(t_mem *mem, t_Scene *scene);
+t_pixel		**allocate_pixel_array(int width, int height);
+t_ray		**allocate_corner_array(int width, int height);
+void		init_mem(t_mem *mem, t_Scene *scene);
+void		init_pixel_array(t_mem *mem, t_Scene *scene);
+void		check_object_intersection(t_Scene *scene, t_ray *ray);
+void		check_corner_intersections(t_mem *mem, t_Scene *scene);
+void		check_mid_intersections(t_mem *mem, t_Scene *scene);
+void		average_pixel_colours(t_mem *mem, t_Scene *scene);
+void		trace_rays(t_mem *mem, t_Scene *scene);
+void		free_everything(t_mem *mem, t_Scene *scene);
 
 #endif

@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   compute_ray_directions.c                           :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/08/25 17:22:03 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/23 00:31:04 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../inc/minirt.h"
 
@@ -91,16 +91,68 @@ t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
 	float	fov_adjustment;
 	t_Vector3	ray;
 
-//	printf("in grd\n");
+//	printf("in grd\n"); // TODO remove
 	aspect_ratio = (float)scene->mlx.width / scene->mlx.height;
 	fov_adjustment = tan((scene->camera.fov * M_PI / 180) / 2);
 	ray.x = (2 * ((float)x / scene->mlx.width) - 1) * aspect_ratio * fov_adjustment;
 	ray.y = (1 - 2 * ((float)y / scene->mlx.height)) * fov_adjustment;
-	ray.z = 1;
+	ray.z = -1; // makes the camera look into the screen by default
 	ray.x *= -1; // inverts the x axis, In many 3D rendering setups, the screen space is mapped so that the left side of the image has negative x-values and the right side has positive x-values.
 	ray = apply_camera_orientation(ray, scene);
 
 	return (ray);
+}
+
+void	init_ray(t_Scene *scene, t_ray *ray, int x, int y)
+{
+	ray->ray_origin = scene->camera.position;
+	ray->ray_dir = get_ray_direction(scene, x, y);
+	ray->intersects_object = false;
+	ray->closest_intersection = INFINITY;
+	ray->closest_object = NULL;
+	ray->colour.r = 0;
+	ray->colour.g = 0;
+	ray->colour.b = 0;
+}
+
+void	check_object_intersection(t_Scene *scene, t_ray *ray)
+{
+	t_Object	*current_object;
+	float		distance;
+
+	current_object = scene->objects;
+	distance = INFINITY;
+	while (current_object)
+	{
+		if (current_object->type == PLANE)
+			if (ray_intersects_plane(ray, \
+					current_object->u_data.plane.point, \
+					current_object->u_data.plane.normal, &distance))
+				ray->intersects_object = true;
+		if (current_object->type == SPHERE)
+			if (ray_intersects_sphere(ray, \
+					current_object->u_data.sphere, &distance))
+				ray->intersects_object = true;
+		if (current_object->type == CYLINDER)
+			if (ray_intersects_cylinder(ray, \
+					current_object->u_data.cylinder, &distance))
+				ray->intersects_object = true;
+		if (distance < ray->closest_intersection)
+		{
+			ray->closest_intersection = distance;
+			ray->closest_object = current_object;
+		}
+		current_object = current_object->next;
+	}
+	if (ray->intersects_object)
+	{
+		if (ray->closest_object->type == SPHERE)
+			ray->colour = ray->closest_object->u_data.sphere.colour;
+		else if (ray->closest_object->type == PLANE)
+			ray->colour = ray->closest_object->u_data.plane.colour;
+		else if (ray->closest_object->type == CYLINDER)
+			ray->colour = ray->closest_object->u_data.cylinder.colour;
+	}
 }
 
 /*
@@ -110,96 +162,48 @@ t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
     INPUTS:
         t_Scene *scene: The miniRT structure containing width and height of the
 			screen.
-        t_cam *camera: The camera structure containing FOV and orientation.
 
     OUTPUTS:
         None.
 */
-/* void	compute_ray_directions(t_Scene *scene, t_cam *camera)
+/*void	compute_ray_directions(t_Scene *scene) // rename to ray_trace()
 {
 	int		y;
 	int		x;
-	t_Vector3	ray_dir;
-	float	distance = 0;
+	t_ray	ray;
 
-	y = 0;
-	while (y < mrt->height)
-	{
-		if (y % 100 == 0) // delete later
-		{
-			x = 0;
-			while (x < mrt->width)
-			{
-				if (x % 100 == 0)
-				{
-					ray_dir = get_ray_direction(mrt, x, y, camera);
-					// Send ray from camera coordinates in direction of ray_dir
-					if (ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
-						printf("O"); // Intersection with sphere
-					else
-						printf("_"); // No intersection
-					printf(" ");
-					// calculate intersection
-		//			if ((y % 500 == 0) && (x % 500 == 0))
-		//				printf("Pixel [%d, %d] -> Ray direction: [%f, %f, %f]\n", x, y, ray_dir.x, ray_dir.y, ray_dir.z);
-				}
-				x++;
-			}
-			printf("\n"); // delete later
-		}
-		y++;
-	}
-} */
-
-void	compute_ray_directions(t_Scene *scene)
-{
-	int		y;
-	int		x;
-	t_Vector3	ray_dir;
-	float	distance = 0;
-
-	//int		height = 1080;
-	//int		width = 1920;
-
-	//printf("in crd\n");
 	y = 0;
 	while (y < scene->mlx.height)
-	//while (y < height)
 	{
-		// Calculate the ray direction for every pixel but process every 100th row
 		x = 0;
 		while (x < scene->mlx.width)
-	//	while (x < width)
 		{
-//			ray_dir = get_ray_direction(mrt, x, y, camera);
-			
-			// Always calculate the ray direction for the center pixel
-			/* if ((x == mrt->width / 2 && y == mrt->height / 2))
-			{
-				ray_dir = get_ray_direction(mrt, x, y, camera);
-				printf("Center Ray Direction: [%f, %f, %f]\n", ray_dir.x, ray_dir.y, ray_dir.z);
-				if (ray_intersects_sphere(camera, ray_dir, mrt->objs, &distance))
-					printf("Center Ray intersects sphere\n");
-				else
-					printf("Center Ray doesn't intersect sphere\n");
-			} */
-
-			// Continue processing every 25th pixel for intersection checks
+			// process every 25th pixel for intersection checks, this will be every pixel on the real thing
 			if (y % 25 == 0 && x % 25 == 0)
 			{
-				ray_dir = get_ray_direction(scene, x, y);
-//				printf("Ray Direction: [%f, %f, %f] ", ray_dir.x, ray_dir.y, ray_dir.z);
-				ray_intersects_sphere(scene, ray_dir, &distance);
-			}
+				init_ray(scene, &ray, x, y);
+				check_object_intersection(scene, &ray);
 
-//			if ((y % 500 == 0) && (x % 500 == 0))
-//				printf("Pixel [%d, %d] -> Ray direction: [%f, %f, %f]\n", x, y, ray_dir.x, ray_dir.y, ray_dir.z);
-			
+				if (!ray->intersects_object)
+					my_mlx_pixel_put(x, y, BLACK);
+				else
+					my_mlx_pixel_put(x, y, get_pixel_colour());
+
+//				ray_intersects_sphere(scene, ray_dir, &distance);
+
+//				ray_intersects_plane(scene, ray_dir, &distance);
+			}
 			x++;
 		}
 		if (y % 25 == 0) // Only print newline every 100th row
 			printf("\n"); // delete later
 		y++;
 	}
-}
-
+	printf("\n");
+	y = scene->mlx.height / 2;
+	x = scene->mlx.width / 2;
+	ray_dir = get_ray_direction(scene, x, y);
+	ray_intersects_plane(scene, ray_dir, &distance);
+	printf("ray_dir: %f, %f, %f\n", ray_dir.x, ray_dir.y, ray_dir.z);
+	printf("distance: %f\n", distance); 
+} */
