@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 18:00:19 by atang             #+#    #+#             */
-/*   Updated: 2024/12/30 22:06:34 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/31 15:15:38 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -30,8 +30,8 @@ int	parse_sphere(char **line, t_Scene *scene)
 		return (FAILURE);
 	new_sphere->type = SPHERE;
 	new_sphere->next = NULL;
-	if (parse_vector3(line, &new_sphere->u_data.sphere.centre) == FAILURE)
-		warn_err_free_exit("Failed sphere centre", 13, new_sphere, scene);
+	if (parse_vector3(line, &new_sphere->u_data.sphere.center) == FAILURE)
+		warn_err_free_exit("Failed sphere center", 13, new_sphere, scene);
 	if (get_next_token(line, &token) == FAILURE)
 		warn_err_free_exit("No input for diameter", 13, new_sphere, scene);
 	diameter = parse_float(&token);
@@ -46,7 +46,7 @@ int	parse_sphere(char **line, t_Scene *scene)
 		err_free_exit(13, new_sphere, scene);
 	if (get_next_token(line, &token) == SUCCESS)
 		warn_err_free_exit("Excess sphere value(s)", 13, new_sphere, scene);
-	if (!add_object(scene, new_sphere))
+	if (add_object(scene, new_sphere) != SUCCESS)
 		warn_err_free_exit("Could not add object", 13, new_sphere, scene);
 	printf(G "   SUCCESS - Sphere parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_sphere()\n\n");
@@ -76,7 +76,7 @@ int	parse_plane(char **line, t_Scene *scene)
 		err_free_exit(14, new_plane, scene);
 	if (get_next_token(line, &token) == SUCCESS)
 		warn_err_free_exit("Excess plane value(s)", 14, new_plane, scene);
-	if (!add_object(scene, new_plane))
+	if (add_object(scene, new_plane) != SUCCESS)
 		warn_err_free_exit("Could not add object", 14, new_plane, scene);
 	printf(G "   SUCCESS - Plane parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_plane()\n\n");
@@ -97,8 +97,8 @@ int	parse_cylinder(char **line, t_Scene *scene)
 		return (FAILURE);
 	new_cylinder->type = CYLINDER;
 	new_cylinder->next = NULL;
-	if (parse_vector3(line, &new_cylinder->u_data.cylinder.centre) == FAILURE)
-		warn_err_free_exit("Failed cylinder centre", 15, new_cylinder, scene);
+	if (parse_vector3(line, &new_cylinder->u_data.cylinder.center) == FAILURE)
+		warn_err_free_exit("Failed cylinder center", 15, new_cylinder, scene);
 	if (parse_vector3(line, &new_cylinder->u_data.cylinder.axis) == FAILURE)
 		warn_err_free_exit("Failed cylinder axis", 15, new_cylinder, scene);
 	if (!is_normalized_vector(&new_cylinder->u_data.cylinder.axis))
@@ -128,7 +128,7 @@ int	parse_cylinder(char **line, t_Scene *scene)
 		err_free_exit(15, new_cylinder, scene);
 	if (get_next_token(line, &token) == SUCCESS)
 		warn_err_free_exit("Excess cylinder value(s)", 15, new_cylinder, scene);
-	if (!add_object(scene, new_cylinder))
+	if (add_object(scene, new_cylinder) != SUCCESS)
 		warn_err_free_exit("Could not add object", 15, new_cylinder, scene);
 	printf(G "   SUCCESS - Cylinder parsed and added!\n\n" RST);
 	printf(RED "Exiting" RST " parse_cylinder()\n\n");
