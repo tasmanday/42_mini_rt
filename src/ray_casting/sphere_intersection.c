@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 22:09:09 by tday              #+#    #+#             */
-/*   Updated: 2024/12/05 23:42:57 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/31 17:32:58 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -18,14 +18,16 @@ bool	ray_intersects_sphere(t_ray *ray, t_Sphere sphere, float *distance)
 
 	radius = sphere.diameter / 2.0;
 
-	t_Vector3 L = vect_subtract(ray->ray_origin, sphere.center);
+	t_Vector3 L = vect_subtract(sphere.center, ray->ray_origin);
+//	printf("L = %f, %f, %f\n", L.x, L.y, L.z); // TODO remove
 	float	tc = vect_dot(L, ray->ray_dir);
+//	printf("tc = %f\n", tc); // TODO remove
 	if (tc < 0.0)
 		return (false); // Ray is pointing away from the sphere printf("Ray is pointing away from the sphere\n"),
 	float l2 = vect_dot(L, L);
 	float d2 = l2 - (tc * tc);
 	float radius2 = radius * radius;
-//	printf("l2 %f, tc %f, d2 %f, r2 %f ", l2, tc, d2, radius2);
+//	printf("l2 %f, tc %f, d2 %f, r2 %f ", l2, tc, d2, radius2); // TODO remove
 	if (d2 > radius2)
 		return (false);  // Ray misses the sphere printf("Ray misses the sphere\n"),
 	float t1c = sqrt(radius2 - d2);

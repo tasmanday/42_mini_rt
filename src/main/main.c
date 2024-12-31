@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:29:18 by atang             #+#    #+#             */
-/*   Updated: 2024/12/30 22:05:24 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/31 17:32:55 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -48,12 +48,24 @@ int	main(int argc, char **argv)
 		put_pixels_to_image(&mem, &scene);
 		printf("put_pixels_to_image called\n"); // TODO remove
 		mlx_put_image_to_window(scene.mlx.mlx_ptr, scene.mlx.win_ptr, scene.mlx.img_ptr, 0, 0);
-		printf("mlx_put_image_to_window called\n"); // TODO remove
+		printf("mlx_put_image_to_window called\n"); // TODO remove 
 
 		printf(M "\n---> WINDOW OPENED <---\n\n" RST);
 		mlx_key_hook(scene.mlx.win_ptr, deal_key, &scene);
 		mlx_hook(scene.mlx.win_ptr, 17, 0, close_button_hook, &scene);
 		mlx_loop(scene.mlx.mlx_ptr);
+
+
+
+/*		// testing intersection
+		init_pixel_array(&mem, &scene);
+		printf("init_pixel_array called\n"); // TODO remove
+		printf("mem.pixels[540][962].mid.raydir = %f, %f, %f\n", mem.pixels[540][962].mid.ray_dir.x, mem.pixels[540][962].mid.ray_dir.y, mem.pixels[540][962].mid.ray_dir.z); // TODO remove
+		check_object_intersection(&scene, &mem.pixels[540][962].mid);
+		printf("check_object_intersection called\n"); */  // TODO remove
+		
+
+
 
 		free_everything(&mem, &scene);
 	}

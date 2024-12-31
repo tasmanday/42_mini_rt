@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2024/12/24 13:32:19 by tday             ###   ########.fr       */
+/*   Updated: 2024/12/31 17:32:57 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -158,6 +158,8 @@ float calculate_t_for_cap(t_ray *ray, t_Vector3 cap_center, t_Vector3 axis)
 
 	numerator = vect_dot(axis, vect_subtract(ray->ray_origin, cap_center));
 	denominator = vect_dot(axis, ray->ray_dir);
+	printf("axis = %f, %f, %f\n", axis.x, axis.y, axis.z); // TODO remove
+	printf("numerator = %f, denominator = %f\n", numerator, denominator); // TODO remove
     if (fabs(denominator) < 1e-6) // Check for parallelism
         return (-1); // No intersection
     return (numerator / denominator);
@@ -172,9 +174,12 @@ bool	intersection_within_radius(t_Vector3 intersection_point, t_Vector3 cap_cent
     diff = vect_subtract(intersection_point, cap_center);
     distance_squared = vect_dot(diff, diff);
 	radius_squared = radius * radius;
-	printf("distance_squared = %f, radius_squared = %f\n", distance_squared, radius_squared); // TODO remove
+//	printf("distance_squared = %f, radius_squared = %f\n", distance_squared, radius_squared); // TODO remove
 	if (distance_squared < radius_squared)
-		return (printf("intersection_within_radius true\n"), true);
+	{
+//		printf("intersection_within_radius true\n"); // TODO remove
+		return (true);
+	}
 	return (false);
 }
 
@@ -185,28 +190,37 @@ void	check_end_cap_intersection(t_ray *ray, t_Cylinder cylinder, float intersect
 	t_Vector3	cap_b_center;
 	float		t[2];
 	t_Vector3	intersection_point;
+//	bool		test_bool = false;
+
+//	if (test_bool == false)
+//		test_bool = true;
 
 	offset = vect_multiply_scalar(cylinder.axis, cylinder.height / 2.0f);
 	cap_a_center = vect_add(cylinder.center, offset);
 	cap_b_center = vect_subtract(cylinder.center, offset);
 
-	t[0] = calculate_t_for_cap(ray, cap_a_center, cylinder.axis);
-	t[1] = calculate_t_for_cap(ray, cap_b_center, cylinder.axis);
+//	t[0] = calculate_t_for_cap(ray, cap_a_center, cylinder.axis);
+//	t[1] = calculate_t_for_cap(ray, cap_b_center, cylinder.axis);
+
+//	test_bool = ray_intersects_plane(ray, cap_a_center, cylinder.axis, &t[0]);
 //	printf("t[0] = %f\n", t[0]); // TODO remove
+//	test_bool = ray_intersects_plane(ray, cap_b_center, cylinder.axis, &t[1]);
 //	printf("t[1] = %f\n", t[1]); // TODO remove
 
-	if (t[0] > 0)
+	if (ray_intersects_plane(ray, cap_a_center, cylinder.axis, &t[0]))
 	{
 //		printf("t[0] = %f\n", t[0]); // TODO remove
 		intersection_point = vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, t[0]));
-		if (intersection_within_radius(intersection_point, cap_a_center, cylinder.diameter / 2) || true)
+//		printf("intersection_point = %f, %f, %f\n", intersection_point.x, intersection_point.y, intersection_point.z); // TODO remove
+		if (intersection_within_radius(intersection_point, cap_a_center, cylinder.diameter / 2))
 			intersections[0] = t[0];
 	}
-	if (t[1] > 0)
+	if (ray_intersects_plane(ray, cap_b_center, cylinder.axis, &t[1]) && t[1] > 0)
 	{
 //		printf("t[1] = %f\n", t[1]); // TODO remove
 		intersection_point = vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, t[1]));
-		if (intersection_within_radius(intersection_point, cap_b_center, cylinder.diameter / 2) || true)
+//		printf("intersection_point = %f, %f, %f\n", intersection_point.x, intersection_point.y, intersection_point.z); // TODO remove
+		if (intersection_within_radius(intersection_point, cap_b_center, cylinder.diameter / 2))
 			intersections[1] = t[1];
 	}
 }
@@ -258,8 +272,8 @@ bool	ray_intersects_cylinder(t_ray *ray, t_Cylinder cylinder, float *distance)
 	}
 	if (intersection_flag)
 	{
-		printf("distance = %f\n", *distance); // TODO remove
-		return (printf("ray intersects cylinder caps\n"), true);
+//		printf("distance of closest intersection = %f\n", *distance); // TODO remove
+		return (true);
 	}
 	return (false);
 }
