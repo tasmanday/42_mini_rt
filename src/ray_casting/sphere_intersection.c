@@ -6,46 +6,148 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 22:09:09 by tday              #+#    #+#             */
-/*   Updated: 2024/12/31 17:32:58 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/01 18:08:59 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
+/*
+	Summary
+	Determines if a ray is pointing away from a sphere.
+
+	Inputs
+	[t_Vector3] l: Vector from the ray origin to the sphere center.
+	[t_Vector3] ray_dir: The direction vector of the ray.
+
+	Outputs
+	[bool] Returns true if the ray is pointing away from the sphere, false
+		otherwise.
+
+	Notes
+	- The function calculates the dot product of l and ray_dir. If the result
+		is negative, the ray is pointing away.
+*/
+bool	ray_pointing_away(t_Vector3 l, t_Vector3 ray_dir)
+{
+	float	tc;
+
+	tc = vect_dot(l, ray_dir);
+	if (tc < 0.0)
+		return (true);
+	return (false);
+}
+
+/*
+	Summary
+	Determines if a ray misses a sphere based on the calculated distance.
+
+	Inputs
+	[float] l2: The squared length of vector l.
+	[float] tc: The projection of l onto the ray direction.
+	[float] radius2: The squared radius of the sphere.
+
+	Outputs
+	[bool] Returns true if the ray misses the sphere, false otherwise.
+
+	Notes
+	- The function calculates d2, the squared distance from the sphere center to
+		the ray. If d2 is greater than radius2, the ray misses the sphere.
+*/
+bool	ray_misses_sphere(float l2, float tc, float radius2)
+{
+	float	d2;
+
+	d2 = l2 - (tc * tc);
+	if (d2 > radius2)
+		return (true);
+	return (false);
+}
+
+/*
+	Summary
+	Finds the closest intersection point of a ray with a sphere.
+
+	Inputs
+	[float] tc: The projection of l onto the ray direction.
+	[float] radius2: The squared radius of the sphere.
+	[float] d2: The squared distance from the sphere center to the ray.
+	[float*] distance: Pointer to store the closest intersection distance.
+
+	Outputs
+	[bool] Returns true if an intersection is found, false otherwise.
+
+	Notes
+	- The function calculates two potential intersection points, t1 and t2.
+		It returns the closest positive intersection.
+	- t1c is the distance from the projection point (tc) to the intersection
+		points along the ray direction. It is derived from the Pythagorean
+		theorem, where t1c = sqrt(radius2 - d2). This represents the
+		half-length of the chord formed by the intersection points on the ray.
+*/
+bool	find_closest_intersection(float tc, float radius2, float d2, \
+	float *distance)
+{
+	float	t1c;
+	float	t1;
+	float	t2;
+
+	t1c = sqrt(radius2 - d2);
+	t1 = tc - t1c;
+	t2 = tc + t1c;
+
+	if (t1 > 0)
+	{
+		*distance = t1;
+		return (true);
+	}
+	else if (t2 > 0)
+	{
+		*distance = t2;
+		return (true);
+	}
+	return (false);
+}
+
+/*
+	Summary
+	Determines if a ray intersects with a sphere and calculates the intersection
+	distance.
+
+	Inputs
+	[t_ray*] ray: The ray to check for intersection.
+	[t_Sphere] sphere: The sphere to check against.
+	[float*] distance: Pointer to store the intersection distance.
+
+	Outputs
+	[bool] Returns true if the ray intersects the sphere, false otherwise.
+
+	Notes
+	- The function calculates the vector l from the ray origin to the sphere
+		center.
+	- tc is the projection of vector l onto the ray direction, representing the
+		closest approach of the ray to the sphere center along the ray's path.
+	- It checks if the ray is pointing away or misses the sphere.
+	- If an intersection is found, the closest intersection distance is stored.
+*/
 bool	ray_intersects_sphere(t_ray *ray, t_Sphere sphere, float *distance)
 {
-	float	radius;
+	float		radius;
+	t_Vector3	l;
+	float		tc;
+	float		l2;
+	float		radius2;
 
 	radius = sphere.diameter / 2.0;
-
-	t_Vector3 L = vect_subtract(sphere.center, ray->ray_origin);
-//	printf("L = %f, %f, %f\n", L.x, L.y, L.z); // TODO remove
-	float	tc = vect_dot(L, ray->ray_dir);
-//	printf("tc = %f\n", tc); // TODO remove
-	if (tc < 0.0)
-		return (false); // Ray is pointing away from the sphere printf("Ray is pointing away from the sphere\n"),
-	float l2 = vect_dot(L, L);
-	float d2 = l2 - (tc * tc);
-	float radius2 = radius * radius;
-//	printf("l2 %f, tc %f, d2 %f, r2 %f ", l2, tc, d2, radius2); // TODO remove
-	if (d2 > radius2)
-		return (false);  // Ray misses the sphere printf("Ray misses the sphere\n"),
-	float t1c = sqrt(radius2 - d2);
-	float t1 = tc - t1c;
-    float t2 = tc + t1c;
-	// Find the closest intersection
-    if (t1 > 0)
-	{
-        *distance = t1;  // t1 is the closest positive intersection point
-		return (true); // Intersection found printf("t1 closest intersection\n"), 
-	}
-    else if (t2 > 0)
-	{
-        *distance = t2;  // t1 is negative, so t2 is the closest positive intersection
-		return (true); // Intersection found printf("t2 closest intersection\n"), 
-	}
-    else
-	{
-        return (false);  // Both t1 and t2 are negative, no intersection in front of the camera printf("Both t1 and t2 are negative, no intersection in front of the camera\n"), 
-	}
+	l = vect_subtract(sphere.center, ray->ray_origin);
+	tc = vect_dot(l, ray->ray_dir);
+	if (ray_pointing_away(l, ray->ray_dir))
+		return (false);
+	l2 = vect_dot(l, l);
+	radius2 = radius * radius;
+	if (ray_misses_sphere(l2, tc, radius2))
+		return (false);
+	if (find_closest_intersection(tc, radius2, l2 - (tc * tc), distance))
+		return (true);
+	return (false);
 }

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2025/01/01 16:43:42 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/01 17:26:27 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -106,6 +106,21 @@ t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
 	return (ray);
 }
 
+/*
+	Summary
+	Initializes a ray with its origin, direction, and default intersection
+	properties.
+
+	Inputs
+	[t_Scene*] scene: The scene containing the camera position.
+	[t_ray*] ray: The ray to initialize.
+	[int] x: The x-coordinate of the pixel.
+	[int] y: The y-coordinate of the pixel.
+
+	Outputs
+	None. The ray is initialized with its origin, direction, and default
+	properties.
+*/
 void	init_ray(t_Scene *scene, t_ray *ray, int x, int y)
 {
 	ray->ray_origin = scene->camera.position;
@@ -118,6 +133,16 @@ void	init_ray(t_Scene *scene, t_ray *ray, int x, int y)
 	ray->colour.b = 0;
 }
 
+/*
+	Summary
+	Sets the color of a ray based on the type of the closest intersected object.
+
+	Inputs
+	[t_ray*] ray: The ray whose color is to be set.
+
+	Outputs
+	None. The color is set in the ray structure.
+*/
 void	set_ray_colour(t_ray *ray)
 {
 	if (ray->closest_object->type == SPHERE)
@@ -128,29 +153,44 @@ void	set_ray_colour(t_ray *ray)
 		ray->colour = ray->closest_object->u_data.cylinder.colour;
 }
 
-void	set_closest_object(t_ray *ray, t_Object *object, float distance)
-{
-	ray->closest_intersection = distance;
-	ray->closest_object = object;
-}
+/*
+	Summary
+	Checks if a ray intersects with a given object and updates the intersection
+	distance.
 
+	Inputs
+	[t_ray*] ray: The ray to check for intersection.
+	[t_Object*] object: The object to check against.
+	[float*] distance: Pointer to store the intersection distance.
+
+	Outputs
+	[bool] Returns true if there is an intersection, false otherwise.
+*/
 bool	check_intersection(t_ray *ray, t_Object *object, float *distance)
 {
 	if (object->type == PLANE)
-		return ray_intersects_plane(ray, object->u_data.plane.point, object->u_data.plane.normal, distance);
+		return (ray_intersects_plane(ray, object->u_data.plane.point, \
+			object->u_data.plane.normal, distance));
 	else if (object->type == SPHERE)
-		return ray_intersects_sphere(ray, object->u_data.sphere, distance);
+		return (ray_intersects_sphere(ray, object->u_data.sphere, distance));
 	else if (object->type == CYLINDER)
-		return ray_intersects_cylinder(ray, object->u_data.cylinder, distance);
-	return false;
+		return (ray_intersects_cylinder(ray, object->u_data.cylinder, \
+			distance));
+	return (false);
 }
 
-void	process_intersection(t_ray *ray, t_Object *object, float distance)
-{
-	if (distance < ray->closest_intersection)
-		set_closest_object(ray, object, distance);
-}
+/*
+	Summary
+	Checks for intersections between a ray and all objects in the scene.
 
+	Inputs
+	[t_Scene*] scene: The scene containing the objects.
+	[t_ray*] ray: The ray to check for intersections.
+
+	Outputs
+	None. The ray's intersection properties are updated based on the closest
+	intersection.
+*/
 void	check_object_intersection(t_Scene *scene, t_ray *ray)
 {
 	t_Object	*current_object;
@@ -166,7 +206,11 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
 		if (intersects)
 		{
 			ray->intersects_object = true;
-			process_intersection(ray, current_object, distance);
+			if (distance < ray->closest_intersection)
+			{
+				ray->closest_intersection = distance;
+				ray->closest_object = current_object;
+			}
 		}
 		current_object = current_object->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:46:07 by tday              #+#    #+#             */
-/*   Updated: 2024/12/31 17:33:00 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/01 18:12:47 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -22,8 +22,8 @@
 	[float] z: The z component of the vector.
 
 	Outputs
-	[t_Vector3] Returns a t_Vector3 structure initialized with the given x, y, and z
-	components.
+	[t_Vector3] Returns a t_Vector3 structure initialized with the given x, y,
+		and z components.
 */
 t_Vector3	vector(float x, float y, float z)
 {
@@ -36,22 +36,23 @@ t_Vector3	vector(float x, float y, float z)
 }
 
 /*
-	SUMMARY:
-		Normalizes a 3D vector, scaling it to unit length.
+	Summary
+	Normalizes a 3D vector, scaling it to unit length.
 
-	INPUTS:
-		t_Vector3 v: The vector to be normalized, containing x, y, and z components.
+	Inputs
+	[t_Vector3] v: The vector to be normalized, containing x, y, and z
+		components.
 
-	OUTPUTS:
-		t_Vector3: The normalized vector with unit length.
+	Outputs
+	t_Vector3: The normalized vector with unit length.
 */
 t_Vector3	vect_normalise(t_Vector3 v)
 {
-	float	len;
+	float		len;
 	t_Vector3	normalised_vector;
 
 	len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-	if (len == 0) // check for zero length
+	if (len == 0)
 	{
 		normalised_vector.x = 0.0;
 		normalised_vector.y = 0.0;
@@ -96,7 +97,8 @@ t_Vector3	vect_add(t_Vector3 a, t_Vector3 b)
 	[t_Vector3] b: The vector to subtract.
 
 	Outputs
-	[t_Vector3] Returns a vector representing the difference between the two input vectors.
+	[t_Vector3] Returns a vector representing the difference between the two
+		input vectors.
 */
 t_Vector3	vect_subtract(t_Vector3 a, t_Vector3 b)
 {
@@ -110,15 +112,16 @@ t_Vector3	vect_subtract(t_Vector3 a, t_Vector3 b)
 
 /*
 	Summary
-	Calculates and returns the cross product of two vectors, which is a vector perpendicular
-	to both input vectors and represents their area in 3D space.
+	Calculates and returns the cross product of two vectors, which is a vector
+	perpendicular to both input vectors and represents their area in 3D space.
 
 	Inputs
 	[t_Vector3] a: The first vector.
 	[t_Vector3] b: The second vector.
 
 	Outputs
-	[t_Vector3] Returns a vector representing the cross product of the two input vectors.
+	[t_Vector3] Returns a vector representing the cross product of the two input
+		vectors.
 */
 t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b)
 {
@@ -134,15 +137,16 @@ t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b)
 	Summary
 	Calculates and returns the dot product of two vectors, which is a scalar
 	representing the magnitude of their projection onto each other.
-
-	The scalar value (float just representing magnitude not direction) result of the dot product tells us how much of vector b aligns with vector a.
+	The scalar value (float just representing magnitude not direction) result of
+	the dot product tells us how much of vector b aligns with vector a.
 
 	Inputs
 	[t_Vector3] a: The first vector.
 	[t_Vector3] b: The second vector.
 
 	Outputs
-	[float] Returns a scalar value representing the dot product of the two input vectors.
+	[float] Returns a scalar value representing the dot product of the two input
+		vectors.
 */
 float	vect_dot(t_Vector3 a, t_Vector3 b)
 {
@@ -151,14 +155,16 @@ float	vect_dot(t_Vector3 a, t_Vector3 b)
 
 /*
 	Summary
-	Multiplies a vector by a scalar, scaling each of its components by the given scalar value.
+	Multiplies a vector by a scalar, scaling each of its components by the given
+	scalar value.
 
 	Inputs
 	[t_Vector3] v: The vector to be scaled.
 	[float] scalar: The scalar value to multiply the vector by.
 
 	Outputs
-	[t_Vector3] Returns a vector whose components have been scaled by the scalar value.
+	[t_Vector3] Returns a vector whose components have been scaled by the scalar
+		value.
 */
 t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar)
 {
@@ -172,7 +178,8 @@ t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar)
 
 /*
 	Summary
-	Calculates and returns the Euclidean distance between two vectors in 3D space.
+	Calculates and returns the Euclidean distance between two vectors in 3D
+	space.
 
 	Inputs
 	[t_Vector3] a: The first vector (point).
