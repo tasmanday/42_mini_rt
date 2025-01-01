@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/01 15:08:25 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/01 23:32:53 by atang            ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
@@ -294,6 +294,8 @@ int			parse_int(char	**str);
 // miscellaneous //
 
 // organise later //
+int			resize_window_hook(int width, int height, t_Scene *scene, t_mem *mem);
+int			expose_hook(t_Scene *scene);
 t_Vector3	vector(float x, float y, float z);
 t_Vector3	vect_normalise(t_Vector3 v);
 t_Vector3	vect_add(t_Vector3 a, t_Vector3 b);
