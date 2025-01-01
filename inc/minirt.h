@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2024/12/30 21:59:53 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/01 15:08:25 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -163,6 +163,13 @@ typedef	struct s_mem
 	t_pixel		**pixels;
 	t_ray		**corners;
 }				t_mem;
+
+typedef struct s_QuadraticCoefficients
+{
+	float		a;
+	float		b;
+	float		c;
+}				t_Quad;
 
 typedef struct s_Mlx
 {

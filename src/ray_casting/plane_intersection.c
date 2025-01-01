@@ -13,11 +13,6 @@ bool	ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
 		return (false); // miss, ray parallel to plane, plane_norm_vect perpendicular to ray_dir
 	*distance = vect_dot(plane_norm_vect, \
 		vect_subtract(point_on_plane, ray->ray_origin)) / denominator;
-/*	if (*distance <= 0) //because the camera looks towards the negative z by default
-	{
-		*distance *= -1; // fixes the negative distance
-		return (true); // ray intersects plane in front of camera
-	} */
 	if (*distance > 0)
 		return (true); // ray intersects plane in front of camera
 	else

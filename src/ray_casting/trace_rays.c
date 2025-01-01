@@ -6,18 +6,28 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2024/12/31 17:32:56 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/01 15:48:34 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
-void	init_pixel_array(t_mem *mem, t_Scene *scene)
+/*
+	Summary
+	Initializes rays for each corner of the pixel grid.
+
+	Inputs
+	[t_mem*] mem: The memory structure containing the corner array.
+	[t_Scene*] scene: The scene containing the dimensions for the grid.
+
+	Outputs
+	None. The corner rays are initialized in the memory structure.
+*/
+void	init_corner_rays(t_mem *mem, t_Scene *scene)
 {
 	int		y;
 	int		x;
 
-	// put in init_corner_rays() function
 	y = 0;
 	while (y <= scene->mlx.height)
 	{
@@ -29,8 +39,25 @@ void	init_pixel_array(t_mem *mem, t_Scene *scene)
 		}
 		y++;
 	}
+}
 
-	// put in init_pixels() function
+/*
+	Summary
+	Initializes the pixel array with corner references and mid-point rays.
+
+	Inputs
+	[t_mem*] mem: The memory structure containing the pixel and corner arrays.
+	[t_Scene*] scene: The scene containing the dimensions for the grid.
+
+	Outputs
+	None. The pixel array is initialized with corner references and mid-point
+	rays.
+*/
+void	init_pixels(t_mem *mem, t_Scene *scene)
+{
+	int		y;
+	int		x;
+
 	y = 0;
 	while (y < scene->mlx.height)
 	{
@@ -41,20 +68,46 @@ void	init_pixel_array(t_mem *mem, t_Scene *scene)
 			mem->pixels[y][x].TR = &mem->corners[y][x + 1]; // top right corner
 			mem->pixels[y][x].BL = &mem->corners[y + 1][x]; // bottom left corner
 			mem->pixels[y][x].BR = &mem->corners[y + 1][x + 1]; // bottom right corner
-
 			init_ray(scene, &mem->pixels[y][x].mid, x + 0.5, y + 0.5);
-
 			mem->pixels[y][x].avg_colour = 0x000000;
 			x++;
 		}
 		y++;
 	}
-
 }
 
+/*
+	Summary
+	Initializes the pixel and corner arrays for ray tracing.
+
+	Inputs
+	[t_mem*] mem: The memory structure to initialize.
+	[t_Scene*] scene: The scene containing the dimensions for the arrays.
+
+	Outputs
+	None. The memory structure is initialized with pixel and corner arrays.
+*/
+void	init_pixel_array(t_mem *mem, t_Scene *scene)
+{
+	init_corner_rays(mem, scene);
+	init_pixels(mem, scene);
+}
+
+/*
+	Summary
+	Checks for intersections between scene objects and corner rays.
+
+	Inputs
+	[t_mem*] mem: The memory structure containing the corner rays.
+	[t_Scene*] scene: The scene containing the objects to check against.
+
+	Outputs
+	None. Intersection data is stored in the corner rays.
+*/
 void	check_corner_intersections(t_mem *mem, t_Scene *scene)
 {
-	int y, x;
+	int		y;
+	int		x;
 
 	y = 0;
 	while (y <= scene->mlx.height)
@@ -69,9 +122,21 @@ void	check_corner_intersections(t_mem *mem, t_Scene *scene)
 	}
 }
 
+/*
+	Summary
+	Checks for intersections between scene objects and mid-point rays of pixels.
+
+	Inputs
+	[t_mem*] mem: The memory structure containing the pixel rays.
+	[t_Scene*] scene: The scene containing the objects to check against.
+
+	Outputs
+	None. Intersection data is stored in the mid-point rays.
+*/
 void	check_mid_intersections(t_mem *mem, t_Scene *scene)
 {
-	int y, x;
+	int		y;
+	int		x;
 
 	y = 0;
 	while (y < scene->mlx.height)
@@ -86,9 +151,50 @@ void	check_mid_intersections(t_mem *mem, t_Scene *scene)
 	}
 }
 
+/*
+	Summary
+	Calculates the average colour of a pixel based on its corner and mid-point
+	rays.
+
+	Inputs
+	[t_pixel*] pixel: The pixel whose average colour is to be calculated.
+
+	Outputs
+	None. The average colour is stored in the pixel structure.
+*/
+void	calculate_average_colour(t_pixel *pixel)
+{
+	int	avg_r;
+	int	avg_g;
+	int	avg_b;
+
+	avg_r = (pixel->TL->colour.r + pixel->TR->colour.r + \
+				pixel->BL->colour.r + pixel->BR->colour.r + \
+				pixel->mid.colour.r) / 5;
+	avg_g = (pixel->TL->colour.g + pixel->TR->colour.g + \
+				pixel->BL->colour.g + pixel->BR->colour.g + \
+				pixel->mid.colour.g) / 5;
+	avg_b = (pixel->TL->colour.b + pixel->TR->colour.b + \
+				pixel->BL->colour.b + pixel->BR->colour.b + \
+				pixel->mid.colour.b) / 5;
+	pixel->avg_colour = avg_r << 16 | avg_g << 8 | avg_b;
+}
+
+/*
+	Summary
+	Calculates the average colour for each pixel in the grid.
+
+	Inputs
+	[t_mem*] mem: The memory structure containing the pixel array.
+	[t_Scene*] scene: The scene containing the dimensions for the grid.
+
+	Outputs
+	None. The average colour is stored in each pixel structure.
+*/
 void	average_pixel_colours(t_mem *mem, t_Scene *scene)
 {
-	int y, x;
+	int	y;
+	int	x;
 
 	y = 0;
 	while (y < scene->mlx.height)
@@ -96,31 +202,25 @@ void	average_pixel_colours(t_mem *mem, t_Scene *scene)
 		x = 0;
 		while (x < scene->mlx.width)
 		{
-			int	avg_r = (mem->pixels[y][x].TL->colour.r +
-							mem->pixels[y][x].TR->colour.r +
-							mem->pixels[y][x].BL->colour.r +
-							mem->pixels[y][x].BR->colour.r +
-							mem->pixels[y][x].mid.colour.r) / 5;
-
-			int	avg_g = (mem->pixels[y][x].TL->colour.g +
-							mem->pixels[y][x].TR->colour.g +
-							mem->pixels[y][x].BL->colour.g +
-							mem->pixels[y][x].BR->colour.g +
-							mem->pixels[y][x].mid.colour.g) / 5;
-
-			int	avg_b = (mem->pixels[y][x].TL->colour.b +
-							mem->pixels[y][x].TR->colour.b +
-							mem->pixels[y][x].BL->colour.b +
-							mem->pixels[y][x].BR->colour.b +
-							mem->pixels[y][x].mid.colour.b) / 5;
-
-			mem->pixels[y][x].avg_colour = avg_r << 16 | avg_g << 8 | avg_b;
+			calculate_average_colour(&mem->pixels[y][x]);
 			x++;
 		}
 		y++;
 	}
 }
 
+/*
+	Summary
+	Traces rays through the scene, checking intersections and calculating pixel
+	colours.
+
+	Inputs
+	[t_mem*] mem: The memory structure containing the pixel and corner arrays.
+	[t_Scene*] scene: The scene to trace rays through.
+
+	Outputs
+	None. The pixel colours are calculated and stored in the memory structure.
+*/
 void	trace_rays(t_mem *mem, t_Scene *scene)
 {
 	init_pixel_array(mem, scene);
