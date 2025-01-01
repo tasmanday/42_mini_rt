@@ -1,16 +1,44 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 17:58:17 by atang             #+#    #+#             */
-/*   Updated: 2024/12/23 00:31:03 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/01 23:32:21 by atang            ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../inc/minirt.h"
+
+// NEW! Added to handle window resizing
+int	expose_hook(t_Scene *scene)
+{
+	mlx_put_image_to_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr,
+			scene->mlx.img_ptr, 0, 0);
+	return (SUCCESS);
+}
+
+// NEW! Added to handle window resizing
+int	resize_window_hook(int width, int height, t_Scene *scene, t_mem *mem)
+{
+	scene->mlx.width = (int)width;
+	scene->mlx.height = (int)height;
+
+	if (width <= 0 || height  <= 0)
+		return (0);
+	if (scene->mlx.img_ptr) // Destroy image if it already exists; prevents leaks
+		mlx_destroy_image(scene->mlx.mlx_ptr, scene->mlx.img_ptr);
+	scene->mlx.img_ptr = mlx_new_image(scene->mlx.mlx_ptr, width, height);
+	scene->mlx.img_data = mlx_get_data_addr(scene->mlx.img_ptr,
+			&scene->mlx.bpp, &scene->mlx.size_line, &scene->mlx.endian);
+	trace_rays(mem, scene);
+	put_pixels_to_image(mem, scene);
+	mlx_put_image_to_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr,
+			scene->mlx.img_ptr, 0, 0);
+	return (SUCCESS);
+}
 
 void	initialise_data(t_Scene	*scene)
 {
@@ -23,6 +51,8 @@ void	initialise_data(t_Scene	*scene)
 	scene->mlx.img_data = mlx_get_data_addr(scene->mlx.img_ptr,
 			&scene->mlx.bpp, &scene->mlx.size_line, &scene->mlx.endian);
 	mlx_hook(scene->mlx.win_ptr, 17, 0, close_button_hook, scene);
+	mlx_hook(scene->mlx.win_ptr, 25, 0, resize_window_hook, scene); // NEW! Added to adapt to resize dimension changes
+	mlx_expose_hook(scene->mlx.win_ptr, expose_hook, scene); // NEW! Added to handle redraw after resize
 	scene->mlx.zoom = 20;
 }
 
