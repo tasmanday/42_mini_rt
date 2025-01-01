@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2024/12/31 17:32:57 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/01 16:43:42 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -32,15 +32,16 @@ bool	camera_pointed_straight_up_or_down(t_Vector3 orientation)
 }
 
 /*
-	SUMMARY:
-		Applies the camera's orientation to a given ray direction.
+	Summary
+	Applies the camera's orientation to a given ray direction.
 
-	INPUTS:
-		t_Vector3 ray_dir: The initial direction of the ray.
-		t_cam *camera: The camera containing orientation information.
+	Inputs
+	t_Vector3 ray_dir: The initial direction of the ray.
+	t_cam *camera: The camera containing orientation information.
 
-	OUTPUTS:
-		t_Vector3: The final ray direction after applying the camera's orientation.
+	Outputs
+	t_Vector3: The final ray direction after applying the camera's
+	orientation.
 */
 t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene)
 {
@@ -50,7 +51,6 @@ t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene)
 	t_Vector3	orientation;
 	t_Vector3	final_ray_dir;
 
-    // Ensure camera orientation is normalized
 	orientation = vect_normalise(scene->camera.orientation);
 	z_axis = orientation;
 	if (camera_pointed_straight_up_or_down(orientation))
@@ -66,38 +66,41 @@ t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene)
 	final_ray_dir.x = ray.x * x_axis.x + ray.y * y_axis.x + ray.z * z_axis.x;
 	final_ray_dir.y = ray.x * x_axis.y + ray.y * y_axis.y + ray.z * z_axis.y;
 	final_ray_dir.z = ray.x * x_axis.z + ray.y * y_axis.z + ray.z * z_axis.z;
-
-    // Normalize the final direction
 	final_ray_dir = vect_normalise(final_ray_dir);
 
 	return (final_ray_dir);
 }
 
 /*
-	SUMMARY:
+	Summary
 		Calculates the ray direction for a given pixel on the screen.
 
-	INPUTS:
-		t_Scene *scene: The miniRT structure containing width and height of the
-			screen.
-		int x, int y: The pixel coordinates.
+	Inputs
+	t_Scene *scene: The miniRT structure containing width and height of the
+		screen.
+	int x, int y: The pixel coordinates.
 
-	OUTPUTS:
-		t_Vector3 ray: The direction of the ray for the given pixel.
+	Outputs
+	t_Vector3 ray: The direction of the ray for the given pixel.
+
+	Notes
+	ray.x *= -1; This line inverts the x axis, In many 3D rendering setups, the
+	screen space is mapped so that the left side of the image has negative
+	x-values and the right side has positive x-values.
 */
 t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
 {
-	float	aspect_ratio;
-	float	fov_adjustment;
+	float		aspect_ratio;
+	float		fov_adjustment;
 	t_Vector3	ray;
 
-//	printf("in grd\n"); // TODO remove
 	aspect_ratio = (float)scene->mlx.width / scene->mlx.height;
 	fov_adjustment = tan((scene->camera.fov * M_PI / 180) / 2);
-	ray.x = (2 * ((float)x / scene->mlx.width) - 1) * aspect_ratio * fov_adjustment;
+	ray.x = (2 * ((float)x / scene->mlx.width) - 1) * aspect_ratio * \
+		fov_adjustment;
 	ray.y = (1 - 2 * ((float)y / scene->mlx.height)) * fov_adjustment;
 	ray.z = 1;
-	ray.x *= -1; // inverts the x axis, In many 3D rendering setups, the screen space is mapped so that the left side of the image has negative x-values and the right side has positive x-values.
+	ray.x *= -1;
 	ray = apply_camera_orientation(ray, scene);
 
 	return (ray);
@@ -115,95 +118,58 @@ void	init_ray(t_Scene *scene, t_ray *ray, int x, int y)
 	ray->colour.b = 0;
 }
 
+void	set_ray_colour(t_ray *ray)
+{
+	if (ray->closest_object->type == SPHERE)
+		ray->colour = ray->closest_object->u_data.sphere.colour;
+	else if (ray->closest_object->type == PLANE)
+		ray->colour = ray->closest_object->u_data.plane.colour;
+	else if (ray->closest_object->type == CYLINDER)
+		ray->colour = ray->closest_object->u_data.cylinder.colour;
+}
+
+void	set_closest_object(t_ray *ray, t_Object *object, float distance)
+{
+	ray->closest_intersection = distance;
+	ray->closest_object = object;
+}
+
+bool	check_intersection(t_ray *ray, t_Object *object, float *distance)
+{
+	if (object->type == PLANE)
+		return ray_intersects_plane(ray, object->u_data.plane.point, object->u_data.plane.normal, distance);
+	else if (object->type == SPHERE)
+		return ray_intersects_sphere(ray, object->u_data.sphere, distance);
+	else if (object->type == CYLINDER)
+		return ray_intersects_cylinder(ray, object->u_data.cylinder, distance);
+	return false;
+}
+
+void	process_intersection(t_ray *ray, t_Object *object, float distance)
+{
+	if (distance < ray->closest_intersection)
+		set_closest_object(ray, object, distance);
+}
+
 void	check_object_intersection(t_Scene *scene, t_ray *ray)
 {
 	t_Object	*current_object;
 	float		distance;
+	bool		intersects;
 
 	current_object = scene->objects;
 	distance = INFINITY;
+	ray->intersects_object = false;
 	while (current_object)
 	{
-		if (current_object->type == PLANE)
-			if (ray_intersects_plane(ray, \
-					current_object->u_data.plane.point, \
-					current_object->u_data.plane.normal, &distance))
-				ray->intersects_object = true;
-		if (current_object->type == SPHERE)
-			if (ray_intersects_sphere(ray, \
-					current_object->u_data.sphere, &distance))
-				ray->intersects_object = true;
-		if (current_object->type == CYLINDER)
-			if (ray_intersects_cylinder(ray, \
-					current_object->u_data.cylinder, &distance))
-				ray->intersects_object = true;
-		if (distance < ray->closest_intersection)
+		intersects = check_intersection(ray, current_object, &distance);
+		if (intersects)
 		{
-			ray->closest_intersection = distance;
-			ray->closest_object = current_object;
+			ray->intersects_object = true;
+			process_intersection(ray, current_object, distance);
 		}
 		current_object = current_object->next;
 	}
 	if (ray->intersects_object)
-	{
-		if (ray->closest_object->type == SPHERE)
-			ray->colour = ray->closest_object->u_data.sphere.colour;
-		else if (ray->closest_object->type == PLANE)
-			ray->colour = ray->closest_object->u_data.plane.colour;
-		else if (ray->closest_object->type == CYLINDER)
-			ray->colour = ray->closest_object->u_data.cylinder.colour;
-	}
+		set_ray_colour(ray);
 }
-
-/*
-    SUMMARY:
-        Computes the normalised ray directions for each pixel on the screen.
-
-    INPUTS:
-        t_Scene *scene: The miniRT structure containing width and height of the
-			screen.
-
-    OUTPUTS:
-        None.
-*/
-/*void	compute_ray_directions(t_Scene *scene) // rename to ray_trace()
-{
-	int		y;
-	int		x;
-	t_ray	ray;
-
-	y = 0;
-	while (y < scene->mlx.height)
-	{
-		x = 0;
-		while (x < scene->mlx.width)
-		{
-			// process every 25th pixel for intersection checks, this will be every pixel on the real thing
-			if (y % 25 == 0 && x % 25 == 0)
-			{
-				init_ray(scene, &ray, x, y);
-				check_object_intersection(scene, &ray);
-
-				if (!ray->intersects_object)
-					my_mlx_pixel_put(x, y, BLACK);
-				else
-					my_mlx_pixel_put(x, y, get_pixel_colour());
-
-//				ray_intersects_sphere(scene, ray_dir, &distance);
-
-//				ray_intersects_plane(scene, ray_dir, &distance);
-			}
-			x++;
-		}
-		if (y % 25 == 0) // Only print newline every 100th row
-			printf("\n"); // delete later
-		y++;
-	}
-	printf("\n");
-	y = scene->mlx.height / 2;
-	x = scene->mlx.width / 2;
-	ray_dir = get_ray_direction(scene, x, y);
-	ray_intersects_plane(scene, ray_dir, &distance);
-	printf("ray_dir: %f, %f, %f\n", ray_dir.x, ray_dir.y, ray_dir.z);
-	printf("distance: %f\n", distance); 
-} */
