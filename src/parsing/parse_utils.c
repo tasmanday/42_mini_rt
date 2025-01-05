@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 17:24:03 by atang             #+#    #+#             */
-/*   Updated: 2024/12/14 10:24:05 by marvin           ###   ########.fr       */
+/*   Updated: 2025/01/05 23:40:25 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minirt.h"
 
@@ -56,12 +56,12 @@ static int validate_rgb(char *token)
     return (SUCCESS);
 }
 
-int parse_rgb(t_Colour *colour, char **line)
+int parse_rgb(t_Colour4 *colour, char **line)
 {
     int     i;
     int     value;
     char    *token;
-    int     *components[3];
+    float   *components[3];
 
     components[0] = &colour->r;
     components[1] = &colour->g;
@@ -78,9 +78,10 @@ int parse_rgb(t_Colour *colour, char **line)
         value = ft_atoi(token);
         if (value < 0 || value > 255)
             return (print_error_and_return("RGB value out of range (0-255)", token));
-        *components[i] = value;
+		*components[i] = value / 255.0f;
         i++;
     }
+	colour->a = 1.0f;
     return (SUCCESS);
 }
 

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   print_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:01:41 by atang             #+#    #+#             */
-/*   Updated: 2024/12/16 10:12:58 by marvin           ###   ########.fr       */
+/*   Updated: 2025/01/05 23:41:25 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minirt.h"
 
@@ -16,7 +16,7 @@ void	print_ambient_light(t_AmbientLight *ambient)
 {
 	printf(B "\n   Ambient Light:\n" RST);
 	printf("      Ratio: %f\n", ambient->ratio);
-	printf("      Colour: %d, %d, %d\n", ambient->colour.r,
+	printf("      Colour: %f, %f, %f\n", ambient->colour.r,
 		ambient->colour.g, ambient->colour.b);
 }
 
@@ -36,6 +36,6 @@ void	print_light(const t_Light *light)
 	printf("      Position: %f, %f, %f\n", light->position.x, light->position.y,
 		light->position.z);
 	printf("      Brightness: %f\n", light->brightness);
-	printf("      Colour: %d, %d, %d\n", light->colour.r, light->colour.g,
+	printf("      Colour: %f, %f, %f\n", light->colour.r, light->colour.g,
 		light->colour.b);
 }

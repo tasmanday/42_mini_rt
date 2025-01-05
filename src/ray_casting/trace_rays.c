@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/01/01 15:48:34 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/05 23:36:33 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -164,9 +164,10 @@ void	check_mid_intersections(t_mem *mem, t_Scene *scene)
 */
 void	calculate_average_colour(t_pixel *pixel)
 {
-	int	avg_r;
-	int	avg_g;
-	int	avg_b;
+	float	avg_r;
+	float	avg_g;
+	float	avg_b;
+	unsigned int alpha = 255;
 
 	avg_r = (pixel->TL->colour.r + pixel->TR->colour.r + \
 				pixel->BL->colour.r + pixel->BR->colour.r + \
@@ -177,7 +178,10 @@ void	calculate_average_colour(t_pixel *pixel)
 	avg_b = (pixel->TL->colour.b + pixel->TR->colour.b + \
 				pixel->BL->colour.b + pixel->BR->colour.b + \
 				pixel->mid.colour.b) / 5;
-	pixel->avg_colour = avg_r << 16 | avg_g << 8 | avg_b;
+	unsigned int r = (unsigned int)(avg_r * 255);
+	unsigned int g = (unsigned int)(avg_g * 255);
+	unsigned int b = (unsigned int)(avg_b * 255);
+	pixel->avg_colour = (alpha << 24) | (r << 16) | (g << 8) | b;
 }
 
 /*

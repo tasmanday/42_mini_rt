@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 12:12:23 by atang             #+#    #+#             */
-/*   Updated: 2024/12/30 22:07:42 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/05 23:41:54 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -21,7 +21,7 @@ void	print_sphere(const struct Object *object)
 		object->u_data.sphere.center.y,
 		object->u_data.sphere.center.z);
 	printf("      Diameter: %f\n", object->u_data.sphere.diameter);
-	printf("      Colour: %d, %d, %d",
+	printf("      Colour: %f, %f, %f",
 		object->u_data.sphere.colour.r,
 		object->u_data.sphere.colour.g,
 		object->u_data.sphere.colour.b);
@@ -39,7 +39,7 @@ void	print_plane(const struct Object *object)
 		object->u_data.plane.normal.x,
 		object->u_data.plane.normal.y,
 		object->u_data.plane.normal.z);
-	printf("      Colour: %d, %d, %d",
+	printf("      Colour: %f, %f, %f",
 		object->u_data.plane.colour.r,
 		object->u_data.plane.colour.g,
 		object->u_data.plane.colour.b);
@@ -59,7 +59,7 @@ void	print_cylinder(const struct Object *object)
 		object->u_data.cylinder.axis.z);
 	printf("      Diameter: %f\n", object->u_data.cylinder.diameter);
 	printf("      Height: %f\n", object->u_data.cylinder.height);
-	printf("      Colour: %d, %d, %d",
+	printf("      Colour: %f, %f, %f",
 		object->u_data.cylinder.colour.r,
 		object->u_data.cylinder.colour.g,
 		object->u_data.cylinder.colour.b);

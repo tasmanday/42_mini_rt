@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2025/01/01 17:26:27 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/05 23:49:29 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -126,7 +126,7 @@ void	init_ray(t_Scene *scene, t_ray *ray, int x, int y)
 	ray->ray_origin = scene->camera.position;
 	ray->ray_dir = get_ray_direction(scene, x, y);
 	ray->intersects_object = false;
-	ray->closest_intersection = INFINITY;
+	ray->closest_hit_distance = INFINITY;
 	ray->closest_object = NULL;
 	ray->colour.r = 0;
 	ray->colour.g = 0;
@@ -179,6 +179,80 @@ bool	check_intersection(t_ray *ray, t_Object *object, float *distance)
 	return (false);
 }
 
+void calculate_normal(t_ray *ray)
+{
+	t_Vector3 intersection_point;
+	t_Object *closest_object = ray->closest_object;
+
+	// Calculate the intersection point
+	intersection_point = vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance));
+
+	if (closest_object->type == SPHERE)
+	{
+		// For a sphere, the normal is the vector from the sphere's center to the intersection point
+		ray->normal_at_intersection = vect_subtract(intersection_point, closest_object->u_data.sphere.center);
+		ray->normal_at_intersection = vect_normalise(ray->normal_at_intersection);
+	}
+	else if (closest_object->type == PLANE)
+	{
+		// For a plane, the normal is constant and is the plane's normal
+		ray->normal_at_intersection = closest_object->u_data.plane.normal;
+	}
+	else if (closest_object->type == CYLINDER)
+	{
+		t_Cylinder cyl = closest_object->u_data.cylinder;
+
+		if (ray->cyl_closest_point == 0 || ray->cyl_closest_point == 1)
+		{
+			// Intersection is on an end cap
+			ray->normal_at_intersection = vect_normalise(cyl.axis);
+			if (ray->cyl_closest_point == 1)
+			{
+				// Reverse the normal for the opposite cap
+				ray->normal_at_intersection = vect_multiply_scalar(ray->normal_at_intersection, -1);
+			}
+		}
+		else if (ray->cyl_closest_point == 2 || ray->cyl_closest_point == 3)
+		{
+			// Intersection is on the cylindrical body
+			t_Vector3 to_point = vect_subtract(intersection_point, cyl.center);
+			float projection_length = vect_dot(to_point, cyl.axis);
+			t_Vector3 projection = vect_multiply_scalar(cyl.axis, projection_length);
+			ray->normal_at_intersection = vect_subtract(to_point, projection);
+			ray->normal_at_intersection = vect_normalise(ray->normal_at_intersection);
+		}
+	}
+}
+
+void calculate_lighting(t_Scene *scene, t_ray *ray)
+{
+	t_Vector3	light_dir;
+	float		intensity;
+
+	light_dir = vect_normalise(vect_subtract(scene->light.position, vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance)));
+	intensity = vect_dot(light_dir, ray->normal_at_intersection);
+	if (intensity < 0)
+		intensity = 0;
+	if (ray->closest_object->type == SPHERE)
+		{
+			ray->colour.r = fmin(ray->closest_object->u_data.sphere.colour.r * intensity, 1);
+			ray->colour.g = fmin(ray->closest_object->u_data.sphere.colour.g * intensity, 1);
+			ray->colour.b = fmin(ray->closest_object->u_data.sphere.colour.b * intensity, 1);
+		}
+	else if (ray->closest_object->type == PLANE)
+		{
+			ray->colour.r = fmin(ray->closest_object->u_data.plane.colour.r * intensity, 1);
+			ray->colour.g = fmin(ray->closest_object->u_data.plane.colour.g * intensity, 1);
+			ray->colour.b = fmin(ray->closest_object->u_data.plane.colour.b * intensity, 1);
+		}
+	else if (ray->closest_object->type == CYLINDER)
+		{
+			ray->colour.r = fmin(ray->closest_object->u_data.cylinder.colour.r * intensity, 1);
+			ray->colour.g = fmin(ray->closest_object->u_data.cylinder.colour.g * intensity, 1);
+			ray->colour.b = fmin(ray->closest_object->u_data.cylinder.colour.b * intensity, 1);
+		}
+}
+
 /*
 	Summary
 	Checks for intersections between a ray and all objects in the scene.
@@ -206,14 +280,25 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
 		if (intersects)
 		{
 			ray->intersects_object = true;
-			if (distance < ray->closest_intersection)
+			if (distance < ray->closest_hit_distance)
 			{
-				ray->closest_intersection = distance;
+				ray->closest_hit_distance = distance;
 				ray->closest_object = current_object;
 			}
 		}
 		current_object = current_object->next;
 	}
 	if (ray->intersects_object)
-		set_ray_colour(ray);
+	{
+		// Calculate the normal of the closest object
+		calculate_normal(ray);
+		// calculate lighting
+		calculate_lighting(scene, ray);
+		// calculate shadows
+
+		// apply lighting and shadows to ray colour
+
+		// set the ray colour
+		// set_ray_colour(ray);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2025/01/01 15:28:51 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/05 23:36:33 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -198,6 +198,7 @@ bool	ray_intersects_cylinder(t_ray *ray, t_Cylinder cyl, float *distance)
 		{
 			*distance = points[i];
 			intersection_flag = true;
+			ray->cyl_closest_point = i;
 		}
 		i++;
 	}

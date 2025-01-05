@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/01 23:32:53 by atang            ###   ########.fr       */
+/*   Updated: 2025/01/05 23:39:09 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINIRT_H
 # define MINIRT_H
@@ -69,6 +69,14 @@ typedef struct s_Vector3
 	float		z;
 }	t_Vector3;
 
+typedef struct s_Colour4
+{
+	float		r;
+	float		g;
+	float		b;
+	float		a;
+}				t_Colour4;
+
 typedef struct s_Colour
 {
 	int			r;
@@ -79,7 +87,7 @@ typedef struct s_Colour
 typedef struct s_AmbientLight
 {
 	float		ratio;
-	t_Colour	colour;
+	t_Colour4	colour;
 }	t_AmbientLight;
 
 typedef struct s_Camera
@@ -93,21 +101,21 @@ typedef struct s_Light
 {
 	t_Vector3	position;
 	float		brightness;
-	t_Colour	colour;
+	t_Colour4	colour;
 }	t_Light;
 
 typedef struct s_Sphere
 {
 	t_Vector3	center;
 	float		diameter;
-	t_Colour	colour;
+	t_Colour4	colour;
 }	t_Sphere;
 
 typedef struct s_Plane
 {
 	t_Vector3	point;
 	t_Vector3	normal;
-	t_Colour	colour;
+	t_Colour4	colour;
 }	t_Plane;
 
 typedef struct s_Cylinder
@@ -116,7 +124,7 @@ typedef struct s_Cylinder
 	t_Vector3	axis;
 	float		diameter;
 	float		height;
-	t_Colour	colour;
+	t_Colour4	colour;
 }	t_Cylinder;
 
 typedef enum s_ObjectType
@@ -143,19 +151,21 @@ typedef struct s_ray
 	t_Vector3	ray_origin;
 	t_Vector3	ray_dir;
 	bool		intersects_object;
-	float		closest_intersection;
+	float		closest_hit_distance;
+	int			cyl_closest_point;
 	t_Object	*closest_object;
-	t_Colour	colour;
+	t_Colour4	colour;
+	t_Vector3	normal_at_intersection;
 }				t_ray;
 
 typedef struct s_pixel
 {
-	t_ray		*TL;
-	t_ray		*TR;
-	t_ray		*BL;
-	t_ray		*BR;
-	t_ray		mid;
-	int			avg_colour;
+	t_ray			*TL;
+	t_ray			*TR;
+	t_ray			*BL;
+	t_ray			*BR;
+	t_ray			mid;
+	unsigned int	avg_colour;
 }				t_pixel;
 
 typedef	struct s_mem
@@ -188,7 +198,7 @@ typedef struct s_Mlx
 	int			bpp;
 	int			size_line;
 	int			endian;
-}			t_Mlx;
+}				t_Mlx;
 
 typedef struct s_Scene
 {
@@ -259,7 +269,7 @@ int			parse_plane(char **line, t_Scene *scene);
 int			parse_cylinder(char **line, t_Scene *scene);
 
 // parse_utils.c //
-int			parse_rgb(t_Colour *colour, char **line);
+int			parse_rgb(t_Colour4 *colour, char **line);
 int 		parse_vector3(char **line, t_Vector3 *vec);
 int			parse_position(t_Vector3 *position, char **line);
 int			parse_orientation(t_Vector3 *orientation, char **line);
