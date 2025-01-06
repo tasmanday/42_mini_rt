@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2025/01/06 17:27:14 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/06 20:49:39 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -184,6 +184,7 @@ bool	ray_intersects_cylinder(t_ray *ray, t_Cylinder cyl, float *distance)
 	bool	intersection_flag;
 	int		i;
 
+	cyl.axis = vect_normalise(cyl.axis);
 	points[0] = -1;
 	points[1] = -1;
 	points[2] = -1;
