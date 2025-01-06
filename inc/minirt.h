@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/06 17:27:09 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/06 22:37:38 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -22,6 +22,7 @@
 # include <sys/types.h> // for ssize_t
 # include <math.h>
 # include <errno.h>
+# include <pthread.h>
 # include "../minilibx/mlx.h"
 
 // DEFINITIONS //
@@ -180,6 +181,26 @@ typedef struct s_QuadraticCoefficients
 	float		b;
 	float		c;
 }				t_Quad;
+
+typedef struct s_Task
+{
+	void		(*function)(void*);
+    void		*argument;
+}				t_Task;
+
+typedef struct s_ThreadPool
+{
+    pthread_mutex_t mutex_queue;
+    pthread_cond_t notify;
+	int			num_threads;
+	int			queue_size;
+    pthread_t threads[4]; // TODO change to num_threads
+    t_Task task_queue[256]; // TODO change to queue_size
+    int head;
+    int tail;
+    int task_count;
+    int shutdown;
+}				t_ThreadPool;
 
 typedef struct s_Mlx
 {

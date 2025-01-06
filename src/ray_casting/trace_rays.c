@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/01/06 17:27:13 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/06 22:37:42 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -116,6 +116,8 @@ void	check_corner_intersections(t_mem *mem, t_Scene *scene)
 		while (x <= scene->mlx.width)
 		{
 			check_object_intersection(scene, &mem->corners[y][x]);
+			// if (y < mlx.height && x < mlx.width)		// TODO: put this here and remove check mid intersections function
+			// 	check_object_intersection(scene, &mem->pixels[y][x].mid);
 			x++;
 		}
 		y++;
