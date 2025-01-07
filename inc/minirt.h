@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/07 21:57:58 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/07 23:41:27 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -171,8 +171,8 @@ typedef struct s_pixel
 
 typedef	struct s_mem
 {
-	t_pixel		**pixels;
-	t_ray		**corners;
+	t_pixel			**pixels;
+	t_ray			**corners;
 }				t_mem;
 
 typedef struct s_QuadraticCoefficients
@@ -182,26 +182,24 @@ typedef struct s_QuadraticCoefficients
 	float		c;
 }				t_Quad;
 
-typedef struct s_Task
+/* typedef struct	s_Task
 {
-	void		(*function)(void *);
-    void		*argument;
+	void			(*function)(void *);
+    void			*argument;
+	struct s_Task	*next;
 }				t_Task;
 
-typedef struct s_ThreadPool
+typedef struct	s_ThreadPool
 {
-    pthread_mutex_t mutex_queue;
+	pthread_mutex_t	mutex_queue;
 	pthread_cond_t	cond_queue;
-    pthread_cond_t notify;
-	int			num_threads;
-	int			queue_size;
-    pthread_t *threads;
-    t_Task *task_queue;
-    int head;
-    int tail;
-    int task_count;
-    int shutdown;
-}				t_ThreadPool;
+	pthread_cond_t	notify;
+	int				num_threads;
+	pthread_t 		*threads;
+	t_Task 			*task_queue_head;
+	t_Task 			*task_queue_tail;
+	bool			shutdown;
+}				t_ThreadPool; */
 
 typedef struct s_Mlx
 {
@@ -322,6 +320,14 @@ int			get_next_token(char **line, char **token);
 char		*ft_strtok(char **line, const char *delim);
 float		parse_float(char **str);
 int			parse_int(char	**str);
+
+/* // threads.c //
+void		init_threads(t_ThreadPool *thread_pool);
+void		execute_task(t_Task *task);
+void		start_thread(t_ThreadPool *thread_pool);
+void		submit_task(t_ThreadPool *thread_pool, t_Task task);
+int			count_cpu_threads();
+*/
 
 // miscellaneous //
 

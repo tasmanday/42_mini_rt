@@ -10,9 +10,14 @@
 /*                                                                            */
 /******************************************************************************/
 
+// **** 		THIS FILE IS NOT INCLUDED IN THE PROJECT				****
+// **** 	THREADS ARE NOT ALLOWED IN THE EXTERNAL FUNCTIONS LIST		****
+// ****				I WANT TO IMPLEMENT THEM MYSELF						****
+// **** 		I WILL NOT INCLUDE THIS FILE IN THE MAKEFILE			****
+
 #include "../../inc/minirt.h"
 
-int		count_threads()
+int		count_cpu_threads()
 {
 	int		num_threads;
 
@@ -83,3 +88,52 @@ void	init_threads(t_ThreadPool *thread_pool)
 	pthread_cond_destroy(&thread_pool->cond_queue);
 }
 
+void	init_thread_pool(t_mem *mem, t_ThreadPool *pool)
+{
+	int		i;
+
+	pool = safe_calloc(1, sizeof(t_ThreadPool), "thread_pool malloc error");
+	pool->num_threads = count_cpu_threads();
+	pool->threads = safe_calloc(pool->num_threads, sizeof(pthread_t), "threads malloc error");
+	pool->task_queue_head = NULL;
+	pool->task_queue_tail = NULL;
+	pool->shutdown = false;
+	pthread_mutex_init(&pool->mutex_queue, NULL);
+    pthread_cond_init(&pool->cond_queue, NULL);
+	i = 0;
+	while (i < pool->num_threads)
+	{
+		if (pthread_create(&pool->threads[i], NULL, &start_thread, NULL) != 0)
+			perror("Failed to create thread");
+		printf("thread %d created\n", i);
+		i++;
+	}
+	mem->thread_pool = pool;
+}
+
+void	destroy_thread_pool(t_ThreadPool *pool)
+{
+	int		i;
+	t_Task	*task;
+
+	if (pool)
+	{
+		pthread_mutex_lock(&pool->mutex_queue);
+		pool->shutdown = true;
+		pthread_cond_broadcast(&pool->cond_queue);
+		pthread_mutex_unlock(&pool->mutex_queue);
+		i = 0;
+		while (i < pool->num_threads)
+			pthread_join(pool->threads[i++], NULL);
+		while (pool->task_queue_head)
+		{
+			task = pool->task_queue_head;
+			pool->task_queue_head = task->next;
+			free(task);
+		}
+		free(pool->threads);
+		pthread_mutex_destroy(&pool->mutex_queue);
+		pthread_cond_destroy(&pool->cond_queue);
+		free(pool);
+	}
+}
