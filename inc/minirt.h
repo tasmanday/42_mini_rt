@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/06 22:37:38 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/07 21:57:58 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -184,18 +184,19 @@ typedef struct s_QuadraticCoefficients
 
 typedef struct s_Task
 {
-	void		(*function)(void*);
+	void		(*function)(void *);
     void		*argument;
 }				t_Task;
 
 typedef struct s_ThreadPool
 {
     pthread_mutex_t mutex_queue;
+	pthread_cond_t	cond_queue;
     pthread_cond_t notify;
 	int			num_threads;
 	int			queue_size;
-    pthread_t threads[4]; // TODO change to num_threads
-    t_Task task_queue[256]; // TODO change to queue_size
+    pthread_t *threads;
+    t_Task *task_queue;
     int head;
     int tail;
     int task_count;
@@ -357,7 +358,7 @@ t_ray		**allocate_corner_array(int width, int height);
 void		init_mem(t_mem *mem, t_Scene *scene);
 void		init_pixel_array(t_mem *mem, t_Scene *scene);
 void		check_object_intersection(t_Scene *scene, t_ray *ray);
-void		check_corner_intersections(t_mem *mem, t_Scene *scene);
+void		render_scene(t_mem *mem, t_Scene *scene);
 void		check_mid_intersections(t_mem *mem, t_Scene *scene);
 void		average_pixel_colours(t_mem *mem, t_Scene *scene);
 void		trace_rays(t_mem *mem, t_Scene *scene);
