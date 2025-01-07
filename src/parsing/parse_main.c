@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:44:24 by atang             #+#    #+#             */
-/*   Updated: 2024/12/14 12:13:41 by marvin           ###   ########.fr       */
+/*   Updated: 2025/01/07 22:52:09 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,23 +102,26 @@ int	parse_line(char *line, t_Scene *scene)
 	if (ft_strcmp(token, "A") == 0)
 	{
 		if (check_multiple_definitions(token, &scene->ambient_light_parsed,
-			10) == FAILURE)
+				10) == FAILURE)
 			return (FAILURE);
 		return (parse_ambient_light(&line, &scene->ambient_light));
 	}
 	else if (ft_strcmp(token, "C") == 0)
 	{
-		if (check_multiple_definitions(token, &scene->camera_parsed, 11) == FAILURE)
+		if (check_multiple_definitions(token, &scene->camera_parsed, 11)
+			== FAILURE)
 			return (FAILURE);
 		return (parse_camera(&line, &scene->camera));
 	}
 	else if (ft_strcmp(token, "L") == 0)
 	{
-		if (check_multiple_definitions(token, &scene->light_parsed, 12) == FAILURE)
+		if (check_multiple_definitions(token, &scene->light_parsed, 12)
+			== FAILURE)
 			return (FAILURE);
 		return (parse_light(&line, &scene->light));
 	}
-	else if (ft_strcmp(token, "sp") == 0 || ft_strcmp(token, "pl") == 0 || ft_strcmp(token, "cy") == 0)
+	else if (ft_strcmp(token, "sp") == 0 || ft_strcmp(token, "pl") == 0
+		|| ft_strcmp(token, "cy") == 0)
 		return (parse_object(token, &line, scene));
 	else
 	{

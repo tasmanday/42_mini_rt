@@ -1,16 +1,39 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   trace_rays.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
 /*   Updated: 2025/01/07 23:37:35 by tday             ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../inc/minirt.h"
+
+/*	
+	ONLY USE THIS IF CALCULATE_AVERAGE_COLOUR GETS TOO LONG!
+	-> Added to apply ambient light
+	Takes each colour component of the base colour and multiplies it
+	by the ambient light ratio AND colour and divides the result by 255 to keep
+	it in range. f_min is then used to ensure no volour value exceeds 225
+	(maximum brightness).
+
+t_Colour4   apply_ambient_light(t_Colour4 base_colour, t_AmbientLight ambient)
+{
+	t_Colour4    result;
+
+	result.r = base_colour.r * (ambient.ratio * ambient.colour.r /  255.0);
+	result.g = base_colour.g * (ambient.ratio * ambient.colour.g /  255.0);
+	result.b = base_colour.b * (ambient.ratio * ambient.colour.b /  255.0);
+	
+    result.r = fmin(result.r, 255.0);
+    result.g = fmin(result.g, 255.0);
+    result.b = fmin(result.b, 255.0);
+    return (result);
+}
+*/
 
 /*
 	Summary
@@ -165,12 +188,13 @@ void	check_mid_intersections(t_mem *mem, t_Scene *scene)
 	Outputs
 	None. The average colour is stored in the pixel structure.
 */
-void	calculate_average_colour(t_pixel *pixel)
+//void	calculate_average_colour(t_pixel *pixel) // New prototype below (now takes t_AmbientLight)
+void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient)
 {
 	float	avg_r;
 	float	avg_g;
 	float	avg_b;
-	unsigned int alpha = 255;
+	//unsigned int alpha = 255; // This is now further down
 
 	avg_r = (pixel->TL->colour.r + pixel->TR->colour.r + \
 				pixel->BL->colour.r + pixel->BR->colour.r + \
@@ -181,6 +205,15 @@ void	calculate_average_colour(t_pixel *pixel)
 	avg_b = (pixel->TL->colour.b + pixel->TR->colour.b + \
 				pixel->BL->colour.b + pixel->BR->colour.b + \
 				pixel->mid.colour.b) / 5;
+	// NEW! Added from here...
+	avg_r = avg_r * (1 - ambient.ratio) + ambient.colour.r * ambient.ratio; // 1st part (1 - ratio) is % of original colour e.g. 1 - 0.3 = 70%
+    avg_g = avg_g * (1 - ambient.ratio) + ambient.colour.g * ambient.ratio; // 2nd part is ratio % of ambient colour
+    avg_b = avg_b * (1 - ambient.ratio) + ambient.colour.b * ambient.ratio; // Result is final blended colour
+    avg_r = fminf(fmaxf(avg_r, 0.0f), 1.0f); // Clamps value between 0 and 1 so not too bright/dark
+    avg_g = fminf(fmaxf(avg_g, 0.0f), 1.0f);
+    avg_b = fminf(fmaxf(avg_b, 0.0f), 1.0f);
+    unsigned int alpha = 255;
+	// ...until here to apply ambient light
 	unsigned int r = (unsigned int)(avg_r * 255);
 	unsigned int g = (unsigned int)(avg_g * 255);
 	unsigned int b = (unsigned int)(avg_b * 255);
@@ -209,11 +242,13 @@ void	average_pixel_colours(t_mem *mem, t_Scene *scene)
 		x = 0;
 		while (x < scene->mlx.width)
 		{
-			calculate_average_colour(&mem->pixels[y][x]);
+			//calculate_average_colour(&mem->pixels[y][x]); // Now the below line to account for ambient light
+			calculate_average_colour(&mem->pixels[y][x], scene->ambient_light);
 			x++;
 		}
 		y++;
 	}
+	printf(G"-> Ambient light adjustment applied\n"RST);
 }
 
 /*

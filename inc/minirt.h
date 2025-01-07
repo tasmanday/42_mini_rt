@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
 /*   Updated: 2025/01/07 23:41:27 by tday             ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
@@ -342,6 +342,8 @@ t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b);
 float		vect_dot(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar);
 float		vect_distance(t_Vector3 a, t_Vector3 b);
+void		calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient);
+t_Colour4   apply_ambient_light(t_Colour4 base_colour, t_AmbientLight ambient);
 
 //void		compute_ray_directions(t_Scene *scene);
 void		init_ray(t_Scene *scene, t_ray *ray, int x, int y);
