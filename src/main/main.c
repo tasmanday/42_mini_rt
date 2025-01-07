@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:29:18 by atang             #+#    #+#             */
-/*   Updated: 2025/01/06 17:27:09 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/07 23:41:09 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -16,7 +16,6 @@ int	main(int argc, char **argv)
 {
 	t_Scene	scene;
 	t_mem	mem;
-
 	if (argc != 2 || filename_error(argv[1]))
 	{
 		printf(RED "\nError!\n" RST G

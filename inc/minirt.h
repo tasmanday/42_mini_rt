@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/07 22:36:20 by atang            ###   ########.fr       */
+/*   Updated: 2025/01/07 23:41:27 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/types.h> // for ssize_t
 # include <math.h>
 # include <errno.h>
+# include <pthread.h>
 # include "../minilibx/mlx.h"
 
 // DEFINITIONS //
@@ -170,8 +171,8 @@ typedef struct s_pixel
 
 typedef	struct s_mem
 {
-	t_pixel		**pixels;
-	t_ray		**corners;
+	t_pixel			**pixels;
+	t_ray			**corners;
 }				t_mem;
 
 typedef struct s_QuadraticCoefficients
@@ -180,6 +181,25 @@ typedef struct s_QuadraticCoefficients
 	float		b;
 	float		c;
 }				t_Quad;
+
+/* typedef struct	s_Task
+{
+	void			(*function)(void *);
+    void			*argument;
+	struct s_Task	*next;
+}				t_Task;
+
+typedef struct	s_ThreadPool
+{
+	pthread_mutex_t	mutex_queue;
+	pthread_cond_t	cond_queue;
+	pthread_cond_t	notify;
+	int				num_threads;
+	pthread_t 		*threads;
+	t_Task 			*task_queue_head;
+	t_Task 			*task_queue_tail;
+	bool			shutdown;
+}				t_ThreadPool; */
 
 typedef struct s_Mlx
 {
@@ -301,6 +321,14 @@ char		*ft_strtok(char **line, const char *delim);
 float		parse_float(char **str);
 int			parse_int(char	**str);
 
+/* // threads.c //
+void		init_threads(t_ThreadPool *thread_pool);
+void		execute_task(t_Task *task);
+void		start_thread(t_ThreadPool *thread_pool);
+void		submit_task(t_ThreadPool *thread_pool, t_Task task);
+int			count_cpu_threads();
+*/
+
 // miscellaneous //
 
 // organise later //
@@ -338,7 +366,7 @@ t_ray		**allocate_corner_array(int width, int height);
 void		init_mem(t_mem *mem, t_Scene *scene);
 void		init_pixel_array(t_mem *mem, t_Scene *scene);
 void		check_object_intersection(t_Scene *scene, t_ray *ray);
-void		check_corner_intersections(t_mem *mem, t_Scene *scene);
+void		render_scene(t_mem *mem, t_Scene *scene);
 void		check_mid_intersections(t_mem *mem, t_Scene *scene);
 void		average_pixel_colours(t_mem *mem, t_Scene *scene);
 void		trace_rays(t_mem *mem, t_Scene *scene);

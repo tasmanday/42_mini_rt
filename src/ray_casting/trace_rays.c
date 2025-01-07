@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/01/07 22:46:20 by atang            ###   ########.fr       */
+/*   Updated: 2025/01/07 23:37:35 by tday             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void	init_pixel_array(t_mem *mem, t_Scene *scene)
 	init_pixels(mem, scene);
 }
 
+// TODO: fix comment after modifying function
 /*
 	Summary
 	Checks for intersections between scene objects and corner rays.
@@ -127,7 +128,7 @@ void	init_pixel_array(t_mem *mem, t_Scene *scene)
 	Outputs
 	None. Intersection data is stored in the corner rays.
 */
-void	check_corner_intersections(t_mem *mem, t_Scene *scene)
+void	render_scene(t_mem *mem, t_Scene *scene)
 {
 	int		y;
 	int		x;
@@ -139,6 +140,8 @@ void	check_corner_intersections(t_mem *mem, t_Scene *scene)
 		while (x <= scene->mlx.width)
 		{
 			check_object_intersection(scene, &mem->corners[y][x]);
+			if (y < scene->mlx.height && x < scene->mlx.width)
+			 	check_object_intersection(scene, &mem->pixels[y][x].mid);
 			x++;
 		}
 		y++;
@@ -155,7 +158,7 @@ void	check_corner_intersections(t_mem *mem, t_Scene *scene)
 
 	Outputs
 	None. Intersection data is stored in the mid-point rays.
-*/
+
 void	check_mid_intersections(t_mem *mem, t_Scene *scene)
 {
 	int		y;
@@ -172,7 +175,7 @@ void	check_mid_intersections(t_mem *mem, t_Scene *scene)
 		}
 		y++;
 	}
-}
+} */
 
 /*
 	Summary
@@ -263,7 +266,6 @@ void	average_pixel_colours(t_mem *mem, t_Scene *scene)
 void	trace_rays(t_mem *mem, t_Scene *scene)
 {
 	init_pixel_array(mem, scene);
-	check_corner_intersections(mem, scene);
-	check_mid_intersections(mem, scene);
+	render_scene(mem, scene);
 	average_pixel_colours(mem, scene);
 }
