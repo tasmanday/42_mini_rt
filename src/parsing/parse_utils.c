@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 22:52:53 by atang             #+#    #+#             */
-/*   Updated: 2025/01/07 22:57:53 by atang            ###   ########.fr       */
+/*   Updated: 2025/01/10 21:52:22 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	parse_vector3(char **line, t_Vector3 *vec)
 	return (SUCCESS);
 }
 
+/*
+-> OLD validate_rgb - didn't handle trailing whitespace for tokens
 static int	validate_rgb(char *token)
 {
 	int	i;
@@ -55,6 +57,33 @@ static int	validate_rgb(char *token)
 	}
 	return (SUCCESS);
 }
+*/
+
+static int validate_rgb(char *token)
+{
+    if (!token)
+        return (FAILURE);
+    while (*token && (*token == ' ' || *token == '\t' || *token == '\r' || *token == '\n'))
+        token++;
+    if (*token == '-')
+        token++;
+    if (*token == '\0')
+        return (FAILURE);
+    while (*token && *token != ' ' && *token != '\t' && *token != '\r' && *token != '\n')
+    {
+        if (!ft_isdigit((unsigned char)*token))
+            return FAILURE;
+        token++;
+    }
+    while (*token && (*token == ' ' || *token == '\t' || *token == '\r' || *token == '\n'))
+        token++;
+    if (*token  == '\0')
+	{
+    	return (SUCCESS);
+	}
+	return (FAILURE);
+}
+
 
 int	parse_rgb(t_Colour4 *colour, char **line)
 {
