@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   trace_rays.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/01/11 11:18:10 by atang            ###   ########.fr       */
+/*   Updated: 2025/01/12 18:00:57 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../inc/minirt.h"
 
@@ -36,7 +36,7 @@ t_Colour4   apply_ambient_light(t_Colour4 base_colour, t_AmbientLight ambient)
 */
 
 // NEW! Shadow check function
-bool is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Vector3 normal)
+bool is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object)
 {
 	t_ray	shadow_ray;
 	float	light_distance;
@@ -44,7 +44,7 @@ bool is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Vector3 normal
 	// Create shdaow ray from insection point to light source
 	shadow_ray.ray_origin = intersection_point;
 	// Add offset to avoid self-shadowing
-	shadow_ray.ray_origin = vect_add(intersection_point, vect_multiply_scalar(normal, 0.001f)); 
+//	shadow_ray.ray_origin = vect_add(intersection_point, vect_multiply_scalar(normal, 0.001f));
 	// Calculate direction to light
 	shadow_ray.ray_dir = vect_subtract(scene->light.position, intersection_point);
 	// Calculate distance to light
@@ -58,19 +58,25 @@ bool is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Vector3 normal
 	shadow_ray.cyl_closest_point = 0;
 
 	// Check for insections between point and light
+if (check_object_intersection(scene, &shadow_ray, ignore_object))
+		{
+			// If intersection is closer than the light, point is in shadow
+			if (shadow_ray.closest_hit_distance < light_distance)
+				return (true);
+		}
+/*	// Check for insections between point and light
 	t_Object	*current = scene->objects;
 	while (current)
 	{
-		check_object_intersection(scene, &shadow_ray);
-		if (shadow_ray.intersects_object)
+		if (check_object_intersection(scene, &shadow_ray))
 		{
 			// If intersection is closer than the light, point is in shadow
-			if (shadow_ray.closest_hit_distance > 0.001f && 
+			if (shadow_ray.closest_hit_distance > 0.0001f && 
 				shadow_ray.closest_hit_distance < light_distance)
 				return (true);
 		}
 		current = current->next;
-	}
+	} */
 	return (false);
 }
 
@@ -172,15 +178,20 @@ void	render_scene(t_mem *mem, t_Scene *scene)
 	int		y;
 	int		x;
 
+
 	y = 0;
 	while (y <= scene->mlx.height)
 	{
 		x = 0;
 		while (x <= scene->mlx.width)
 		{
-			check_object_intersection(scene, &mem->corners[y][x]);
+			if (check_object_intersection(scene, &mem->corners[y][x], NULL))
+				calculate_ray_colour(scene, &mem->corners[y][x]);
 			if (y < scene->mlx.height && x < scene->mlx.width)
-			 	check_object_intersection(scene, &mem->pixels[y][x].mid);
+			{
+			 	if (check_object_intersection(scene, &mem->pixels[y][x].mid, NULL))
+					calculate_ray_colour(scene, &mem->pixels[y][x].mid);
+			}
 			x++;
 		}
 		y++;
@@ -262,7 +273,29 @@ void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient)
 }
 */
 
-void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *scene)
+void	calculate_average_colour(t_pixel *pixel)
+{
+	float	avg_r;
+	float	avg_g;
+	float	avg_b;
+	unsigned int alpha = 255;
+
+	avg_r = (pixel->TL->colour.r + pixel->TR->colour.r + \
+				pixel->BL->colour.r + pixel->BR->colour.r + \
+				pixel->mid.colour.r) * 0.2f;
+	avg_g = (pixel->TL->colour.g + pixel->TR->colour.g + \
+				pixel->BL->colour.g + pixel->BR->colour.g + \
+				pixel->mid.colour.g) * 0.2f;
+	avg_b = (pixel->TL->colour.b + pixel->TR->colour.b + \
+				pixel->BL->colour.b + pixel->BR->colour.b + \
+				pixel->mid.colour.b) * 0.2f;
+	unsigned int r = (unsigned int)(avg_r * 255);
+	unsigned int g = (unsigned int)(avg_g * 255);
+	unsigned int b = (unsigned int)(avg_b * 255);
+	pixel->avg_colour = (alpha << 24) | (r << 16) | (g << 8) | b;
+}
+
+/* void calculate_average_colour(t_pixel *pixel)
 {
     float   avg_r;
     float   avg_g;
@@ -278,7 +311,7 @@ void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *s
     avg_b = (pixel->TL->colour.b + pixel->TR->colour.b + \
             pixel->BL->colour.b + pixel->BR->colour.b + \
             pixel->mid.colour.b) * 0.2f;
-    // Check if point is in shadow
+    // Check if point is in shadow    *** moved elsewhere ***
     if (pixel->mid.intersects_object)
     {
         t_Vector3 intersection_point = vect_add(pixel->mid.ray_origin, 
@@ -297,7 +330,7 @@ void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *s
             avg_g = avg_g * (1 - ambient.ratio) + ambient.colour.g * ambient.ratio;
             avg_b = avg_b * (1 - ambient.ratio) + ambient.colour.b * ambient.ratio;
         }
-    }
+    } 
     // Clamp values
     avg_r = fminf(fmaxf(avg_r, 0.0f), 1.0f);
     avg_g = fminf(fmaxf(avg_g, 0.0f), 1.0f);
@@ -308,7 +341,7 @@ void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *s
     unsigned int g = (unsigned int)(avg_g * 255);
     unsigned int b = (unsigned int)(avg_b * 255);
     pixel->avg_colour = (alpha << 24) | (r << 16) | (g << 8) | b;
-}
+} */
 
 /*
 	Summary
@@ -332,9 +365,9 @@ void	average_pixel_colours(t_mem *mem, t_Scene *scene)
 		x = 0;
 		while (x < scene->mlx.width)
 		{
-			//calculate_average_colour(&mem->pixels[y][x]); // Now the below for ambient light
+			calculate_average_colour(&mem->pixels[y][x]); 
 			//calculate_average_colour(&mem->pixels[y][x], scene->ambient_light); // Now the below for shadow
-			calculate_average_colour(&mem->pixels[y][x], scene->ambient_light, scene);
+			//calculate_average_colour(&mem->pixels[y][x], scene->ambient_light, scene); // Now the above again because I moved shadow and ambient light
 			x++;
 		}
 		y++;

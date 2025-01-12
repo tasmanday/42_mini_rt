@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:46:07 by tday              #+#    #+#             */
-/*   Updated: 2025/01/01 18:12:47 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/12 16:18:27 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -196,4 +196,17 @@ float	vect_distance(t_Vector3 a, t_Vector3 b)
 	difference = vect_subtract(a, b);
 	distance = sqrt(vect_dot(difference, difference));
 	return (distance);
+}
+
+
+t_Vector3 vect_reflect(t_Vector3 incident, t_Vector3 normal)
+{
+    float dot_product = vect_dot(incident, normal);
+    t_Vector3 reflection;
+
+    reflection.x = incident.x - 2 * dot_product * normal.x;
+    reflection.y = incident.y - 2 * dot_product * normal.y;
+    reflection.z = incident.z - 2 * dot_product * normal.z;
+
+    return reflection;
 }

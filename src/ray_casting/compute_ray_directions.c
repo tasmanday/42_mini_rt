@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2025/01/06 22:37:41 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/12 18:01:23 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -224,7 +224,7 @@ void calculate_normal(t_ray *ray)
 	}
 }
 
-void calculate_lighting(t_Scene *scene, t_ray *ray)
+/* void calculate_lighting(t_Scene *scene, t_ray *ray)
 {
 	t_Vector3	light_dir;
 	float		intensity;
@@ -251,6 +251,38 @@ void calculate_lighting(t_Scene *scene, t_ray *ray)
 			ray->colour.g = fmin(ray->closest_object->u_data.cylinder.colour.g * intensity, 1);
 			ray->colour.b = fmin(ray->closest_object->u_data.cylinder.colour.b * intensity, 1);
 		}
+} */
+
+void calculate_lighting(t_Light light, t_AmbientLight ambient, t_ray *ray)
+{
+	t_Vector3	light_dir;
+	float		intensity;
+//	t_Colour4	colour;
+
+
+//	colour = ray->colour;
+	light_dir = vect_normalise(vect_subtract(light.position, vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance)));
+	intensity = vect_dot(light_dir, ray->normal_at_intersection);
+	if (intensity < 0)
+		intensity = 0.0f;
+
+	ray->colour.r = (ray->colour.r * ambient.ratio * ambient.colour.r) + ray->colour.r * intensity;
+	ray->colour.g = (ray->colour.g * ambient.ratio * ambient.colour.g) + ray->colour.g * intensity;
+	ray->colour.b = (ray->colour.b * ambient.ratio * ambient.colour.b) + ray->colour.b * intensity;
+
+	// Clamp values
+	ray->colour.r = fminf(fmaxf(ray->colour.r, 0.0f), 1.0f);
+	ray->colour.g = fminf(fmaxf(ray->colour.g, 0.0f), 1.0f);
+	ray->colour.b = fminf(fmaxf(ray->colour.b, 0.0f), 1.0f);
+
+//	colour.r = fmaxf(ray->colour.r * intensity, ambient.colour.r * ambient.ratio);
+//	colour.g = fmaxf(ray->colour.g * intensity, ambient.colour.g * ambient.ratio);
+//	colour.b = fmaxf(ray->colour.b * intensity, ambient.colour.b * ambient.ratio);
+	// apply ambient lighting
+//	colour.r = fminf(colour.r * (1 - ambient.ratio) + ambient.colour.r * ambient.ratio, 1.0f);
+//	colour.g = fminf(colour.g * (1 - ambient.ratio) + ambient.colour.g * ambient.ratio, 1.0f);
+//	colour.b = fminf(colour.b * (1 - ambient.ratio) + ambient.colour.b * ambient.ratio, 1.0f);
+//	ray->colour = colour;
 }
 
 /*
@@ -265,7 +297,7 @@ void calculate_lighting(t_Scene *scene, t_ray *ray)
 	None. The ray's intersection properties are updated based on the closest
 	intersection.
 */
-void	check_object_intersection(t_Scene *scene, t_ray *ray)
+bool	check_object_intersection(t_Scene *scene, t_ray *ray, t_Object *ignore_object)
 {
 	t_Object	*current_object;
 	float		distance;
@@ -276,6 +308,11 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
 	ray->intersects_object = false;
 	while (current_object)
 	{
+		if (current_object == ignore_object)
+		{
+			current_object = current_object->next;
+			continue;
+		}
 		intersects = check_intersection(ray, current_object, &distance);
 		if (intersects)
 		{
@@ -288,17 +325,31 @@ void	check_object_intersection(t_Scene *scene, t_ray *ray)
 		}
 		current_object = current_object->next;
 	}
-	if (ray->intersects_object)
+	return (ray->intersects_object);
+}
+
+void	calculate_ray_colour(t_Scene *scene, t_ray *ray)
+{
+	t_Vector3	intersection_point;
+//	t_Vector3	light_dir;
+	
+//	light_dir = vect_normalise(vect_subtract(scene->light.position, vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance)));
+	intersection_point = vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance));
+	// Set ray colour values to colour of closest object
+	set_ray_colour(ray);
+	// Calculate the normal of the closest object
+	calculate_normal(ray);
+	// calculate shadows
+	if (is_in_shadow(scene, intersection_point, ray->closest_object))
+//	if (is_in_shadow(scene, intersection_point, light_dir))
 	{
-		// Calculate the normal of the closest object
-		calculate_normal(ray);
-		// calculate lighting
-		calculate_lighting(scene, ray);
-		// calculate shadows
-
-		// apply lighting and shadows to ray colour
-
-		// set the ray colour
-		// set_ray_colour(ray);
+		ray->colour.r = ray->colour.r * scene->ambient_light.ratio * scene->ambient_light.colour.r;
+		ray->colour.g = ray->colour.g * scene->ambient_light.ratio * scene->ambient_light.colour.g;
+		ray->colour.b = ray->colour.b * scene->ambient_light.ratio * scene->ambient_light.colour.b;
 	}
+	else
+	{
+		// calculate lighting
+		calculate_lighting(scene->light, scene->ambient_light, ray);
+	} 
 }

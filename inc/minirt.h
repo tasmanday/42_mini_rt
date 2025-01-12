@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/11 11:18:58 by atang            ###   ########.fr       */
+/*   Updated: 2025/01/12 18:00:10 by tday             ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef MINIRT_H
 # define MINIRT_H
@@ -332,7 +332,8 @@ int			count_cpu_threads();
 // miscellaneous //
 
 // organise later //
-bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Vector3 normal);
+//bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Vector3 normal);
+bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object);
 int			resize_window_hook(int width, int height, t_Scene *scene, t_mem *mem);
 int			expose_hook(t_Scene *scene);
 t_Vector3	vector(float x, float y, float z);
@@ -343,8 +344,9 @@ t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b);
 float		vect_dot(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar);
 float		vect_distance(t_Vector3 a, t_Vector3 b);
-//void		calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient); // OLD - PRE-shadow
-void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *scene);
+t_Vector3	vect_reflect(t_Vector3 incident, t_Vector3 normal);
+void		calculate_average_colour(t_pixel *pixel); // OLD - PRE-shadow
+//void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *scene);
 t_Colour4   apply_ambient_light(t_Colour4 base_colour, t_AmbientLight ambient);
 
 //void		compute_ray_directions(t_Scene *scene);
@@ -367,11 +369,13 @@ t_pixel		**allocate_pixel_array(int width, int height);
 t_ray		**allocate_corner_array(int width, int height);
 void		init_mem(t_mem *mem, t_Scene *scene);
 void		init_pixel_array(t_mem *mem, t_Scene *scene);
-void		check_object_intersection(t_Scene *scene, t_ray *ray);
+//bool		check_object_intersection(t_Scene *scene, t_ray *ray);
+bool		check_object_intersection(t_Scene *scene, t_ray *ray, t_Object *ignore_object);
 void		render_scene(t_mem *mem, t_Scene *scene);
 void		check_mid_intersections(t_mem *mem, t_Scene *scene);
 void		average_pixel_colours(t_mem *mem, t_Scene *scene);
 void		trace_rays(t_mem *mem, t_Scene *scene);
 void		free_everything(t_mem *mem, t_Scene *scene);
+void		calculate_ray_colour(t_Scene *scene, t_ray *ray);
 
 #endif
