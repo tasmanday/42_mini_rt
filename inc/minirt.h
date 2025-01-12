@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/07 23:41:27 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/11 11:18:58 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,7 @@ int			count_cpu_threads();
 // miscellaneous //
 
 // organise later //
+bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Vector3 normal);
 int			resize_window_hook(int width, int height, t_Scene *scene, t_mem *mem);
 int			expose_hook(t_Scene *scene);
 t_Vector3	vector(float x, float y, float z);
@@ -342,7 +343,8 @@ t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b);
 float		vect_dot(t_Vector3 a, t_Vector3 b);
 t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar);
 float		vect_distance(t_Vector3 a, t_Vector3 b);
-void		calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient);
+//void		calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient); // OLD - PRE-shadow
+void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *scene);
 t_Colour4   apply_ambient_light(t_Colour4 base_colour, t_AmbientLight ambient);
 
 //void		compute_ray_directions(t_Scene *scene);
