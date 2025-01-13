@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/01/12 18:00:57 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/13 21:41:05 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -44,9 +44,11 @@ bool is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore
 	// Create shdaow ray from insection point to light source
 	shadow_ray.ray_origin = intersection_point;
 	// Add offset to avoid self-shadowing
-//	shadow_ray.ray_origin = vect_add(intersection_point, vect_multiply_scalar(normal, 0.001f));
+//	shadow_ray.ray_origin = vect_add(intersection_point, vect_multiply_scalar(normal, 0.00001f));
 	// Calculate direction to light
 	shadow_ray.ray_dir = vect_subtract(scene->light.position, intersection_point);
+
+	shadow_ray.ray_origin = vect_add(intersection_point, vect_multiply_scalar(shadow_ray.ray_dir, 0.0001f));
 	// Calculate distance to light
 	light_distance = vect_distance(scene->light.position, intersection_point);
 	// Normalise direction

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/12 18:00:10 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/13 21:41:04 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -332,7 +332,7 @@ int			count_cpu_threads();
 // miscellaneous //
 
 // organise later //
-//bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Vector3 normal);
+//bool 		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object, t_Vector3 normal);
 bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object);
 int			resize_window_hook(int width, int height, t_Scene *scene, t_mem *mem);
 int			expose_hook(t_Scene *scene);
