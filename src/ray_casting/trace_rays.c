@@ -134,10 +134,10 @@ void	init_pixels(t_mem *mem, t_Scene *scene)
 		x = 0;
 		while (x < scene->mlx.width)
 		{
-			mem->pixels[y][x].TL = &mem->corners[y][x]; // top left corner
-			mem->pixels[y][x].TR = &mem->corners[y][x + 1]; // top right corner
-			mem->pixels[y][x].BL = &mem->corners[y + 1][x]; // bottom left corner
-			mem->pixels[y][x].BR = &mem->corners[y + 1][x + 1]; // bottom right corner
+//			mem->pixels[y][x].TL = &mem->corners[y][x]; // top left corner
+//			mem->pixels[y][x].TR = &mem->corners[y][x + 1]; // top right corner
+//			mem->pixels[y][x].BL = &mem->corners[y + 1][x]; // bottom left corner
+//			mem->pixels[y][x].BR = &mem->corners[y + 1][x + 1]; // bottom right corner
 			init_ray(scene, &mem->pixels[y][x].mid, x + 0.5, y + 0.5);
 			mem->pixels[y][x].avg_colour = 0x000000;
 			x++;
@@ -145,6 +145,38 @@ void	init_pixels(t_mem *mem, t_Scene *scene)
 		y++;
 	}
 }
+
+void	allocate_pointers(t_mem *mem, t_Scene *scene)
+{
+	int		y;
+	int		x;
+
+	y = 0;
+	while (y < scene->mlx.height)
+	{
+		x = 0;
+		while (x < scene->mlx.width)
+		{
+			// Allocate pointers for neighbours and corners
+			mem->pixels[y][x].neighbour_colours[0] = &mem->pixels[y - 1][x - 1].mid.colour; // need to handle edge pixels
+			mem->pixels[y][x].neighbour_colours[1] = &mem->pixels[y - 1][x].mid.colour;
+			mem->pixels[y][x].neighbour_colours[2] = &mem->pixels[y - 1][x + 1].mid.colour;
+			mem->pixels[y][x].neighbour_colours[3] = &mem->pixels[y][x - 1].mid.colour;
+			mem->pixels[y][x].neighbour_colours[4] = &mem->pixels[y][x + 1].mid.colour;
+			mem->pixels[y][x].neighbour_colours[5] = &mem->pixels[y + 1][x - 1].mid.colour;
+			mem->pixels[y][x].neighbour_colours[6] = &mem->pixels[y + 1][x].mid.colour;
+			mem->pixels[y][x].neighbour_colours[7] = &mem->pixels[y + 1][x + 1].mid.colour;
+		
+			mem->pixels[y][x].corner_colours[0] = &mem->corners[y][x].colour;
+			mem->pixels[y][x].corner_colours[1] = &mem->corners[y][x + 1].colour;
+			mem->pixels[y][x].corner_colours[2] = &mem->corners[y + 1][x].colour;
+			mem->pixels[y][x].corner_colours[3] = &mem->corners[y + 1][x + 1].colour;
+			x++;
+		}
+		y++;
+	}
+}
+
 
 /*
 	Summary

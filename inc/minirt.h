@@ -161,6 +161,8 @@ typedef struct s_ray
 
 typedef struct s_pixel
 {
+	t_Colour4		*neighbour_colours[8];
+	t_Colour4		*corner_colours[4];
 	t_ray			*TL;
 	t_ray			*TR;
 	t_ray			*BL;
