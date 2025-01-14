@@ -111,6 +111,52 @@ void	init_corner_rays(t_mem *mem, t_Scene *scene)
 	}
 }
 
+void	set_pointers_to_null(t_pixel *pixel)
+{
+	int	i;
+
+	i = 0;
+	while (i < 8)
+	{
+		pixel.neighbour_colours[i] = null;
+		i++;
+	}
+	i = 0;
+	while (i < 4)
+	{
+		pixel.corner_colours[i] = null;
+		i++;
+	}
+}
+
+void	allocate_neighbour_pointers(t_mem *mem, int y, int x)
+{
+	if (y > 0 && x > 0)
+		mem->pixels[y][x].neighbour_colours[0] = &mem->pixels[y - 1][x - 1].mid.colour; // need to handle edge pixels
+	if (y > 0)
+		mem->pixels[y][x].neighbour_colours[1] = &mem->pixels[y - 1][x].mid.colour;
+	if (y > 0 && x < scene->mlx.width - 1)
+		mem->pixels[y][x].neighbour_colours[2] = &mem->pixels[y - 1][x + 1].mid.colour;
+	if (x > 0)
+		mem->pixels[y][x].neighbour_colours[3] = &mem->pixels[y][x - 1].mid.colour;
+	if (x < scene->mlx.width - 1)
+		mem->pixels[y][x].neighbour_colours[4] = &mem->pixels[y][x + 1].mid.colour;
+	if (y < scene->mlx.height - 1 && x > 0)
+		mem->pixels[y][x].neighbour_colours[5] = &mem->pixels[y + 1][x - 1].mid.colour;
+	if (y < scene->mlx.height - 1)
+		mem->pixels[y][x].neighbour_colours[6] = &mem->pixels[y + 1][x].mid.colour;
+	if (y < scene->mlx.height - 1 && x < scene->mlx.width - 1)
+		mem->pixels[y][x].neighbour_colours[7] = &mem->pixels[y + 1][x + 1].mid.colour;
+}
+
+void	allocate_corner_pointers(t_mem *mem, int y, int x)
+{
+	mem->pixels[y][x].corner_colours[0] = &mem->corners[y][x].colour;
+	mem->pixels[y][x].corner_colours[1] = &mem->corners[y][x + 1].colour;
+	mem->pixels[y][x].corner_colours[2] = &mem->corners[y + 1][x].colour;
+	mem->pixels[y][x].corner_colours[3] = &mem->corners[y + 1][x + 1].colour;
+}
+
 /*
 	Summary
 	Initializes the pixel array with corner references and mid-point rays.
@@ -138,6 +184,9 @@ void	init_pixels(t_mem *mem, t_Scene *scene)
 //			mem->pixels[y][x].TR = &mem->corners[y][x + 1]; // top right corner
 //			mem->pixels[y][x].BL = &mem->corners[y + 1][x]; // bottom left corner
 //			mem->pixels[y][x].BR = &mem->corners[y + 1][x + 1]; // bottom right corner
+			set_pointers_to_null(mem->pixels[y][x]);
+			allocate_neighbour_pointers(mem, y, x);
+			allocate_corner_pointers(mem, y, x);
 			init_ray(scene, &mem->pixels[y][x].mid, x + 0.5, y + 0.5);
 			mem->pixels[y][x].avg_colour = 0x000000;
 			x++;
@@ -146,7 +195,7 @@ void	init_pixels(t_mem *mem, t_Scene *scene)
 	}
 }
 
-void	allocate_pointers(t_mem *mem, t_Scene *scene)
+/* void	allocate_pointers(t_mem *mem, t_Scene *scene) // move to init_pixels()
 {
 	int		y;
 	int		x;
@@ -157,26 +206,17 @@ void	allocate_pointers(t_mem *mem, t_Scene *scene)
 		x = 0;
 		while (x < scene->mlx.width)
 		{
-			// Allocate pointers for neighbours and corners
-			mem->pixels[y][x].neighbour_colours[0] = &mem->pixels[y - 1][x - 1].mid.colour; // need to handle edge pixels
-			mem->pixels[y][x].neighbour_colours[1] = &mem->pixels[y - 1][x].mid.colour;
-			mem->pixels[y][x].neighbour_colours[2] = &mem->pixels[y - 1][x + 1].mid.colour;
-			mem->pixels[y][x].neighbour_colours[3] = &mem->pixels[y][x - 1].mid.colour;
-			mem->pixels[y][x].neighbour_colours[4] = &mem->pixels[y][x + 1].mid.colour;
-			mem->pixels[y][x].neighbour_colours[5] = &mem->pixels[y + 1][x - 1].mid.colour;
-			mem->pixels[y][x].neighbour_colours[6] = &mem->pixels[y + 1][x].mid.colour;
-			mem->pixels[y][x].neighbour_colours[7] = &mem->pixels[y + 1][x + 1].mid.colour;
-		
-			mem->pixels[y][x].corner_colours[0] = &mem->corners[y][x].colour;
-			mem->pixels[y][x].corner_colours[1] = &mem->corners[y][x + 1].colour;
-			mem->pixels[y][x].corner_colours[2] = &mem->corners[y + 1][x].colour;
-			mem->pixels[y][x].corner_colours[3] = &mem->corners[y + 1][x + 1].colour;
+			// set null
+			set_pointers_to_null(mem->pixels[y][x]);
+			// Allocate pointers for neighbours
+			allocate_neighbour_pointers(mem, y, x);
+			// allocate corners
+			allocate_corner_pointers(mem, y, x);
 			x++;
 		}
 		y++;
 	}
-}
-
+} */
 
 /*
 	Summary
