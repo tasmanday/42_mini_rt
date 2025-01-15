@@ -29,12 +29,12 @@ t_pixel	**allocate_pixel_array(int width, int height)
 	t_pixel	**pixels;
 	int		i;
 
-	pixels = safe_calloc(height * sizeof(t_pixel *), \
+	pixels = safe_malloc(height * sizeof(t_pixel *), \
 		"pixels array malloc error");
 	i = 0;
 	while (i < height)
 	{
-		pixels[i] = safe_calloc(width * sizeof(t_pixel), \
+		pixels[i] = safe_malloc(width * sizeof(t_pixel), \
 			"pixels array malloc error");
 		i++;
 	}
@@ -57,12 +57,12 @@ t_ray	**allocate_corner_array(int width, int height)
 	t_ray	**corners;
 	int		i;
 
-	corners = safe_calloc((height + 1) * sizeof(t_ray *), \
+	corners = safe_malloc((height + 1) * sizeof(t_ray *), \
 		"corners array malloc error");
 	i = 0;
 	while (i <= height)
 	{
-		corners[i] = safe_calloc((width + 1) * sizeof(t_ray), \
+		corners[i] = safe_malloc((width + 1) * sizeof(t_ray), \
 			"corners array malloc error");
 		i++;
 	}

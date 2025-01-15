@@ -118,18 +118,18 @@ void	set_pointers_to_null(t_pixel *pixel)
 	i = 0;
 	while (i < 8)
 	{
-		pixel.neighbour_colours[i] = null;
+		pixel->neighbour_colours[i] = NULL;
 		i++;
 	}
 	i = 0;
 	while (i < 4)
 	{
-		pixel.corner_colours[i] = null;
+		pixel->corner_colours[i] = NULL;
 		i++;
 	}
 }
 
-void	allocate_neighbour_pointers(t_mem *mem, int y, int x)
+void	allocate_neighbour_pointers(t_mem *mem, t_Scene *scene, int y, int x)
 {
 	if (y > 0 && x > 0)
 		mem->pixels[y][x].neighbour_colours[0] = &mem->pixels[y - 1][x - 1].mid.colour; // need to handle edge pixels
@@ -184,8 +184,8 @@ void	init_pixels(t_mem *mem, t_Scene *scene)
 //			mem->pixels[y][x].TR = &mem->corners[y][x + 1]; // top right corner
 //			mem->pixels[y][x].BL = &mem->corners[y + 1][x]; // bottom left corner
 //			mem->pixels[y][x].BR = &mem->corners[y + 1][x + 1]; // bottom right corner
-			set_pointers_to_null(mem->pixels[y][x]);
-			allocate_neighbour_pointers(mem, y, x);
+			set_pointers_to_null(&mem->pixels[y][x]);
+			allocate_neighbour_pointers(mem, scene, y, x);
 			allocate_corner_pointers(mem, y, x);
 			init_ray(scene, &mem->pixels[y][x].mid, x + 0.5, y + 0.5);
 			mem->pixels[y][x].avg_colour = 0x000000;
@@ -349,6 +349,51 @@ void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient)
 
 void	calculate_average_colour(t_pixel *pixel)
 {
+	float	avg_r = 0;
+	float	avg_g = 0;
+	float	avg_b = 0;
+	int		i;
+	int		count;
+
+	i = 0;
+	count = 0;
+	while (i < 8)
+	{
+		if (pixel->neighbour_colours[i])
+		{
+			avg_r += pixel->neighbour_colours[i]->r;
+			avg_g += pixel->neighbour_colours[i]->g;
+			avg_b += pixel->neighbour_colours[i]->b;
+			count++;
+		}
+		i++;
+	}
+	while (i < 4)
+	{
+		if (pixel->corner_colours[i])
+		{
+			avg_r += pixel->corner_colours[i]->r;
+			avg_g += pixel->corner_colours[i]->g;
+			avg_b += pixel->corner_colours[i]->b;
+			count++;
+		}
+		i++;
+	}
+	avg_r = avg_r / count;
+	avg_g = avg_g / count;
+	avg_b = avg_b / count;
+	// Clamp values
+    avg_r = fminf(fmaxf(avg_r, 0.0f), 1.0f);
+    avg_g = fminf(fmaxf(avg_g, 0.0f), 1.0f);
+    avg_b = fminf(fmaxf(avg_b, 0.0f), 1.0f);
+	unsigned int r = (unsigned int)(avg_r * 255);
+	unsigned int g = (unsigned int)(avg_g * 255);
+	unsigned int b = (unsigned int)(avg_b * 255);
+	pixel->avg_colour = (255 << 24) | (r << 16) | (g << 8) | b;
+}
+
+/* void	calculate_average_colour(t_pixel *pixel)
+{
 	float	avg_r;
 	float	avg_g;
 	float	avg_b;
@@ -367,7 +412,7 @@ void	calculate_average_colour(t_pixel *pixel)
 	unsigned int g = (unsigned int)(avg_g * 255);
 	unsigned int b = (unsigned int)(avg_b * 255);
 	pixel->avg_colour = (alpha << 24) | (r << 16) | (g << 8) | b;
-}
+} */
 
 /* void calculate_average_colour(t_pixel *pixel)
 {
