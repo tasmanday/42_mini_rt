@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 23:16:37 by tday              #+#    #+#             */
-/*   Updated: 2025/01/31 23:36:35 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 00:15:01 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -19,8 +19,7 @@ bool is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore
 
 	// Create shdaow ray from insection point to light source
 	shadow_ray.ray_origin = intersection_point;
-	// Add offset to avoid self-shadowing
-//	shadow_ray.ray_origin = vect_add(intersection_point, vect_multiply_scalar(normal, 0.00001f));
+
 	// Calculate direction to light
 	shadow_ray.ray_dir = vect_subtract(scene->light.position, intersection_point);
 
@@ -42,19 +41,6 @@ if (ray_intersects_object(scene, &shadow_ray, ignore_object))
 			if (shadow_ray.closest_hit_distance < light_distance)
 				return (true);
 		}
-/*	// Check for insections between point and light
-	t_Object	*current = scene->objects;
-	while (current)
-	{
-		if (ray_intersects_object(scene, &shadow_ray))
-		{
-			// If intersection is closer than the light, point is in shadow
-			if (shadow_ray.closest_hit_distance > 0.0001f && 
-				shadow_ray.closest_hit_distance < light_distance)
-				return (true);
-		}
-		current = current->next;
-	} */
 	return (false);
 }
 
@@ -80,16 +66,8 @@ void calculate_lighting(t_Light light, t_AmbientLight ambient, t_ray *ray)
 
 void	apply_light_or_shadow(t_Scene *scene, t_ray *ray)
 {
-//	t_Vector3	intersection_point;
-//	t_Vector3	light_dir;
-	
-//	light_dir = vect_normalise(vect_subtract(scene->light.position, vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance)));
-//	intersection_point = vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance));
-	// Set ray colour values to colour of closest object
-	
 	// calculate shadows
 	if (is_in_shadow(scene, ray->intersection_point, ray->closest_object))
-//	if (is_in_shadow(scene, intersection_point, light_dir))
 	{
 		ray->colour.r = ray->colour.r * scene->ambient_light.ratio * scene->ambient_light.colour.r;
 		ray->colour.g = ray->colour.g * scene->ambient_light.ratio * scene->ambient_light.colour.g;
