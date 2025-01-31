@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/13 21:41:04 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 00:15:09 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -157,6 +157,7 @@ typedef struct s_ray
 	t_Object	*closest_object;
 	t_Colour4	colour;
 	t_Vector3	normal_at_intersection;
+	t_Vector3	intersection_point;
 }				t_ray;
 
 typedef struct s_pixel
@@ -172,7 +173,7 @@ typedef struct s_pixel
 typedef	struct s_mem
 {
 	t_pixel			**pixels;
-	t_ray			**corners;
+	t_ray			**corner_ray;
 }				t_mem;
 
 typedef struct s_QuadraticCoefficients
@@ -321,6 +322,11 @@ char		*ft_strtok(char **line, const char *delim);
 float		parse_float(char **str);
 int			parse_int(char	**str);
 
+// init.c //
+void		init_scene(t_Scene *scene);
+void		init_pixel_array(t_mem *mem, t_Scene *scene);
+
+
 /* // threads.c //
 void		init_threads(t_ThreadPool *thread_pool);
 void		execute_task(t_Task *task);
@@ -369,13 +375,22 @@ t_pixel		**allocate_pixel_array(int width, int height);
 t_ray		**allocate_corner_array(int width, int height);
 void		init_mem(t_mem *mem, t_Scene *scene);
 void		init_pixel_array(t_mem *mem, t_Scene *scene);
-//bool		check_object_intersection(t_Scene *scene, t_ray *ray);
-bool		check_object_intersection(t_Scene *scene, t_ray *ray, t_Object *ignore_object);
+//bool		ray_intersects_object(t_Scene *scene, t_ray *ray);
+bool		ray_intersects_object(t_Scene *scene, t_ray *ray, t_Object *ignore_object);
 void		render_scene(t_mem *mem, t_Scene *scene);
 void		check_mid_intersections(t_mem *mem, t_Scene *scene);
 void		average_pixel_colours(t_mem *mem, t_Scene *scene);
 void		trace_rays(t_mem *mem, t_Scene *scene);
 void		free_everything(t_mem *mem, t_Scene *scene);
-void		calculate_ray_colour(t_Scene *scene, t_ray *ray);
+void		apply_light_or_shadow(t_Scene *scene, t_ray *ray);
+void		calculate_intersection_point(t_ray *ray);
+void		calculate_normal_at_intersection(t_ray *ray);
+void		calculate_intersection(t_ray *ray);
+void		set_ray_colour(t_ray *ray);
+bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object);
+void		average_pixel_colours(t_mem *mem, t_Scene *scene);
+void		calculate_average_colour(t_pixel *pixel);
+void		render_scene(t_mem *mem, t_Scene *scene);
+void		apply_light_or_shadow(t_Scene *scene, t_ray *ray);
 
 #endif

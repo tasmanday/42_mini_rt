@@ -5,12 +5,57 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 23:06:45 by tday              #+#    #+#             */
-/*   Updated: 2025/01/01 15:31:26 by tday             ###   ########.fr       */
+/*   Created: 2025/01/31 21:05:32 by tday              #+#    #+#             */
+/*   Updated: 2025/02/01 00:15:07 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
+
+void init_scene(t_Scene *scene)
+{
+	*scene = (t_Scene){0};
+}
+
+/*
+	Summary
+	Initializes the corner rays and the pixel array with corner references for
+	ray tracing.
+
+	Inputs
+	[t_mem*] mem: The memory structure containing the pixel and corner arrays.
+	[t_Scene*] scene: The scene containing the dimensions for the grid.
+
+	Outputs
+	None. The memory structure is initialized with corner rays. Each pixel is
+	linked to its corresponding corner rays and initialized with an average
+	color of black (0x000000).
+*/
+void	init_pixel_array(t_mem *mem, t_Scene *scene)
+{
+	int		y;
+	int		x;
+
+	y = 0;
+	while (y <= scene->mlx.height)
+	{
+		x = 0;
+		while (x <= scene->mlx.width)
+		{
+			init_ray(scene, &mem->corner_ray[y][x], x, y);
+			if (x < scene->mlx.width && y < scene->mlx.height)
+			{
+				mem->pixels[y][x].TL = &mem->corner_ray[y][x]; // top left corner
+				mem->pixels[y][x].TR = &mem->corner_ray[y][x + 1]; // top right corner
+				mem->pixels[y][x].BL = &mem->corner_ray[y + 1][x]; // bottom left corner
+				mem->pixels[y][x].BR = &mem->corner_ray[y + 1][x + 1]; // bottom right corner
+				mem->pixels[y][x].avg_colour = 0x000000;
+			}
+			x++;
+		}
+		y++;
+	}
+}
 
 /*
 	Summary
@@ -84,5 +129,32 @@ t_ray	**allocate_corner_array(int width, int height)
 void	init_mem(t_mem *mem, t_Scene *scene)
 {
 	mem->pixels = allocate_pixel_array(scene->mlx.width, scene->mlx.height);
-	mem->corners = allocate_corner_array(scene->mlx.width, scene->mlx.height);
+	mem->corner_ray = allocate_corner_array(scene->mlx.width, scene->mlx.height);
+}
+
+/*
+	Summary
+	Initializes a ray with its origin, direction, and default intersection
+	properties.
+
+	Inputs
+	[t_Scene*] scene: The scene containing the camera position.
+	[t_ray*] ray: The ray to initialize.
+	[int] x: The x-coordinate of the pixel.
+	[int] y: The y-coordinate of the pixel.
+
+	Outputs
+	None. The ray is initialized with its origin, direction, and default
+	properties.
+*/
+void	init_ray(t_Scene *scene, t_ray *ray, int x, int y)
+{
+	ray->ray_origin = scene->camera.position;
+	ray->ray_dir = get_ray_direction(scene, x, y);
+	ray->intersects_object = false;
+	ray->closest_hit_distance = INFINITY;
+	ray->closest_object = NULL;
+	ray->colour.r = 0;
+	ray->colour.g = 0;
+	ray->colour.b = 0;
 }

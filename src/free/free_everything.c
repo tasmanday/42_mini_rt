@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 23:12:25 by tday              #+#    #+#             */
-/*   Updated: 2024/12/05 23:15:02 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/31 23:21:29 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -27,16 +27,16 @@ void	free_everything(t_mem *mem, t_Scene *scene)
 		free(mem->pixels); // Free the top-level pointer
 	}
 
-	// Free the mem->corners array
-	if (mem->corners)
+	// Free the mem->corner_ray array
+	if (mem->corner_ray)
 	{
 		int i = 0;
 		while (i <= scene->mlx.height)
 		{
-			if (mem->corners[i])
-				free(mem->corners[i]); // Free each row in the mem->corners array
+			if (mem->corner_ray[i])
+				free(mem->corner_ray[i]); // Free each row in the mem->corner_ray array
 			i++;
 		}
-		free(mem->corners); // Free the top-level pointer
+		free(mem->corner_ray); // Free the top-level pointer
 	}
 }
