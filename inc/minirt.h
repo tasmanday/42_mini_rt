@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/31 22:32:11 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/31 23:36:36 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -173,7 +173,7 @@ typedef struct s_pixel
 typedef	struct s_mem
 {
 	t_pixel			**pixels;
-	t_ray			**corners;
+	t_ray			**corner_ray;
 }				t_mem;
 
 typedef struct s_QuadraticCoefficients
@@ -382,6 +382,15 @@ void		check_mid_intersections(t_mem *mem, t_Scene *scene);
 void		average_pixel_colours(t_mem *mem, t_Scene *scene);
 void		trace_rays(t_mem *mem, t_Scene *scene);
 void		free_everything(t_mem *mem, t_Scene *scene);
-void		calculate_ray_colour(t_Scene *scene, t_ray *ray);
+void		apply_light_or_shadow(t_Scene *scene, t_ray *ray);
+void		calculate_intersection_point(t_ray *ray);
+void		calculate_normal_at_intersection(t_ray *ray);
+void		calculate_intersection(t_ray *ray);
+void		set_ray_colour(t_ray *ray);
+bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object);
+void		average_pixel_colours(t_mem *mem, t_Scene *scene);
+void		calculate_average_colour(t_pixel *pixel);
+void		render_scene(t_mem *mem, t_Scene *scene);
+void		apply_light_or_shadow(t_Scene *scene, t_ray *ray);
 
 #endif

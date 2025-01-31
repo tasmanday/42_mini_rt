@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 22:30:41 by tday              #+#    #+#             */
-/*   Updated: 2025/01/31 22:38:25 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/31 23:36:34 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -79,4 +79,63 @@ bool	ray_intersects_object(t_Scene *scene, t_ray *ray, t_Object *ignore_object)
 		current_object = current_object->next;
 	}
 	return (ray->intersects_object);
+}
+
+void calculate_normal_at_intersection(t_ray *ray)
+{
+	//t_Vector3 intersection_point;
+	t_Object *closest_object = ray->closest_object;
+
+	// Calculate the intersection point
+	//intersection_point = vect_add(ray->ray_origin, vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance));
+
+	if (closest_object->type == SPHERE)
+	{
+		// For a sphere, the normal is the vector from the sphere's center to the intersection point
+		ray->normal_at_intersection = vect_subtract(ray->intersection_point, closest_object->u_data.sphere.center);
+		ray->normal_at_intersection = vect_normalise(ray->normal_at_intersection);
+	}
+	else if (closest_object->type == PLANE)
+	{
+		// For a plane, the normal is constant and is the plane's normal
+		ray->normal_at_intersection = closest_object->u_data.plane.normal;
+	}
+	else if (closest_object->type == CYLINDER)
+	{
+		t_Cylinder cyl = closest_object->u_data.cylinder;
+
+		if (ray->cyl_closest_point == 0 || ray->cyl_closest_point == 1)
+		{
+			// Intersection is on an end cap
+			ray->normal_at_intersection = vect_normalise(cyl.axis);
+			if (ray->cyl_closest_point == 1)
+			{
+				// Reverse the normal for the opposite cap
+				ray->normal_at_intersection = vect_multiply_scalar(ray->normal_at_intersection, -1);
+			}
+		}
+		else if (ray->cyl_closest_point == 2 || ray->cyl_closest_point == 3)
+		{
+			// Intersection is on the cylindrical body
+			t_Vector3 to_point = vect_subtract(ray->intersection_point, cyl.center);
+			float projection_length = vect_dot(to_point, cyl.axis);
+			t_Vector3 projection = vect_multiply_scalar(cyl.axis, projection_length);
+			ray->normal_at_intersection = vect_subtract(to_point, projection);
+			ray->normal_at_intersection = vect_normalise(ray->normal_at_intersection);
+		}
+	}
+}
+
+void	calculate_intersection_point(t_ray *ray)
+{
+	t_Vector3	ray_length;
+	
+	ray_length = vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance);
+	ray->intersection_point = vect_add(ray->ray_origin, ray_length);
+}
+
+void	calculate_intersection(t_ray *ray)
+{
+	calculate_intersection_point(ray);
+	calculate_normal_at_intersection(ray);
 }
