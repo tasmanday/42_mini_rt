@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/31 21:33:13 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/31 22:32:11 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -157,6 +157,7 @@ typedef struct s_ray
 	t_Object	*closest_object;
 	t_Colour4	colour;
 	t_Vector3	normal_at_intersection;
+	t_Vector3	intersection_point;
 }				t_ray;
 
 typedef struct s_pixel
@@ -374,8 +375,8 @@ t_pixel		**allocate_pixel_array(int width, int height);
 t_ray		**allocate_corner_array(int width, int height);
 void		init_mem(t_mem *mem, t_Scene *scene);
 void		init_pixel_array(t_mem *mem, t_Scene *scene);
-//bool		check_object_intersection(t_Scene *scene, t_ray *ray);
-bool		check_object_intersection(t_Scene *scene, t_ray *ray, t_Object *ignore_object);
+//bool		ray_intersects_object(t_Scene *scene, t_ray *ray);
+bool		ray_intersects_object(t_Scene *scene, t_ray *ray, t_Object *ignore_object);
 void		render_scene(t_mem *mem, t_Scene *scene);
 void		check_mid_intersections(t_mem *mem, t_Scene *scene);
 void		average_pixel_colours(t_mem *mem, t_Scene *scene);

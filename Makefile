@@ -6,7 +6,7 @@
 #    By: tday <tday@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2025/01/31 21:33:14 by tday             ###   ########.fr        #
+#    Updated: 2025/01/31 22:31:21 by tday             ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -47,7 +47,8 @@ SRCS			:=		$(addprefix src/main/, main.c)							\
 						$(addprefix src/ray_casting/, compute_ray_directions.c	\
 									sphere_intersection.c 						\
 									cylinder_intersection.c						\
-									plane_intersection.c trace_rays.c)			\
+									plane_intersection.c trace_rays.c			\
+									intersection.c)								\
 						$(addprefix src/vectors/, vector_operations.c)				
 
 OBJS            :=      $(SRCS:src/%.c=$(OBJ_DIR)/%.o)

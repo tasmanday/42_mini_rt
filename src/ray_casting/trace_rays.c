@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/01/31 21:33:12 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/31 22:33:40 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -60,7 +60,7 @@ bool is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore
 	shadow_ray.cyl_closest_point = 0;
 
 	// Check for insections between point and light
-if (check_object_intersection(scene, &shadow_ray, ignore_object))
+if (ray_intersects_object(scene, &shadow_ray, ignore_object))
 		{
 			// If intersection is closer than the light, point is in shadow
 			if (shadow_ray.closest_hit_distance < light_distance)
@@ -70,7 +70,7 @@ if (check_object_intersection(scene, &shadow_ray, ignore_object))
 	t_Object	*current = scene->objects;
 	while (current)
 	{
-		if (check_object_intersection(scene, &shadow_ray))
+		if (ray_intersects_object(scene, &shadow_ray))
 		{
 			// If intersection is closer than the light, point is in shadow
 			if (shadow_ray.closest_hit_distance > 0.0001f && 
@@ -108,11 +108,11 @@ void	render_scene(t_mem *mem, t_Scene *scene)
 		x = 0;
 		while (x <= scene->mlx.width)
 		{
-			if (check_object_intersection(scene, &mem->corners[y][x], NULL))
+			if (ray_intersects_object(scene, &mem->corners[y][x], NULL))
 				calculate_ray_colour(scene, &mem->corners[y][x]);
 	//		if (y < scene->mlx.height && x < scene->mlx.width)
 	//		{
-	//		 	if (check_object_intersection(scene, &mem->pixels[y][x].mid, NULL))
+	//		 	if (ray_intersects_object(scene, &mem->pixels[y][x].mid, NULL))
 	//				calculate_ray_colour(scene, &mem->pixels[y][x].mid);
 	//		}
 			x++;
@@ -143,7 +143,7 @@ void	check_mid_intersections(t_mem *mem, t_Scene *scene)
 		x = 0;
 		while (x < scene->mlx.width)
 		{
-			check_object_intersection(scene, &mem->pixels[y][x].mid);
+			ray_intersects_object(scene, &mem->pixels[y][x].mid);
 			x++;
 		}
 		y++;
