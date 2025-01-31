@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/01/13 21:41:04 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/31 21:33:13 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -320,6 +320,11 @@ int			get_next_token(char **line, char **token);
 char		*ft_strtok(char **line, const char *delim);
 float		parse_float(char **str);
 int			parse_int(char	**str);
+
+// init.c //
+void		init_scene(t_Scene *scene);
+void		init_pixel_array(t_mem *mem, t_Scene *scene);
+
 
 /* // threads.c //
 void		init_threads(t_ThreadPool *thread_pool);

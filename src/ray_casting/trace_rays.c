@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/01/13 21:41:05 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/31 21:33:12 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -82,86 +82,7 @@ if (check_object_intersection(scene, &shadow_ray, ignore_object))
 	return (false);
 }
 
-/*
-	Summary
-	Initializes rays for each corner of the pixel grid.
 
-	Inputs
-	[t_mem*] mem: The memory structure containing the corner array.
-	[t_Scene*] scene: The scene containing the dimensions for the grid.
-
-	Outputs
-	None. The corner rays are initialized in the memory structure.
-*/
-void	init_corner_rays(t_mem *mem, t_Scene *scene)
-{
-	int		y;
-	int		x;
-
-	y = 0;
-	while (y <= scene->mlx.height)
-	{
-		x = 0;
-		while (x <= scene->mlx.width)
-		{
-			init_ray(scene, &mem->corners[y][x], x, y);
-			x++;
-		}
-		y++;
-	}
-}
-
-/*
-	Summary
-	Initializes the pixel array with corner references and mid-point rays.
-
-	Inputs
-	[t_mem*] mem: The memory structure containing the pixel and corner arrays.
-	[t_Scene*] scene: The scene containing the dimensions for the grid.
-
-	Outputs
-	None. The pixel array is initialized with corner references and mid-point
-	rays.
-*/
-void	init_pixels(t_mem *mem, t_Scene *scene)
-{
-	int		y;
-	int		x;
-
-	y = 0;
-	while (y < scene->mlx.height)
-	{
-		x = 0;
-		while (x < scene->mlx.width)
-		{
-			mem->pixels[y][x].TL = &mem->corners[y][x]; // top left corner
-			mem->pixels[y][x].TR = &mem->corners[y][x + 1]; // top right corner
-			mem->pixels[y][x].BL = &mem->corners[y + 1][x]; // bottom left corner
-			mem->pixels[y][x].BR = &mem->corners[y + 1][x + 1]; // bottom right corner
-			init_ray(scene, &mem->pixels[y][x].mid, x + 0.5, y + 0.5);
-			mem->pixels[y][x].avg_colour = 0x000000;
-			x++;
-		}
-		y++;
-	}
-}
-
-/*
-	Summary
-	Initializes the pixel and corner arrays for ray tracing.
-
-	Inputs
-	[t_mem*] mem: The memory structure to initialize.
-	[t_Scene*] scene: The scene containing the dimensions for the arrays.
-
-	Outputs
-	None. The memory structure is initialized with pixel and corner arrays.
-*/
-void	init_pixel_array(t_mem *mem, t_Scene *scene)
-{
-	init_corner_rays(mem, scene);
-	init_pixels(mem, scene);
-}
 
 // TODO: fix comment after modifying function
 /*
@@ -189,11 +110,11 @@ void	render_scene(t_mem *mem, t_Scene *scene)
 		{
 			if (check_object_intersection(scene, &mem->corners[y][x], NULL))
 				calculate_ray_colour(scene, &mem->corners[y][x]);
-			if (y < scene->mlx.height && x < scene->mlx.width)
-			{
-			 	if (check_object_intersection(scene, &mem->pixels[y][x].mid, NULL))
-					calculate_ray_colour(scene, &mem->pixels[y][x].mid);
-			}
+	//		if (y < scene->mlx.height && x < scene->mlx.width)
+	//		{
+	//		 	if (check_object_intersection(scene, &mem->pixels[y][x].mid, NULL))
+	//				calculate_ray_colour(scene, &mem->pixels[y][x].mid);
+	//		}
 			x++;
 		}
 		y++;
@@ -283,14 +204,14 @@ void	calculate_average_colour(t_pixel *pixel)
 	unsigned int alpha = 255;
 
 	avg_r = (pixel->TL->colour.r + pixel->TR->colour.r + \
-				pixel->BL->colour.r + pixel->BR->colour.r + \
-				pixel->mid.colour.r) * 0.2f;
+				pixel->BL->colour.r + pixel->BR->colour.r \
+				) * 0.25f;
 	avg_g = (pixel->TL->colour.g + pixel->TR->colour.g + \
-				pixel->BL->colour.g + pixel->BR->colour.g + \
-				pixel->mid.colour.g) * 0.2f;
+				pixel->BL->colour.g + pixel->BR->colour.g \
+				) * 0.25f;
 	avg_b = (pixel->TL->colour.b + pixel->TR->colour.b + \
-				pixel->BL->colour.b + pixel->BR->colour.b + \
-				pixel->mid.colour.b) * 0.2f;
+				pixel->BL->colour.b + pixel->BR->colour.b \
+				) * 0.25f;
 	unsigned int r = (unsigned int)(avg_r * 255);
 	unsigned int g = (unsigned int)(avg_g * 255);
 	unsigned int b = (unsigned int)(avg_b * 255);
@@ -374,7 +295,7 @@ void	average_pixel_colours(t_mem *mem, t_Scene *scene)
 		}
 		y++;
 	}
-	printf(G"-> Ambient light adjustment applied\n"RST);
+	printf(G"-> Ambient light adjustment applied\n"RST); // TODO remove
 }
 
 /*
@@ -392,6 +313,10 @@ void	average_pixel_colours(t_mem *mem, t_Scene *scene)
 void	trace_rays(t_mem *mem, t_Scene *scene)
 {
 	init_pixel_array(mem, scene);
+	printf("init_pixel_array called\n"); // TODO remove
 	render_scene(mem, scene);
+	printf("render_scene called\n"); // TODO remove
 	average_pixel_colours(mem, scene);
+	printf("average_pixel_colours called\n"); // TODO remove
 }
+

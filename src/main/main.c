@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:29:18 by atang             #+#    #+#             */
-/*   Updated: 2025/01/07 23:41:09 by tday             ###   ########.fr       */
+/*   Updated: 2025/01/31 21:33:10 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -26,20 +26,14 @@ int	main(int argc, char **argv)
 		printf(M "\n---> FILE FOUND <---\n" RST);
 		if (file_status(argv[1]) != SUCCESS)
 			return (1);
-		scene.ambient_light_parsed = 0;
-		scene.camera_parsed = 0;
-		scene.light_parsed = 0;
-		scene.object_count = 0;
+		init_scene(&scene);
+		printf("init_scene called\n"); // TODO remove
 		parse_rt_file(argv[1], &scene);
-
-		scene.mlx.height = 1080;
-		scene.mlx.width = 1920;
-
-		initialise_data(&scene);
+		printf("parse_rt_file called\n"); // TODO remove
+		scene.mlx.height = 1080; // TODO put in init_mlx needs to be at start
+		scene.mlx.width = 1920; // TODO put in init_mlx needs to be at start
+		initialise_data(&scene); // TODO change name to init_mlx
 		printf("initialise_data called\n"); // TODO remove
-//		printf("camera orientation: %f, %f, %f\n", scene.camera.orientation.x, scene.camera.orientation.y, scene.camera.orientation.z);
-//		printf("plane coordinates: %f, %f, %f\n", scene.objects->u_data.plane.point.x, scene.objects->u_data.plane.point.y, scene.objects->u_data.plane.point.z);
-//		printf("plane normal: %f, %f, %f\n", scene.objects->u_data.plane.normal.x, scene.objects->u_data.plane.normal.y, scene.objects->u_data.plane.normal.z);
 		init_mem(&mem, &scene);
 		printf("init_mem called\n"); // TODO remove
 		trace_rays(&mem, &scene);
@@ -54,16 +48,6 @@ int	main(int argc, char **argv)
 		mlx_hook(scene.mlx.win_ptr, 17, 0, close_button_hook, &scene);
 		mlx_hook(scene.mlx.win_ptr, 25, 0, resize_window_hook, &scene);
 		mlx_loop(scene.mlx.mlx_ptr);
-
-/*		// testing intersection
-		init_pixel_array(&mem, &scene);
-		printf("init_pixel_array called\n"); // TODO remove
-		printf("mem.pixels[540][962].mid.raydir = %f, %f, %f\n", mem.pixels[540][962].mid.ray_dir.x, mem.pixels[540][962].mid.ray_dir.y, mem.pixels[540][962].mid.ray_dir.z); // TODO remove
-		check_object_intersection(&scene, &mem.pixels[540][962].mid);
-		printf("check_object_intersection called\n"); */  // TODO remove
-		
-
-
 
 		free_everything(&mem, &scene);
 	}
