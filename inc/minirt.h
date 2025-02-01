@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/02/01 00:15:09 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 17:06:57 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -78,12 +78,12 @@ typedef struct s_Colour4
 	float		a;
 }				t_Colour4;
 
-typedef struct s_Colour
+/* typedef struct s_Colour
 {
 	int			r;
 	int			g;
 	int			b;
-}	t_Colour;
+}	t_Colour; */
 
 typedef struct s_AmbientLight
 {

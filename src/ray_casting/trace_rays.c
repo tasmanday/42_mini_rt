@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 00:15:06 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 17:06:45 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -83,9 +83,6 @@ void	render_scene(t_mem *mem, t_Scene *scene)
 void	trace_rays(t_mem *mem, t_Scene *scene)
 {
 	init_pixel_array(mem, scene); // TODO move
-	printf("init_pixel_array called\n"); // TODO remove
 	render_scene(mem, scene);
-	printf("render_scene called\n"); // TODO remove
 	average_pixel_colours(mem, scene);
-	printf("average_pixel_colours called\n"); // TODO remove
 }
