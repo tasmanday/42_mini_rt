@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 23:12:25 by tday              #+#    #+#             */
-/*   Updated: 2025/01/31 23:21:29 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 23:08:18 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -39,4 +39,5 @@ void	free_everything(t_mem *mem, t_Scene *scene)
 		}
 		free(mem->corner_ray); // Free the top-level pointer
 	}
+	printf(M "all alocated memory freed\n" RST);
 }

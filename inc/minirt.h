@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/02/01 00:15:09 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 23:05:06 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -24,6 +24,12 @@
 # include <errno.h>
 # include <pthread.h>
 # include "../minilibx/mlx.h"
+
+# include "structs.h"
+# include "initialisation.h"
+# include "ray_tracing.h"
+# include "vectors.h"
+# include "free.h"
 
 // DEFINITIONS //
 
@@ -45,143 +51,20 @@
 
 // STRUCTURES//
 
-typedef enum s_Error
-{
-	INVALID_FLOAT = 0,
-	INVALID_INT = 1,
-	INVALID_INPUT_VALUE = 2,
-	MISSING_OR_EXTRA_INPUT_VALUES = 3,
-	COLOUR_VALUES_OUTSIDE_OF_RANGE = 4,
-	AMBIENT_LIGHT_OUTSIDE_OF_RANGE = 5,
-	LIGHT_BRIGHTNESS_RATIO_OUTSIDE_OF_RANGE = 6,
-	CAMERA_FOV_OUTSIDE_OF_RANGE = 7,
-	AMBIENT_LIGHT_ERROR = 10,
-	CAMERA_ERROR = 11,
-	LIGHT_ERROR = 12,
-	SPHERE_ERROR = 13,
-	PLANE_ERROR = 14,
-	CYLINDER_ERROR = 15,
-}	t_Error;
 
-typedef struct s_Vector3
-{
-	float		x;
-	float		y;
-	float		z;
-}	t_Vector3;
 
-typedef struct s_Colour4
-{
-	float		r;
-	float		g;
-	float		b;
-	float		a;
-}				t_Colour4;
 
-typedef struct s_Colour
+
+/* typedef struct s_Colour
 {
 	int			r;
 	int			g;
 	int			b;
-}	t_Colour;
+}	t_Colour; */
 
-typedef struct s_AmbientLight
-{
-	float		ratio;
-	t_Colour4	colour;
-}	t_AmbientLight;
 
-typedef struct s_Camera
-{
-	t_Vector3	position;
-	t_Vector3	orientation;
-	int			fov;
-}	t_Camera;
 
-typedef struct s_Light
-{
-	t_Vector3	position;
-	float		brightness;
-	t_Colour4	colour;
-}	t_Light;
 
-typedef struct s_Sphere
-{
-	t_Vector3	center;
-	float		diameter;
-	t_Colour4	colour;
-}	t_Sphere;
-
-typedef struct s_Plane
-{
-	t_Vector3	point;
-	t_Vector3	normal;
-	t_Colour4	colour;
-}	t_Plane;
-
-typedef struct s_Cylinder
-{
-	t_Vector3	center;
-	t_Vector3	axis;
-	float		diameter;
-	float		height;
-	t_Colour4	colour;
-}	t_Cylinder;
-
-typedef enum s_ObjectType
-{
-	SPHERE,
-	PLANE,
-	CYLINDER
-}	t_ObjectType;
-
-typedef struct Object
-{
-	t_ObjectType	type;
-	union
-	{
-		t_Sphere	sphere;
-		t_Plane		plane;
-		t_Cylinder	cylinder;
-	}	u_data;
-	struct Object	*next;
-}	t_Object;
-
-typedef struct s_ray
-{
-	t_Vector3	ray_origin;
-	t_Vector3	ray_dir;
-	bool		intersects_object;
-	float		closest_hit_distance;
-	int			cyl_closest_point;
-	t_Object	*closest_object;
-	t_Colour4	colour;
-	t_Vector3	normal_at_intersection;
-	t_Vector3	intersection_point;
-}				t_ray;
-
-typedef struct s_pixel
-{
-	t_ray			*TL;
-	t_ray			*TR;
-	t_ray			*BL;
-	t_ray			*BR;
-	t_ray			mid;
-	unsigned int	avg_colour;
-}				t_pixel;
-
-typedef	struct s_mem
-{
-	t_pixel			**pixels;
-	t_ray			**corner_ray;
-}				t_mem;
-
-typedef struct s_QuadraticCoefficients
-{
-	float		a;
-	float		b;
-	float		c;
-}				t_Quad;
 
 /* typedef struct	s_Task
 {
@@ -202,38 +85,6 @@ typedef struct	s_ThreadPool
 	bool			shutdown;
 }				t_ThreadPool; */
 
-typedef struct s_Mlx
-{
-	int			width;
-	int			height;
-	int			**z_matrix;
-	int			zoom;
-	int			colour;
-	int			amplify;
-	int			shift_x;
-	int			shift_y;
-	void		*mlx_ptr;
-	void		*win_ptr;
-	void		*img_ptr;
-	char		*img_data;
-	int			bpp;
-	int			size_line;
-	int			endian;
-}				t_Mlx;
-
-typedef struct s_Scene
-{
-	t_AmbientLight	ambient_light;
-	t_Camera		camera;
-	t_Light			light;
-	int				ambient_light_parsed;
-	int				camera_parsed;
-	int				light_parsed;
-	struct Object	*objects;
-	int				object_count;
-	t_Mlx			mlx;
-}	t_Scene;
-
 // PROTOTYPES //
 
 // error.c //
@@ -247,18 +98,6 @@ int			warn_err_free_exit(const char *message, t_Error error, struct Object *curr
 int			file_exists(char *filename);
 int			file_status(const char *filename);
 int			filename_error(char	*filename);
-
-/*/ get_next_line_utils.c //
-size_t		gnl_strlen(const char *str);
-char		*gnl_strchr(char *str, int target_char);
-char		*gnl_strjoin(char *first_str, char *second_str);
-char		*gnl_initialise_str(void);
-
-// get_next_line.c //
-char		*read_and_append_lines(int fd, char	*stash);
-char		*extract_line_from_stash(char	*stash);
-char		*remaining_stash_after_extraction(char *stash);
-char		*get_next_line(int fd, char **line); */
 
 // mlx.c //
 void		initialise_data(t_Scene	*mlx);
@@ -323,8 +162,8 @@ float		parse_float(char **str);
 int			parse_int(char	**str);
 
 // init.c //
-void		init_scene(t_Scene *scene);
-void		init_pixel_array(t_mem *mem, t_Scene *scene);
+// void		init_scene(t_Scene *scene);
+// void		init_pixel_array(t_mem *mem, t_Scene *scene);
 
 
 /* // threads.c //
@@ -336,21 +175,15 @@ int			count_cpu_threads();
 */
 
 // miscellaneous //
-
-// organise later //
-//bool 		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object, t_Vector3 normal);
-bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object);
+void		put_pixels_to_image(t_mem *mem, t_Scene *scene);
 int			resize_window_hook(int width, int height, t_Scene *scene, t_mem *mem);
 int			expose_hook(t_Scene *scene);
-t_Vector3	vector(float x, float y, float z);
-t_Vector3	vect_normalise(t_Vector3 v);
-t_Vector3	vect_add(t_Vector3 a, t_Vector3 b);
-t_Vector3	vect_subtract(t_Vector3 a, t_Vector3 b);
-t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b);
-float		vect_dot(t_Vector3 a, t_Vector3 b);
-t_Vector3	vect_multiply_scalar(t_Vector3 v, float scalar);
-float		vect_distance(t_Vector3 a, t_Vector3 b);
-t_Vector3	vect_reflect(t_Vector3 incident, t_Vector3 normal);
+
+/* // organise later //
+//bool 		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object, t_Vector3 normal);
+bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object);
+
+
 void		calculate_average_colour(t_pixel *pixel); // OLD - PRE-shadow
 //void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *scene);
 t_Colour4   apply_ambient_light(t_Colour4 base_colour, t_AmbientLight ambient);
@@ -365,12 +198,10 @@ bool		ray_intersects_sphere(t_ray *ray, t_Sphere sphere, \
 			float *distance);
 bool		ray_intersects_cylinder(t_ray *ray, t_Cylinder cylinder, \
 			float *distance);
-/* bool		ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
-			float *distance); */
 bool		ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
 			t_Vector3	plane_norm_vect, float *distance);
 
-void		put_pixels_to_image(t_mem *mem, t_Scene *scene);
+
 t_pixel		**allocate_pixel_array(int width, int height);
 t_ray		**allocate_corner_array(int width, int height);
 void		init_mem(t_mem *mem, t_Scene *scene);
@@ -391,6 +222,6 @@ bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignor
 void		average_pixel_colours(t_mem *mem, t_Scene *scene);
 void		calculate_average_colour(t_pixel *pixel);
 void		render_scene(t_mem *mem, t_Scene *scene);
-void		apply_light_or_shadow(t_Scene *scene, t_ray *ray);
+void		apply_light_or_shadow(t_Scene *scene, t_ray *ray); */
 
 #endif

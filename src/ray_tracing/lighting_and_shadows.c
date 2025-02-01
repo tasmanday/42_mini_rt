@@ -6,13 +6,14 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 23:16:37 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 00:15:01 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 22:56:34 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
-bool is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object)
+bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, \
+			t_Object *ignore_object)
 {
 	t_ray	shadow_ray;
 	float	light_distance;
@@ -44,7 +45,7 @@ if (ray_intersects_object(scene, &shadow_ray, ignore_object))
 	return (false);
 }
 
-void calculate_lighting(t_Light light, t_AmbientLight ambient, t_ray *ray)
+void	calculate_lighting(t_Light light, t_AmbientLight ambient, t_ray *ray)
 {
 	t_Vector3	light_dir;
 	float		intensity;
