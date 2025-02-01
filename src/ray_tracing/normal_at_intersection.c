@@ -6,21 +6,21 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:52:47 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 17:06:52 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 22:53:55 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
 // For a sphere, the normal is the vector from the sphere's center to the intersection point
-void calculate_normal_at_sphere(t_ray *ray)
+void	calculate_normal_at_sphere(t_ray *ray)
 {
 	ray->normal_at_intersection = vect_subtract(ray->intersection_point, \
 		ray->closest_object->u_data.sphere.center);
 	ray->normal_at_intersection = vect_normalise(ray->normal_at_intersection);
 }
 
-void calculate_normal_cylinder_cap(t_ray *ray, t_Cylinder cyl)
+void	calculate_normal_cylinder_cap(t_ray *ray, t_Cylinder cyl)
 {
 	ray->normal_at_intersection = vect_normalise(cyl.axis);
 	if (ray->cyl_closest_point == 1)
@@ -67,7 +67,7 @@ void	calculate_normal_cylinder_body(t_ray *ray, t_Cylinder cyl)
 	ray->normal_at_intersection = vect_normalise(nc);
 }
 
-void calculate_normal_at_cylinder(t_ray *ray)
+void	calculate_normal_at_cylinder(t_ray *ray)
 {
 	t_Cylinder cyl = ray->closest_object->u_data.cylinder;
 
@@ -77,7 +77,7 @@ void calculate_normal_at_cylinder(t_ray *ray)
 		calculate_normal_cylinder_body(ray, cyl);
 }
 
-void calculate_normal_at_intersection(t_ray *ray)
+void	calculate_normal_at_intersection(t_ray *ray)
 {
 	t_Object *closest_object = ray->closest_object;
 

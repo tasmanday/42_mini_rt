@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/02/01 19:07:41 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/01 23:05:06 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,6 +29,7 @@
 # include "initialisation.h"
 # include "ray_tracing.h"
 # include "vectors.h"
+# include "free.h"
 
 // DEFINITIONS //
 
@@ -161,8 +162,8 @@ float		parse_float(char **str);
 int			parse_int(char	**str);
 
 // init.c //
-void		init_scene(t_Scene *scene);
-void		init_pixel_array(t_mem *mem, t_Scene *scene);
+// void		init_scene(t_Scene *scene);
+// void		init_pixel_array(t_mem *mem, t_Scene *scene);
 
 
 /* // threads.c //
@@ -174,12 +175,14 @@ int			count_cpu_threads();
 */
 
 // miscellaneous //
-
-// organise later //
-//bool 		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object, t_Vector3 normal);
-bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object);
+void		put_pixels_to_image(t_mem *mem, t_Scene *scene);
 int			resize_window_hook(int width, int height, t_Scene *scene, t_mem *mem);
 int			expose_hook(t_Scene *scene);
+
+/* // organise later //
+//bool 		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object, t_Vector3 normal);
+bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignore_object);
+
 
 void		calculate_average_colour(t_pixel *pixel); // OLD - PRE-shadow
 //void calculate_average_colour(t_pixel *pixel, t_AmbientLight ambient, t_Scene *scene);
@@ -195,12 +198,10 @@ bool		ray_intersects_sphere(t_ray *ray, t_Sphere sphere, \
 			float *distance);
 bool		ray_intersects_cylinder(t_ray *ray, t_Cylinder cylinder, \
 			float *distance);
-/* bool		ray_intersects_cylinder(t_Scene *scene, t_Vector3 ray_dir, \
-			float *distance); */
 bool		ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
 			t_Vector3	plane_norm_vect, float *distance);
 
-void		put_pixels_to_image(t_mem *mem, t_Scene *scene);
+
 t_pixel		**allocate_pixel_array(int width, int height);
 t_ray		**allocate_corner_array(int width, int height);
 void		init_mem(t_mem *mem, t_Scene *scene);
@@ -221,6 +222,6 @@ bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, t_Object *ignor
 void		average_pixel_colours(t_mem *mem, t_Scene *scene);
 void		calculate_average_colour(t_pixel *pixel);
 void		render_scene(t_mem *mem, t_Scene *scene);
-void		apply_light_or_shadow(t_Scene *scene, t_ray *ray);
+void		apply_light_or_shadow(t_Scene *scene, t_ray *ray); */
 
 #endif
