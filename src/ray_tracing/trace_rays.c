@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 17:06:45 by tday             ###   ########.fr       */
+/*   Updated: 2025/02/02 14:14:37 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -21,6 +21,16 @@
 
 	Outputs
 	None. The color is set in the ray structure.
+
+	Explanation
+	This function assigns the initial color to a ray before lighting calculations.
+	Each object in the scene stores its own base color, and this function
+	retrieves that color based on the object type.
+
+	This base color will later be modified by:
+	- Light intensity calculations
+	- Shadow effects
+	- Ambient lighting
 */
 void	set_ray_colour(t_ray *ray)
 {
@@ -32,17 +42,35 @@ void	set_ray_colour(t_ray *ray)
 		ray->colour = ray->closest_object->u_data.cylinder.colour;
 }
 
-// TODO: fix comment after modifying function
 /*
 	Summary
-	Checks for intersections between scene objects and corner rays.
+	Renders the entire scene by processing each pixel through ray tracing.
 
 	Inputs
-	[t_mem*] mem: The memory structure containing the corner rays.
-	[t_Scene*] scene: The scene containing the objects to check against.
+	[t_mem*] mem: Pointer to memory structure containing ray data for each pixel.
+	[t_Scene*] scene: Pointer to scene structure containing scene configuration
+	                  and object data.
 
 	Outputs
-	None. Intersection data is stored in the corner rays.
+	None. Updates the ray data with color and intersection information for each
+	pixel.
+
+	Explanation
+	This function implements the core ray tracing loop, processing each pixel
+	in the image.
+	For each pixel it:
+
+	1. Checks for Object Intersection:
+	   - Tests if the ray from that pixel hits any object in the scene
+	   - NULL parameter means we're not ignoring any objects (used for shadows)
+
+	2. If an Intersection Occurs:
+	   - Calculates intersection details
+	   - Sets the base color from the intersected object
+	   - Applies lighting calculations and shadows
+
+	The nested loops ensure every pixel in the image is processed, with the
+	outer loop handling rows (y) and the inner loop handling columns (x).
 */
 void	render_scene(t_mem *mem, t_Scene *scene)
 {
@@ -70,15 +98,32 @@ void	render_scene(t_mem *mem, t_Scene *scene)
 
 /*
 	Summary
-	Traces rays through the scene, checking intersections and calculating pixel
-	colours.
+	Main ray tracing function that coordinates the rendering process.
 
 	Inputs
-	[t_mem*] mem: The memory structure containing the pixel and corner arrays.
-	[t_Scene*] scene: The scene to trace rays through.
+	[t_mem*] mem: Pointer to memory structure containing ray and pixel data.
+	[t_Scene*] scene: Pointer to scene structure containing scene configuration.
 
 	Outputs
-	None. The pixel colours are calculated and stored in the memory structure.
+	None. Updates the pixel colors in the memory structure based on ray tracing
+	calculations.
+
+	Explanation
+	This function implements a two-phase rendering approach:
+
+	1. Corner Ray Tracing:
+	   - Traces rays through the corners of each pixel instead of centers
+	   - Calculates intersections, lighting, and shadows for each ray
+	   - Requires one extra row and column of rays compared to center sampling
+
+	2. Anti-aliasing:
+	   - Averages the corner ray colors to produce the final pixel color
+	   - Provides improved image quality with minimal performance impact
+	   - Smooths edges and reduces aliasing artifacts
+
+	This corner-sampling approach was chosen because it offers a good balance
+	between image quality and performance, requiring only slightly more rays
+	than center-sampling while providing built-in anti-aliasing capabilities.
 */
 void	trace_rays(t_mem *mem, t_Scene *scene)
 {
