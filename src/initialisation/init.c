@@ -6,30 +6,60 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 21:05:32 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 17:06:40 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 00:33:30 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
-void init_scene(t_Scene *scene)
+/*
+	Summary
+	Initializes a scene structure by setting all its members to zero.
+
+	Inputs
+	[t_Scene*] scene: Pointer to the scene structure to initialize.
+
+	Outputs
+	None. Modifies the scene structure in place.
+
+	Explanation
+	Uses compound literal syntax to zero-initialize all members of the scene
+	structure, ensuring a clean initial state before scene setup begins.
+*/
+void	init_scene(t_Scene *scene)
 {
 	*scene = (t_Scene){0};
 }
 
 /*
 	Summary
-	Initializes the corner rays and the pixel array with corner references for
-	ray tracing.
+	Initializes the corner rays and pixel array for the entire image, setting
+	up the structure needed for anti-aliased ray tracing.
 
 	Inputs
-	[t_mem*] mem: The memory structure containing the pixel and corner arrays.
-	[t_Scene*] scene: The scene containing the dimensions for the grid.
+	[t_mem*] mem: Contains the pixel and corner ray arrays to initialize.
+	[t_Scene*] scene: Contains the image dimensions.
 
 	Outputs
-	None. The memory structure is initialized with corner rays. Each pixel is
-	linked to its corresponding corner rays and initialized with an average
-	color of black (0x000000).
+	None. Initializes both the corner ray array and links corners to pixels.
+
+	Explanation
+	1. Corner Ray Setup:
+	   - Creates a grid of rays (width+1 × height+1)
+	   - Each ray represents a corner point where pixels meet
+	   - Initializes each ray with proper direction based on position
+
+	2. Pixel Corner Assignment:
+	   - For each pixel (width × height):
+	   - Links to its four corner rays:
+	     * TL: Current position (y,x)
+	     * TR: Right neighbor (y,x+1)
+	     * BL: Bottom neighbor (y+1,x)
+	     * BR: Bottom-right neighbor (y+1,x+1)
+	   - Sets initial average color to black
+
+	Note: The corner ray grid is one unit larger in each dimension than the
+	pixel grid, as each pixel needs four corners for anti-aliasing.
 */
 void	init_pixel_array(t_mem *mem, t_Scene *scene)
 {
@@ -45,10 +75,10 @@ void	init_pixel_array(t_mem *mem, t_Scene *scene)
 			init_ray(scene, &mem->corner_ray[y][x], x, y);
 			if (x < scene->mlx.width && y < scene->mlx.height)
 			{
-				mem->pixels[y][x].TL = &mem->corner_ray[y][x]; // top left corner
-				mem->pixels[y][x].TR = &mem->corner_ray[y][x + 1]; // top right corner
-				mem->pixels[y][x].BL = &mem->corner_ray[y + 1][x]; // bottom left corner
-				mem->pixels[y][x].BR = &mem->corner_ray[y + 1][x + 1]; // bottom right corner
+				mem->pixels[y][x].TL = &mem->corner_ray[y][x];
+				mem->pixels[y][x].TR = &mem->corner_ray[y][x + 1];
+				mem->pixels[y][x].BL = &mem->corner_ray[y + 1][x];
+				mem->pixels[y][x].BR = &mem->corner_ray[y + 1][x + 1];
 				mem->pixels[y][x].avg_colour = 0x000000;
 			}
 			x++;
@@ -68,6 +98,18 @@ void	init_pixel_array(t_mem *mem, t_Scene *scene)
 
 	Outputs
 	[t_pixel**] Returns a pointer to the allocated 2D array of pixels.
+
+	Explanation
+	1. Allocate Row Pointers:
+	   - Creates array of height pointers using safe_malloc
+	   - Each pointer will point to a row of pixels
+
+	2. Allocate Each Row:
+	   - For each row, allocates width * sizeof(t_pixel) bytes
+	   - Uses safe_malloc to handle allocation failures
+
+	Note: Uses safe_malloc which handles error checking and reporting,
+	ensuring robust memory allocation.
 */
 t_pixel	**allocate_pixel_array(int width, int height)
 {
@@ -91,13 +133,26 @@ t_pixel	**allocate_pixel_array(int width, int height)
 	Allocates memory for a 2D array of rays representing the corners of a grid.
 
 	Inputs
-	[int] width: The width of the corner array.
-	[int] height: The height of the corner array.
+	[int] width: The width of the pixel array.
+	[int] height: The height of the pixel array.
 
 	Outputs
 	[t_ray**] Returns a pointer to the allocated 2D array of rays.
+
+	Explanation
+	1. Allocate Row Pointers:
+	   - Creates array of (height + 1) pointers using safe_malloc
+	   - Extra row needed because corners form a grid one larger than pixels
+
+	2. Allocate Each Row:
+	   - For each row, allocates (width + 1) * sizeof(t_ray) bytes
+	   - Extra column needed for same reason as extra row
+	   - Uses safe_malloc to handle allocation failures
+
+	Note: Array dimensions are (width+1) × (height+1) because corner rays
+	exist at the edges of pixels, requiring an extra row and column.
 */
-t_ray	**allocate_corner_array(int width, int height)
+t_ray	**allocate_corner_arry(int width, int height)
 {
 	t_ray	**corners;
 	int		i;
@@ -125,11 +180,16 @@ t_ray	**allocate_corner_array(int width, int height)
 
 	Outputs
 	None. The memory structure is initialized with allocated arrays.
+
+	Explanation
+	Allocates two main data structures needed for ray tracing:
+	1. Pixel array: Stores final color values and corner references
+	2. Corner ray array: Stores the rays used for anti-aliasing
 */
 void	init_mem(t_mem *mem, t_Scene *scene)
 {
 	mem->pixels = allocate_pixel_array(scene->mlx.width, scene->mlx.height);
-	mem->corner_ray = allocate_corner_array(scene->mlx.width, scene->mlx.height);
+	mem->corner_ray = allocate_corner_arry(scene->mlx.width, scene->mlx.height);
 }
 
 /*
@@ -144,8 +204,20 @@ void	init_mem(t_mem *mem, t_Scene *scene)
 	[int] y: The y-coordinate of the pixel.
 
 	Outputs
-	None. The ray is initialized with its origin, direction, and default
-	properties.
+	None. The ray is initialized with its properties.
+
+	Explanation
+	1. Set Ray Origin and Direction:
+	   - Origin set to camera position
+	   - Direction calculated based on pixel coordinates
+
+	2. Initialize Intersection Properties:
+	   - No intersection (false)
+	   - Infinite hit distance
+	   - No closest object (NULL)
+
+	3. Set Initial Color:
+	   - All color components (r,g,b) set to 0
 */
 void	init_ray(t_Scene *scene, t_ray *ray, int x, int y)
 {

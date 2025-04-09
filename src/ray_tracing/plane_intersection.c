@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2025/01/04 21:30:32 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 00:57:39 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -39,8 +39,7 @@ bool	ray_intersects_plane(t_ray *ray, t_Vector3	point_on_plane, \
 {
 	float		denominator;
 
-	plane_norm_vect = vect_normalise(plane_norm_vect); // potentially remove this, should already be normalised and normalising is expensive
-
+	plane_norm_vect = vect_normalise(plane_norm_vect);
 	denominator = vect_dot(plane_norm_vect, ray->ray_dir);
 	if (fabs(denominator) < 1e-6)
 		return (false);

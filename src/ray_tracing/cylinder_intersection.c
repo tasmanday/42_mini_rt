@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 22:49:10 by tday              #+#    #+#             */
-/*   Updated: 2025/01/06 22:37:44 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 01:10:32 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,16 +14,27 @@
 
 /*
 	Summary
-	Checks if the contact point is within the height of the cylinder.
+	Determines if a ray-cylinder intersection point lies within the cylinder's
+	height bounds.
 
 	Inputs
-	[t_ray*] ray: The ray being checked for intersection.
+	[t_ray*] ray: The ray being checked.
 	[t_Cylinder] cyl: The cylinder to check against.
-	[float] t: The distance along the ray to the contact point.
+	[float] t: The distance along the ray to the intersection point.
 
 	Outputs
-	[bool] Returns true if the contact point is within the cylinder's height,
-		false otherwise.
+	[bool] Returns true if the point lies between the cylinder's end caps,
+	false otherwise.
+
+	Explanation
+	This function checks height validity in three steps:
+	1. Calculates the actual intersection point using the ray equation
+	2. Projects the vector from cylinder center to intersection point onto
+	   the cylinder's axis using dot product
+	3. Checks if this projected height falls within ±height/2 of the center
+
+	This ensures we only count intersections that hit the finite cylinder,
+	not its infinite extension.
 */
 bool	contact_point_within_cylinder_height(t_ray *ray, t_Cylinder cyl, \
 		float t)
@@ -51,6 +62,23 @@ bool	contact_point_within_cylinder_height(t_ray *ray, t_Cylinder cyl, \
 
 	Outputs
 	None. The intersection distances are stored in the array t.
+
+	Explanation
+	This function finds intersection points using these steps:
+	1. Calculate Orthogonal Components:
+	   - rd_ax_orthog: Cross product of ray direction and cylinder axis
+	   - ro_cen_ax_orthog: Cross product of ray-to-center vector and axis
+	   These vectors represent the perpendicular components needed for
+	   intersection calculation
+
+	2. Build Quadratic Equation (at² + bt + c = 0):
+	   - a = dot(rd_ax_orthog, rd_ax_orthog)
+	   - b = 2 * dot(rd_ax_orthog, ro_cen_ax_orthog)
+	   - c = dot(ro_cen_ax_orthog, ro_cen_ax_orthog) - radius²
+
+	3. Solve Using Quadratic Formula:
+	   - If discriminant ≥ 0: Two solutions (ray hits cylinder)
+	   - If discriminant < 0: No solutions (ray misses cylinder)
 */
 void	calculate_contact_distances(t_ray *ray, t_Cylinder cyl, float t[2])
 {
@@ -86,10 +114,20 @@ void	calculate_contact_distances(t_ray *ray, t_Cylinder cyl, float t[2])
 	Inputs
 	[t_ray*] ray: The ray being checked for intersection.
 	[t_Cylinder] cyl: The cylinder to check against.
-	[float distance[4]]: Array to store the intersection distances.
+	[float distance[4]]: Array to store intersection distances, where indices
+		2 and 3 are used for cylinder body hits.
 
 	Outputs
-	None. The intersection distances are stored in the array distance.
+	None. Updates the distance array with valid intersection distances.
+
+	Explanation
+	This function processes cylinder body intersections in two steps:
+	1. Gets potential intersection distances with the infinite cylinder
+	2. For each positive distance, checks if the intersection point lies
+	   within the cylinder's height bounds
+
+	Only valid intersections (positive distance and within height) are stored
+	in the distance array at indices 2 and 3 (0 and 1 are reserved for caps).
 */
 void	check_cylinder_body(t_ray *ray, t_Cylinder cyl, float distance[4])
 {
@@ -114,6 +152,15 @@ void	check_cylinder_body(t_ray *ray, t_Cylinder cyl, float distance[4])
 	Outputs
 	[bool] Returns true if the contact point is within the cap's radius,
 		false otherwise.
+
+	Explanation
+	This function uses the dot product with itself to calculate distance²:
+	1. Finds vector from cap center to contact point
+	2. Compares dot(diff, diff) with radius²
+	3. If distance² ≤ radius², point is within or on the cap
+
+	Using dot product with itself avoids the need for a square root operation,
+	making this check more efficient than using actual distance.
 */
 bool	within_radius(t_Vector3 contact_point, t_Vector3 cap_center, \
 		float radius)
@@ -133,10 +180,26 @@ bool	within_radius(t_Vector3 contact_point, t_Vector3 cap_center, \
 	Inputs
 	[t_ray*] ray: The ray being checked for intersection.
 	[t_Cylinder] cyl: The cylinder to check against.
-	[float distance[4]]: Array to store the intersection distances.
+	[float distance[4]]: Array to store intersection distances, where indices
+		0 and 1 are used for cap hits.
 
 	Outputs
-	None. The intersection distances are stored in the array distance.
+	None. Updates the distance array with valid cap intersection distances.
+
+	Explanation
+	This function checks both end caps in three steps:
+	1. Calculate Cap Centers:
+	   - Uses cylinder axis and height to find centers of both caps
+	   - cap_a = center + (axis * height/2)
+	   - cap_b = center - (axis * height/2)
+
+	2. For Each Cap:
+	   - Check if ray intersects cap's plane
+	   - If yes, calculate exact intersection point
+
+	3. Validate Intersections:
+	   - Ensure intersection point lies within cap's radius
+	   - Store valid distances in array (index 0 for cap_a, 1 for cap_b)
 */
 void	check_end_cap(t_ray *ray, t_Cylinder cyl, float distance[4])
 {
@@ -177,6 +240,22 @@ void	check_end_cap(t_ray *ray, t_Cylinder cyl, float distance[4])
 
 	Outputs
 	[bool] Returns true if there is an intersection, false otherwise.
+	Also updates distance and ray->cyl_closest_point for the closest hit.
+
+	Explanation
+	This function coordinates the complete cylinder intersection test:
+	1. Initialization:
+	   - Normalizes cylinder axis
+	   - Creates array for up to 4 intersection points (2 caps, 2 body)
+	   
+	2. Intersection Tests:
+	   - Checks end caps (points[0] and points[1])
+	   - Checks cylinder body (points[2] and points[3])
+	   
+	3. Find Closest Hit:
+	   - Examines all valid intersection points (distance > 0)
+	   - Updates distance if closer hit is found
+	   - Records which part was hit (caps or body) in cyl_closest_point
 */
 bool	ray_intersects_cylinder(t_ray *ray, t_Cylinder cyl, float *distance)
 {

@@ -5,39 +5,64 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 23:12:25 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 23:08:18 by tday             ###   ########.fr       */
+/*   Created: 2025/04/09 23:41:32 by tday              #+#    #+#             */
+/*   Updated: 2025/04/09 23:48:34 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "../../inc/minirt.h"
 
+/*
+	Summary
+	Frees all dynamically allocated memory in the program.
+
+	Inputs
+	[t_mem*] mem: Pointer to the memory structure containing allocated arrays.
+	[t_Scene*] scene: Pointer to the scene structure containing window
+	dimensions.
+
+	Outputs
+	None. Frees the memory and prints a confirmation message.
+	
+	Explanation
+	This function performs a complete cleanup of the program's dynamic memory:
+	1. Frees the pixels array, which is a 2D array storing color information for
+		each pixel:
+	   - First frees each row of pixel data
+	   - Then frees the array of row pointers
+	2. Frees the corner_ray array, which stores ray information for the corners
+		of each pixel:
+	   - First frees each row of ray data
+	   - Then frees the array of row pointers
+	The function checks for NULL pointers before attempting to free memory to
+	prevent segmentation faults. After cleanup, it confirms successful memory
+	deallocation with a message.
+*/
 void	free_everything(t_mem *mem, t_Scene *scene)
 {
-	// Free the mem->pixels array
+	int	i;
+
 	if (mem->pixels)
 	{
-		int i = 0;
+		i = 0;
 		while (i < scene->mlx.height)
 		{
 			if (mem->pixels[i])
-				free(mem->pixels[i]); // Free each row in the mem->pixels array
+				free(mem->pixels[i]);
 			i++;
 		}
-		free(mem->pixels); // Free the top-level pointer
+		free(mem->pixels);
 	}
-
-	// Free the mem->corner_ray array
 	if (mem->corner_ray)
 	{
-		int i = 0;
+		i = 0;
 		while (i <= scene->mlx.height)
 		{
 			if (mem->corner_ray[i])
-				free(mem->corner_ray[i]); // Free each row in the mem->corner_ray array
+				free(mem->corner_ray[i]);
 			i++;
 		}
-		free(mem->corner_ray); // Free the top-level pointer
+		free(mem->corner_ray);
 	}
 	printf(M "all alocated memory freed\n" RST);
 }
