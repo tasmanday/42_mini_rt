@@ -26,7 +26,7 @@ int	main(int argc, char **argv)
 		printf(M "\n---> FILE FOUND <---\n" RST);
 		if (file_status(argv[1]) != SUCCESS)
 			return (1);
-		init_scene(&scene);
+		init_scene(&scene, &mem);
 		printf("init_scene called\n"); // TODO remove
 		parse_rt_file(argv[1], &scene);
 		printf("parse_rt_file called\n"); // TODO remove
@@ -49,7 +49,7 @@ int	main(int argc, char **argv)
 		mlx_hook(scene.mlx.win_ptr, 25, 0, resize_window_hook, &scene);
 		mlx_loop(scene.mlx.mlx_ptr);
 
-		free_everything(&mem, &scene);
+		//free_everything(&scene);
 	}
 	else
 		return (err_return("File not found"));

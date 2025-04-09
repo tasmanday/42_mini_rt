@@ -17,6 +17,6 @@
 
 // FUNCTION PROTOTYPES //
 
-void	free_everything(t_mem *mem, t_Scene *scene);
+void	free_everything(t_Scene *scene);
 
 #endif

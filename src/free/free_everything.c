@@ -38,31 +38,31 @@
 	prevent segmentation faults. After cleanup, it confirms successful memory
 	deallocation with a message.
 */
-void	free_everything(t_mem *mem, t_Scene *scene)
+void	free_everything(t_Scene *scene)
 {
 	int	i;
 
-	if (mem->pixels)
+	if (scene->mem->pixels)
 	{
 		i = 0;
 		while (i < scene->mlx.height)
 		{
-			if (mem->pixels[i])
-				free(mem->pixels[i]);
+			if (scene->mem->pixels[i])
+				free(scene->mem->pixels[i]);
 			i++;
 		}
-		free(mem->pixels);
+		free(scene->mem->pixels);
 	}
-	if (mem->corner_ray)
+	if (scene->mem->corner_ray)
 	{
 		i = 0;
 		while (i <= scene->mlx.height)
 		{
-			if (mem->corner_ray[i])
-				free(mem->corner_ray[i]);
+			if (scene->mem->corner_ray[i])
+				free(scene->mem->corner_ray[i]);
 			i++;
 		}
-		free(mem->corner_ray);
+		free(scene->mem->corner_ray);
 	}
 	printf(M "all alocated memory freed\n" RST);
 }

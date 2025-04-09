@@ -127,19 +127,6 @@ typedef struct s_Mlx
 	int			endian;
 }				t_Mlx;
 
-typedef struct s_Scene
-{
-	t_AmbientLight	ambient_light;
-	t_Camera		camera;
-	t_Light			light;
-	int				ambient_light_parsed;
-	int				camera_parsed;
-	int				light_parsed;
-	struct Object	*objects;
-	int				object_count;
-	t_Mlx			mlx;
-}	t_Scene;
-
 typedef struct s_ray
 {
 	t_Vector3	ray_origin;
@@ -168,5 +155,18 @@ typedef	struct s_mem
 	t_ray			**corner_ray;
 }				t_mem;
 
+typedef struct s_Scene
+{
+	t_AmbientLight	ambient_light;
+	t_Camera		camera;
+	t_Light			light;
+	int				ambient_light_parsed;
+	int				camera_parsed;
+	int				light_parsed;
+	struct Object	*objects;
+	int				object_count;
+	t_Mlx			mlx;
+	t_mem			*mem;
+}	t_Scene;
 
 #endif

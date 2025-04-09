@@ -26,9 +26,10 @@
 	Uses compound literal syntax to zero-initialize all members of the scene
 	structure, ensuring a clean initial state before scene setup begins.
 */
-void	init_scene(t_Scene *scene)
+void	init_scene(t_Scene *scene, t_mem *mem)
 {
 	*scene = (t_Scene){0};
+	scene->mem = mem;
 }
 
 /*

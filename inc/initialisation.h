@@ -17,7 +17,7 @@
 
 // FUNCTION PROTOTYPES //
 
-void		init_scene(t_Scene *scene);
+void		init_scene(t_Scene *scene, t_mem *mem);
 void		init_pixel_array(t_mem *mem, t_Scene *scene);
 t_pixel		**allocate_pixel_array(int width, int height);
 t_ray		**allocate_corner_arry(int width, int height);

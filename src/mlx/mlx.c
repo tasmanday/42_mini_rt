@@ -82,7 +82,7 @@ void	handle_exit(t_Scene *scene)
 {
 	mlx_destroy_window(scene->mlx.mlx_ptr, scene->mlx.win_ptr);
 	printf(RED "\nExiting...\n\n" RST);
-//	free_everything(&mem, &scene); // TODO make this work since &mem is not being passed to this function
+	free_everything(scene);
 	exit(1);
 }
 
