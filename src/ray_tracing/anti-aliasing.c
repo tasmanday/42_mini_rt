@@ -39,7 +39,7 @@ void	calculate_average_colour(t_pixel *pixel)
 {
 	float			avg_r;
 	float			avg_g;
-	float			avg_b;da
+	float			avg_b;
 	unsigned int	alpha;
 
 	alpha = 255;
@@ -90,7 +90,7 @@ void	average_pixel_colours(t_mem *mem, t_Scene *scene)
 		x = 0;
 		while (x < scene->mlx.width)
 		{
-			calculate_average_colour(&mem->pixels[y][x]); 
+			calculate_average_colour(&mem->pixels[y][x]);
 			x++;
 		}
 		y++;
