@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 23:12:25 by tday              #+#    #+#             */
-/*   Updated: 2025/02/02 13:41:17 by tday             ###   ########.fr       */
+/*   Created: 2025/04/09 23:41:32 by tday              #+#    #+#             */
+/*   Updated: 2025/04/09 23:48:34 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -18,7 +18,8 @@
 
 	Inputs
 	[t_mem*] mem: Pointer to the memory structure containing allocated arrays.
-	[t_Scene*] scene: Pointer to the scene structure containing window dimensions.
+	[t_Scene*] scene: Pointer to the scene structure containing window
+	dimensions.
 
 	Outputs
 	None. Frees the memory and prints a confirmation message.
@@ -39,9 +40,11 @@
 */
 void	free_everything(t_mem *mem, t_Scene *scene)
 {
+	int	i;
+
 	if (mem->pixels)
 	{
-		int i = 0;
+		i = 0;
 		while (i < scene->mlx.height)
 		{
 			if (mem->pixels[i])
@@ -52,7 +55,7 @@ void	free_everything(t_mem *mem, t_Scene *scene)
 	}
 	if (mem->corner_ray)
 	{
-		int i = 0;
+		i = 0;
 		while (i <= scene->mlx.height)
 		{
 			if (mem->corner_ray[i])

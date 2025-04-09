@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 22:09:09 by tday              #+#    #+#             */
-/*   Updated: 2025/01/01 18:08:59 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 00:57:01 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -95,7 +95,6 @@ bool	find_closest_intersection(float tc, float radius2, float d2, \
 	t1c = sqrt(radius2 - d2);
 	t1 = tc - t1c;
 	t2 = tc + t1c;
-
 	if (t1 > 0)
 	{
 		*distance = t1;

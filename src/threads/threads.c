@@ -15,7 +15,7 @@
 // ****				I WANT TO IMPLEMENT THEM MYSELF						****
 // **** 		I WILL NOT INCLUDE THIS FILE IN THE MAKEFILE			****
 
-#include "../../inc/minirt.h"
+/* #include "../../inc/minirt.h"
 
 int		count_cpu_threads()
 {
@@ -47,7 +47,8 @@ void	start_thread(t_ThreadPool *thread_pool)
 	{
 		pthread_mutex_lock(&thread_pool->mutex_queue);
 		while (thread_pool->task_count == 0)
-			pthread_cond_wait(&thread_pool->cond_queue, &thread_pool->mutex_queue);
+			pthread_cond_wait(&thread_pool->cond_queue, \
+				&thread_pool->mutex_queue);
 
 		task = thread_pool->task_queue[0];
 		i = 0;
@@ -73,7 +74,8 @@ void	init_threads(t_ThreadPool *thread_pool)
 	i = 0;
 	while (i < thread_pool->num_threads)
 	{
-		if (pthread_create(&thread_pool->threads[i], NULL, &start_thread, NULL) != 0)
+		if (pthread_create(&thread_pool->threads[i], NULL, \
+			&start_thread, NULL) != 0)
 			perror("Failed to create thread");
 		i++;
 	}
@@ -94,7 +96,8 @@ void	init_thread_pool(t_mem *mem, t_ThreadPool *pool)
 
 	pool = safe_calloc(1, sizeof(t_ThreadPool), "thread_pool malloc error");
 	pool->num_threads = count_cpu_threads();
-	pool->threads = safe_calloc(pool->num_threads, sizeof(pthread_t), "threads malloc error");
+	pool->threads = safe_calloc(pool->num_threads, sizeof(pthread_t), \
+	"threads malloc error");
 	pool->task_queue_head = NULL;
 	pool->task_queue_tail = NULL;
 	pool->shutdown = false;
@@ -137,3 +140,4 @@ void	destroy_thread_pool(t_ThreadPool *pool)
 		free(pool);
 	}
 }
+*/

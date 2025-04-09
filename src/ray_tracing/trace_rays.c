@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:47:47 by tday              #+#    #+#             */
-/*   Updated: 2025/02/02 14:14:37 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 00:57:07 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -23,7 +23,8 @@
 	None. The color is set in the ray structure.
 
 	Explanation
-	This function assigns the initial color to a ray before lighting calculations.
+	This function assigns the initial color to a ray before lighting
+	calculations.
 	Each object in the scene stores its own base color, and this function
 	retrieves that color based on the object type.
 
@@ -77,7 +78,6 @@ void	render_scene(t_mem *mem, t_Scene *scene)
 	int		y;
 	int		x;
 
-
 	y = 0;
 	while (y <= scene->mlx.height)
 	{
@@ -127,7 +127,7 @@ void	render_scene(t_mem *mem, t_Scene *scene)
 */
 void	trace_rays(t_mem *mem, t_Scene *scene)
 {
-	init_pixel_array(mem, scene); // TODO move
+	init_pixel_array(mem, scene);
 	render_scene(mem, scene);
 	average_pixel_colours(mem, scene);
 }

@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 23:27:06 by tday              #+#    #+#             */
-/*   Updated: 2025/02/18 23:30:01 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 01:57:17 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -37,11 +37,12 @@
 */
 void	calculate_average_colour(t_pixel *pixel)
 {
-	float	avg_r;
-	float	avg_g;
-	float	avg_b;
-	unsigned int alpha = 255;
+	float			avg_r;
+	float			avg_g;
+	float			avg_b;da
+	unsigned int	alpha;
 
+	alpha = 255;
 	avg_r = (pixel->TL->colour.r + pixel->TR->colour.r + \
 				pixel->BL->colour.r + pixel->BR->colour.r \
 				) * 0.25f;
@@ -56,7 +57,6 @@ void	calculate_average_colour(t_pixel *pixel)
 	unsigned int b = (unsigned int)(avg_b * 255);
 	pixel->avg_colour = (alpha << 24) | (r << 16) | (g << 8) | b;
 }
-
 
 /*
 	Summary

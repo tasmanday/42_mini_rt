@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 22:30:41 by tday              #+#    #+#             */
-/*   Updated: 2025/02/02 14:42:50 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 01:08:30 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -109,7 +109,7 @@ bool	ray_intersects_object(t_Scene *scene, t_ray *ray, t_Object *ignore_obj)
 		if (current_object == ignore_obj)
 		{
 			current_object = current_object->next;
-			continue;
+			continue ;
 		}
 		intersects = check_intersection(ray, current_object, &distance);
 		if (intersects)
@@ -122,6 +122,7 @@ bool	ray_intersects_object(t_Scene *scene, t_ray *ray, t_Object *ignore_obj)
 	}
 	return (ray->intersects_object);
 }
+
 /*
 	Summary
 	Calculates the 3D point where a ray intersects with an object using the
@@ -142,10 +143,11 @@ bool	ray_intersects_object(t_Scene *scene, t_ray *ray, t_Object *ignore_obj)
 void	calculate_intersection_point(t_ray *ray)
 {
 	t_Vector3	ray_length;
-	
+
 	ray_length = vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance);
 	ray->intersection_point = vect_add(ray->ray_origin, ray_length);
 }
+
 /*
 	Summary
 	Calculates all intersection-related properties for a ray that has hit an

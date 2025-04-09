@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:46:07 by tday              #+#    #+#             */
-/*   Updated: 2025/02/02 14:01:04 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 00:48:02 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -211,7 +211,8 @@ t_Vector3	vect_cross(t_Vector3 a, t_Vector3 b)
 	- The result is positive when vectors point in similar directions
 	- The result is negative when vectors point in opposite directions
 	- The result is zero when vectors are perpendicular
-	- The magnitude equals |a| * |b| * cos(θ), where θ is the angle between vectors
+	- The magnitude equals |a| * |b| * cos(θ), where θ is the angle between
+		vectors
 
 	Common uses include:
 	- Testing if vectors are facing same/opposite directions (for lighting)
@@ -323,12 +324,12 @@ float	vect_distance(t_Vector3 a, t_Vector3 b)
 */
 t_Vector3 vect_reflect(t_Vector3 incident, t_Vector3 normal)
 {
-	float dot_product = vect_dot(incident, normal);
-	t_Vector3 reflection;
+	float		dot_product;
+	t_Vector3	reflection;
 
+	dot_product = vect_dot(incident, normal);
 	reflection.x = incident.x - 2 * dot_product * normal.x;
 	reflection.y = incident.y - 2 * dot_product * normal.y;
 	reflection.z = incident.z - 2 * dot_product * normal.z;
-
 	return (reflection);
 }

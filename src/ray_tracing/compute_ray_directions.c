@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:57:06 by tday              #+#    #+#             */
-/*   Updated: 2025/02/02 14:34:26 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 01:13:56 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -102,7 +102,6 @@ t_Vector3	apply_camera_orientation(t_Vector3 ray, t_Scene *scene)
 	final_ray_dir.y = ray.x * x_axis.y + ray.y * y_axis.y + ray.z * z_axis.y;
 	final_ray_dir.z = ray.x * x_axis.z + ray.y * y_axis.z + ray.z * z_axis.z;
 	final_ray_dir = vect_normalise(final_ray_dir);
-
 	return (final_ray_dir);
 }
 
@@ -155,6 +154,5 @@ t_Vector3	get_ray_direction(t_Scene *scene, int x, int y)
 	ray.z = 1;
 	ray.x *= -1;
 	ray = apply_camera_orientation(ray, scene);
-
 	return (ray);
 }

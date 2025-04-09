@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:52:47 by tday              #+#    #+#             */
-/*   Updated: 2025/02/02 13:38:33 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 01:01:01 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -63,14 +63,15 @@ void	calculate_normal_cylinder_cap(t_ray *ray, t_Cylinder cyl)
 	ray->normal_at_intersection = vect_normalise(cyl.axis);
 	if (ray->cyl_closest_point == 1)
 	{
-		// Reverse the normal for the opposite cap
-		ray->normal_at_intersection = vect_multiply_scalar(ray->normal_at_intersection, -1);
+		ray->normal_at_intersection = \
+			vect_multiply_scalar(ray->normal_at_intersection, -1);
 	}
 }
 
 /*
 	Summary
-	Calculates the normal vector at the intersection point on the body of a cylinder.
+	Calculates the normal vector at the intersection point on the body of a
+	cylinder.
 
 	Inputs
 	[t_ray*] ray: The ray that intersects with the cylinder.
@@ -83,20 +84,23 @@ void	calculate_normal_cylinder_cap(t_ray *ray, t_Cylinder cyl)
 	Explanation
 	This function computes the normal vector at the intersection point on the
 	cylinder's body. It does so by:
-	1. Calculating the vector from the cylinder's center to the intersection point (civ).
-	2. Projecting this vector onto the cylinder's axis to find the parallel component (pc).
+	1. Calculating the vector from the cylinder's center to the intersection
+	point (civ).
+	2. Projecting this vector onto the cylinder's axis to find the parallel
+	component (pc).
 	3. Subtracting the parallel component from the original vector to isolate the
 	   perpendicular component/normal component (nc).
 	4. Normalizing the resulting vector to ensure it is a unit vector.
-	imagine a right angle triangle with the hypotenuse being civ, the base being pc which runs 
-	parallel to the cylinder's axis, and the perpendicular being nc.
+	imagine a right angle triangle with the hypotenuse being civ, the base being
+	pc which runs parallel to the cylinder's axis, and the perpendicular being
+	nc.
 */
 void	calculate_normal_cylinder_body(t_ray *ray, t_Cylinder cyl)
 {
-	t_Vector3 civ;
-	float projection_length;
-	t_Vector3 pc;
-	t_Vector3 nc;
+	t_Vector3	civ;
+	float		projection_length;
+	t_Vector3	pc;
+	t_Vector3	nc;
 
 	civ = vect_subtract(ray->intersection_point, cyl.center);
 	projection_length = vect_dot(civ, cyl.axis);
@@ -104,13 +108,15 @@ void	calculate_normal_cylinder_body(t_ray *ray, t_Cylinder cyl)
 	nc = vect_subtract(civ, pc);
 	ray->normal_at_intersection = vect_normalise(nc);
 }
+
 /*
 	Summary
 	Determines and calculates the appropriate normal vector for a cylinder
 	based on which part of the cylinder was intersected.
 
 	Inputs
-	[t_ray*] ray: The ray containing intersection data and cylinder hit information.
+	[t_ray*] ray: The ray containing intersection data and cylinder hit
+	information.
 
 	Outputs
 	None. Updates the ray's normal_at_intersection field with the appropriate
@@ -126,13 +132,15 @@ void	calculate_normal_cylinder_body(t_ray *ray, t_Cylinder cyl)
 */
 void	calculate_normal_at_cylinder(t_ray *ray)
 {
-	t_Cylinder cyl = ray->closest_object->u_data.cylinder;
+	t_Cylinder	cyl;
 
+	cyl = ray->closest_object->u_data.cylinder;
 	if (ray->cyl_closest_point == 0 || ray->cyl_closest_point == 1)
 		calculate_normal_cylinder_cap(ray, cyl);
 	else if (ray->cyl_closest_point == 2 || ray->cyl_closest_point == 3)
 		calculate_normal_cylinder_body(ray, cyl);
 }
+
 /*
 	Summary
 	Main dispatcher function that calculates the normal vector at an intersection
@@ -151,9 +159,9 @@ void	calculate_normal_at_cylinder(t_ray *ray)
 	- For spheres: Delegates to specialized sphere normal calculation 
 		function.
 	- For planes: Uses the pre-defined plane normal directly. I would have
-		preferred to use a calculate_normal_at_plane function but the plane normal
-		is already defined in the plane struct and norminette restricts us to 5
-		functions per file.
+		preferred to use a calculate_normal_at_plane function but the plane
+		normal is already defined in the plane struct and norminette restricts
+		us to 5 functions per file.
 	- For cylinders: Delegates to specialized cylinder normal calculation 
 		function.
 	The normal vector is essential for lighting calculations, as it determines
@@ -161,8 +169,9 @@ void	calculate_normal_at_cylinder(t_ray *ray)
 */
 void	calculate_normal_at_intersection(t_ray *ray)
 {
-	t_Object *closest_object = ray->closest_object;
+	t_Object	*closest_object;
 
+	closest_object = ray->closest_object;
 	if (closest_object->type == SPHERE)
 		calculate_normal_at_sphere(ray);
 	else if (closest_object->type == PLANE)

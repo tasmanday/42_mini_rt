@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 21:05:32 by tday              #+#    #+#             */
-/*   Updated: 2025/02/19 00:10:04 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/10 00:33:30 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -26,7 +26,7 @@
 	Uses compound literal syntax to zero-initialize all members of the scene
 	structure, ensuring a clean initial state before scene setup begins.
 */
-void init_scene(t_Scene *scene)
+void	init_scene(t_Scene *scene)
 {
 	*scene = (t_Scene){0};
 }
@@ -75,10 +75,10 @@ void	init_pixel_array(t_mem *mem, t_Scene *scene)
 			init_ray(scene, &mem->corner_ray[y][x], x, y);
 			if (x < scene->mlx.width && y < scene->mlx.height)
 			{
-				mem->pixels[y][x].TL = &mem->corner_ray[y][x]; // top left corner
-				mem->pixels[y][x].TR = &mem->corner_ray[y][x + 1]; // top right corner
-				mem->pixels[y][x].BL = &mem->corner_ray[y + 1][x]; // bottom left corner
-				mem->pixels[y][x].BR = &mem->corner_ray[y + 1][x + 1]; // bottom right corner
+				mem->pixels[y][x].TL = &mem->corner_ray[y][x];
+				mem->pixels[y][x].TR = &mem->corner_ray[y][x + 1];
+				mem->pixels[y][x].BL = &mem->corner_ray[y + 1][x];
+				mem->pixels[y][x].BR = &mem->corner_ray[y + 1][x + 1];
 				mem->pixels[y][x].avg_colour = 0x000000;
 			}
 			x++;
@@ -152,7 +152,7 @@ t_pixel	**allocate_pixel_array(int width, int height)
 	Note: Array dimensions are (width+1) × (height+1) because corner rays
 	exist at the edges of pixels, requiring an extra row and column.
 */
-t_ray	**allocate_corner_array(int width, int height)
+t_ray	**allocate_corner_arry(int width, int height)
 {
 	t_ray	**corners;
 	int		i;
@@ -189,7 +189,7 @@ t_ray	**allocate_corner_array(int width, int height)
 void	init_mem(t_mem *mem, t_Scene *scene)
 {
 	mem->pixels = allocate_pixel_array(scene->mlx.width, scene->mlx.height);
-	mem->corner_ray = allocate_corner_array(scene->mlx.width, scene->mlx.height);
+	mem->corner_ray = allocate_corner_arry(scene->mlx.width, scene->mlx.height);
 }
 
 /*
