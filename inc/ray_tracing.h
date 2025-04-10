@@ -93,5 +93,6 @@ bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, \
 
 void	average_pixel_colours(t_mem *mem, t_Scene *scene);
 void	calculate_average_colour(t_pixel *pixel);
+unsigned int	fill_rgb(float r, float g, float b, unsigned int alpha);
 
 #endif

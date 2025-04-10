@@ -187,10 +187,10 @@ t_ray	**allocate_corner_arry(int width, int height)
 	1. Pixel array: Stores final color values and corner references
 	2. Corner ray array: Stores the rays used for anti-aliasing
 */
-void	init_mem(t_mem *mem, t_Scene *scene)
+void	init_mem(t_Scene *scene)
 {
-	mem->pixels = allocate_pixel_array(scene->mlx.width, scene->mlx.height);
-	mem->corner_ray = allocate_corner_arry(scene->mlx.width, scene->mlx.height);
+	scene->mem->pixels = allocate_pixel_array(scene->mlx.width, scene->mlx.height);
+	scene->mem->corner_ray = allocate_corner_arry(scene->mlx.width, scene->mlx.height);
 }
 
 /*

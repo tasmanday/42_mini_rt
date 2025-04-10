@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 		scene.mlx.width = 1920; // TODO put in init_mlx needs to be at start
 		initialise_data(&scene); // TODO change name to init_mlx
 		printf("initialise_data called\n"); // TODO remove
-		init_mem(&mem, &scene);
+		init_mem(&scene);
 		printf("init_mem called\n"); // TODO remove
 		trace_rays(&mem, &scene);
 		printf("trace_rays called\n"); // TODO remove

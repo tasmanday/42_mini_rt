@@ -40,9 +40,7 @@ void	calculate_average_colour(t_pixel *pixel)
 	float			avg_r;
 	float			avg_g;
 	float			avg_b;
-	unsigned int	alpha;
-
-	alpha = 255;
+	
 	avg_r = (pixel->TL->colour.r + pixel->TR->colour.r + \
 				pixel->BL->colour.r + pixel->BR->colour.r \
 				) * 0.25f;
@@ -52,10 +50,15 @@ void	calculate_average_colour(t_pixel *pixel)
 	avg_b = (pixel->TL->colour.b + pixel->TR->colour.b + \
 				pixel->BL->colour.b + pixel->BR->colour.b \
 				) * 0.25f;
-	unsigned int r = (unsigned int)(avg_r * 255);
-	unsigned int g = (unsigned int)(avg_g * 255);
-	unsigned int b = (unsigned int)(avg_b * 255);
-	pixel->avg_colour = (alpha << 24) | (r << 16) | (g << 8) | b;
+	pixel->avg_colour = fill_rgb(avg_r, avg_g, avg_b, 255);
+}
+
+unsigned int	fill_rgb(float r, float g, float b, unsigned int alpha)
+{
+	unsigned int	red = (unsigned int)(r * 255);
+	unsigned int	green = (unsigned int)(g * 255);
+	unsigned int	blue = (unsigned int)(b * 255);
+	return (alpha << 24) | (red << 16) | (green << 8) | blue;
 }
 
 /*

@@ -21,7 +21,7 @@ void		init_scene(t_Scene *scene, t_mem *mem);
 void		init_pixel_array(t_mem *mem, t_Scene *scene);
 t_pixel		**allocate_pixel_array(int width, int height);
 t_ray		**allocate_corner_arry(int width, int height);
-void		init_mem(t_mem *mem, t_Scene *scene);
+void		init_mem(t_Scene *scene);
 void		init_ray(t_Scene *scene, t_ray *ray, int x, int y);
 
 #endif
