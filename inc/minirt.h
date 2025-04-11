@@ -6,7 +6,7 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 14:11:49 by atang             #+#    #+#             */
-/*   Updated: 2025/02/02 22:29:30 by atang            ###   ########.fr       */
+/*   Updated: 2025/04/12 08:55:09 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,8 @@ char		*ft_strtok(char **line, const char *delim);
 float		ft_strtof(const char *str, char **endptr);
 float		parse_float(char **str);
 int			parse_int(char	**str);
+
+void		init_mlx(t_Scene	*scene);
 
 // init.c //
 // void		init_scene(t_Scene *scene);
