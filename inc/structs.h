@@ -6,12 +6,12 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 19:03:07 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 19:04:54 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/11 22:21:10 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #ifndef STRUCTS_H
-#define STRUCTS_H
+# define STRUCTS_H
 
 typedef enum s_Error
 {
@@ -142,14 +142,14 @@ typedef struct s_ray
 
 typedef struct s_pixel
 {
-	t_ray			*TL;
-	t_ray			*TR;
-	t_ray			*BL;
-	t_ray			*BR;
+	t_ray			*tl;
+	t_ray			*tr;
+	t_ray			*bl;
+	t_ray			*br;
 	unsigned int	avg_colour;
 }				t_pixel;
 
-typedef	struct s_mem
+typedef struct s_mem
 {
 	t_pixel			**pixels;
 	t_ray			**corner_ray;

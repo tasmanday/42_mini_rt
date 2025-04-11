@@ -6,14 +6,15 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:35:44 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 23:00:20 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/11 22:10:59 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #ifndef RAY_TRACING_H
-#define RAY_TRACING_H
+# define RAY_TRACING_H
 
 # include <stdbool.h>
+# include <stdint.h>
 # include "structs.h"
 
 // STRUCTURES //
@@ -63,7 +64,7 @@ bool		ray_pointing_away(t_Vector3 l, t_Vector3 ray_dir);
 
 // cylinder_intersection.c //
 
-bool		ray_intersects_cylinder(t_ray *ray, t_Cylinder cyl, float *distance);
+bool		ray_intersects_cyl(t_ray *ray, t_Cylinder cyl, float *distance);
 void		check_end_cap(t_ray *ray, t_Cylinder cyl, float distance[4]);
 bool		within_radius(t_Vector3 contact_point, t_Vector3 cap_center, \
 			float radius);
@@ -91,8 +92,8 @@ bool		is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, \
 
 // anti-aliasing.c //
 
-void	average_pixel_colours(t_mem *mem, t_Scene *scene);
-void	calculate_average_colour(t_pixel *pixel);
-unsigned int	fill_rgb(float r, float g, float b, unsigned int alpha);
+void		average_pixel_colours(t_mem *mem, t_Scene *scene);
+void		calculate_average_colour(t_pixel *pixel);
+uint32_t	fill_rgb(float r, float g, float b, unsigned int alpha);
 
 #endif

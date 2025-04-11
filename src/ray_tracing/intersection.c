@@ -6,7 +6,7 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 22:30:41 by tday              #+#    #+#             */
-/*   Updated: 2025/04/10 01:08:30 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/11 22:10:53 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -37,7 +37,7 @@ bool	check_intersection(t_ray *ray, t_Object *object, float *distance)
 	else if (object->type == SPHERE)
 		return (ray_intersects_sphere(ray, object->u_data.sphere, distance));
 	else if (object->type == CYLINDER)
-		return (ray_intersects_cylinder(ray, object->u_data.cylinder, \
+		return (ray_intersects_cyl(ray, object->u_data.cylinder, \
 			distance));
 	return (false);
 }

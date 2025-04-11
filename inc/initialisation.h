@@ -6,14 +6,14 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 18:15:42 by tday              #+#    #+#             */
-/*   Updated: 2025/04/10 00:33:06 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/11 22:21:22 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #ifndef INITIALISATION_H
-#define INITIALISATION_H
+# define INITIALISATION_H
 
-#include "structs.h"
+# include "structs.h"
 
 // FUNCTION PROTOTYPES //
 

@@ -6,14 +6,14 @@
 /*   By: tday <tday@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:34:44 by tday              #+#    #+#             */
-/*   Updated: 2025/02/01 22:14:09 by tday             ###   ########.fr       */
+/*   Updated: 2025/04/11 22:24:52 by tday             ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #ifndef VECTORS_H
-#define VECTORS_H
+# define VECTORS_H
 
-#include "structs.h"
+# include "structs.h"
 
 // FUNCTION PROTOTYPES //
 

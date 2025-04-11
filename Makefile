@@ -6,7 +6,7 @@
 #    By: tday <tday@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/19 19:36:12 by tday              #+#    #+#              #
-#    Updated: 2025/02/01 19:08:28 by tday             ###   ########.fr        #
+#    Updated: 2025/04/11 22:16:07 by tday             ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -35,8 +35,8 @@ CFLAGS          :=      -Wall -Wextra -Werror -O3
 
 # Define source and object files
 SRCS			:=		$(addprefix src/main/, main.c)							\
-						$(addprefix src/initialisation/, init.c)				\
-						$(addprefix src/mlx/, mlx.c)							\
+						$(addprefix src/initialisation/, init.c init_2.c)		\
+						$(addprefix src/mlx/, mlx.c mlx_2.c)					\
 						$(addprefix src/free/, free_everything.c)				\
 						$(addprefix src/parsing/, error.c file_check.c 			\
 									object_utils.c error_utils.c				\
@@ -46,11 +46,12 @@ SRCS			:=		$(addprefix src/main/, main.c)							\
 									print_utils.c)								\
 						$(addprefix src/ray_tracing/, compute_ray_directions.c	\
 									sphere_intersection.c 						\
-									cylinder_intersection.c						\
+									cylinder_intersection.c	cyl_2.c				\
 									plane_intersection.c trace_rays.c			\
 									intersection.c lighting_and_shadows.c		\
 									anti-aliasing.c normal_at_intersection.c)	\
-						$(addprefix src/vectors/, vector_operations.c)				
+						$(addprefix src/vectors/, vector_operations.c 			\
+									vectors_2.c)				
 
 OBJS            :=      $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
 RM              :=      rm -f
