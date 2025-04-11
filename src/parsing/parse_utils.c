@@ -6,168 +6,60 @@
 /*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 22:52:53 by atang             #+#    #+#             */
-/*   Updated: 2025/01/10 21:52:22 by atang            ###   ########.fr       */
+/*   Updated: 2025/02/02 22:14:31 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	parse_vector3(char **line, t_Vector3 *vec)
+float	parse_float(char **str)
 {
-	char	*token;
-	float	*coords[3];
-	int		i;
+	char	*end;
+	float	result;
 
-	coords[0] = &vec->x;
-	coords[1] = &vec->y;
-	coords[2] = &vec->z;
-	i = 0;
-	while (i < 3)
+	while (**str == ' ' || **str == '\t' || **str == ',')
 	{
-		if (get_next_token(line, &token) == FAILURE)
-		{
-			return (FAILURE);
-		}
-		*coords[i] = parse_float(&token);
-		if (*coords[i] == FAILURE)
-		{
-			return (FAILURE);
-		}
-		i++;
+		(*str)++;
 	}
-	printf("\n   -> Parsed vector: x = %f, y = %f, z = %f\n\n",
-		vec->x, vec->y, vec->z);
-	return (SUCCESS);
+	result = strtof(*str, &end);
+	if (end == *str)
+	{
+		printf(RED "\n   Error! No valid float found in '%s'"RST, *str);
+		return (FAILURE);
+	}
+	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
+	{
+		printf(RED
+			"\n   Error! Invalid character in float in '%s'"RST, *str);
+		return (FAILURE);
+	}
+	*str = end;
+	while (**str == ' ' || **str == '\t' || **str == ',')
+	{
+		(*str)++;
+	}
+	return (result);
 }
 
-/*
--> OLD validate_rgb - didn't handle trailing whitespace for tokens
-static int	validate_rgb(char *token)
+int	parse_int(char **str)
 {
-	int	i;
+	char		*end;
+	long long	result;
 
-	i = 0;
-	if (token[i] == '-')
-		i++;
-	while (token[i] != '\0')
+	result = ft_atoi(*str);
+	end = *str;
+	if (*end == '-' || *end == '+')
+		end++;
+	while (*end && ft_isdigit(*end))
+		end++;
+	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
 	{
-		if (!ft_isdigit((unsigned char)token[i]))
-			return (FAILURE);
-		i++;
+		printf(RED "\n   Error! Invalid character in '%s'" RST, *str);
+		return (FAILURE);
 	}
-	return (SUCCESS);
-}
-*/
-
-static int validate_rgb(char *token)
-{
-    if (!token)
-        return (FAILURE);
-    while (*token && (*token == ' ' || *token == '\t' || *token == '\r' || *token == '\n'))
-        token++;
-    if (*token == '-')
-        token++;
-    if (*token == '\0')
-        return (FAILURE);
-    while (*token && *token != ' ' && *token != '\t' && *token != '\r' && *token != '\n')
-    {
-        if (!ft_isdigit((unsigned char)*token))
-            return FAILURE;
-        token++;
-    }
-    while (*token && (*token == ' ' || *token == '\t' || *token == '\r' || *token == '\n'))
-        token++;
-    if (*token  == '\0')
-	{
-    	return (SUCCESS);
-	}
-	return (FAILURE);
-}
-
-
-int	parse_rgb(t_Colour4 *colour, char **line)
-{
-	int		i;
-	int		value;
-	char	*token;
-	float	*components[3];
-
-	components[0] = &colour->r;
-	components[1] = &colour->g;
-	components[2] = &colour->b;
-	i = 0;
-	while (i < 3)
-	{
-		if (get_next_token(line, &token) == FAILURE || token == NULL)
-			return (print_error_and_return(
-					"No more tokens found for RGB values (needs 3)", NULL));
-		if (validate_rgb(token) == FAILURE)
-			return (print_error_and_return("RGB value contains \
-	non-numeric characters", token));
-		value = ft_atoi(token);
-		if (value < 0 || value > 255)
-			return (print_error_and_return("RGB value out of range (0-255)",
-					token));
-		*components[i] = value / 255.0f;
-		i++;
-	}
-	colour->a = 1.0f;
-	return (SUCCESS);
-}
-
-int	parse_position(t_Vector3 *position, char **line)
-{
-	char	*endptr;
-	int		i;
-	float	*coords[3];
-	char	*token;
-
-	i = 0;
-	coords[0] = &position->x;
-	coords[1] = &position->y;
-	coords[2] = &position->z;
-	while (i < 3)
-	{
-		if (get_next_token(line, &token) == FAILURE)
-		{
-			printf(RED"\n   Error! Failed to get x/y/z position"RST);
-			return (FAILURE);
-		}
-		*coords[i] = strtof(token, &endptr);
-		if (*endptr != '\0')
-		{
-			printf(RED"\n   Error! Invalid value for x/y/z position"RST);
-			return (FAILURE);
-		}
-		i++;
-	}
-	return (SUCCESS);
-}
-
-int	parse_orientation(t_Vector3 *orientation, char **line)
-{
-	char	*endptr;
-	int		i;
-	float	*coords[3];
-	char	*token;
-
-	i = 0;
-	coords[0] = &orientation->x;
-	coords[1] = &orientation->y;
-	coords[2] = &orientation->z;
-	while (i < 3)
-	{
-		if (get_next_token(line, &token) == FAILURE)
-			return (print_error_and_return("Failed to get x/y/z \
-	orientation", NULL));
-		*coords[i] = strtof(token, &endptr);
-		if (*endptr != '\0')
-			return (print_error_and_return("Invalid value for x/y/z \
-	orientation", token));
-		if (*coords[i] < -1.0f || *coords[i] > 1.0f)
-			return (print_error_and_return("Orientation value out of range \
-	(-1, 1)", NULL));
-		i++;
-	}
-	return (SUCCESS);
+	if (*end == ',' || *end == '\0' || *end == ' ' || *end == '\t')
+		*str = end + 1;
+	else
+		*str = end;
+	return ((int)result);
 }

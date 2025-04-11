@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/12/08 11:51:27 by sentry           ###   ########.fr       */
+/*   Updated: 2025/02/02 19:35:24 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,18 @@ void	print_objects_in_scene(struct Object *objects)
 		printf("      Object type: %s\n", type_str);
 		temp = temp->next;
 	}
+}
+
+void	print_scene_info(t_Scene *scene)
+{
+	printf(M "---> PRINTING ELEMENTS AND OBJECTS <---\n\n" RST);
+	printf(G "Entering" RST " print_ambient_light(), print_camera(), and \
+print_light()\n");
+	print_ambient_light(&scene->ambient_light);
+	print_camera(&scene->camera);
+	print_light(&scene->light);
+	printf(RED "\nExiting" RST " print_ambient_light(), print_camera(), \
+and print_light()\n\n");
+	printf("---------------------------------------------------------------\n");
+	print_all_objects(scene);
 }

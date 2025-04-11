@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sentry <sentry@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:45 by atang             #+#    #+#             */
-/*   Updated: 2024/12/08 12:19:53 by sentry           ###   ########.fr       */
+/*   Updated: 2025/02/02 22:28:49 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,10 @@ int	warn_err_free_exit(const char *message, t_Error error,
 	if (scene && scene->objects)
 		free_scene_objects_and_count(scene);
 	exit(1);
+}
+
+int	is_normalized_vector(t_Vector3 *vector)
+{
+	return ((vector->x >= -1 && vector->x <= 1) && (vector->y >= -1
+			&& vector->y <= 1) && (vector->z >= -1 && vector->z <= 1));
 }
