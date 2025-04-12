@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: atang <atang@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 13:59:30 by atang             #+#    #+#             */
-/*   Updated: 2024/12/14 14:27:21 by marvin           ###   ########.fr       */
+/*   Updated: 2025/02/02 22:29:31 by atang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,35 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		n--;
 	}
 	return (0);
+}
+
+float	ft_strtof(const char *str, char **endptr)
+{
+	float	result;
+	int		sign;
+	float	decimal;
+
+	result = 0.0f;
+	sign = 1;
+	decimal = 0.1f;
+	if (*str == '-')
+		sign = -1;
+	if (*str == '-' || *str == '+')
+		str++;
+	while (*str >= '0' && *str <= '9')
+		result = result * 10.0f + (*str++ - '0');
+	if (*str == '.')
+	{
+		str++;
+		while (*str >= '0' && *str <= '9')
+		{
+			result += (*str++ - '0') * decimal;
+			decimal *= 0.1f;
+		}
+	}
+	if (endptr)
+		*endptr = (char *)str;
+	return (result * sign);
 }
 
 int	get_next_token(char **line, char **token)
@@ -79,56 +108,4 @@ char	*ft_strtok(char **line, const char *delim)
 	else
 		*line = NULL;
 	return (start);
-}
-
-float	parse_float(char **str)
-{
-	char	*end;
-	float	result;
-
-	while (**str == ' ' || **str == '\t' || **str == ',')
-	{
-		(*str)++;
-	}
-	result = strtof(*str, &end);
-	if (end == *str)
-	{
-		printf(RED "\n   Error! No valid float found in '%s'"RST, *str);
-		return (FAILURE);
-	}
-	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
-	{
-		printf(RED
-			"\n   Error! Invalid character in float in '%s'"RST, *str);
-		return (FAILURE);
-	}
-	*str = end;
-	while (**str == ' ' || **str == '\t' || **str == ',')
-	{
-		(*str)++;
-	}
-	return (result);
-}
-
-int	parse_int(char **str)
-{
-	char		*end;
-	long long	result;
-
-	result = ft_atoi(*str);
-	end = *str;
-	if (*end == '-' || *end == '+')
-		end++;
-	while (*end && ft_isdigit(*end))
-		end++;
-	if (*end != '\0' && !ft_isspace(*end) && *end != ',')
-	{
-		printf(RED "\n   Error! Invalid character in '%s'" RST, *str);
-		return (FAILURE);
-	}
-	if (*end == ',' || *end == '\0' || *end == ' ' || *end == '\t')
-		*str = end + 1;
-	else
-		*str = end;
-	return ((int)result);
 }
