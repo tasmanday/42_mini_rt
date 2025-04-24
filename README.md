@@ -45,5 +45,5 @@ make
 ### Running
 
 ```bash
-./miniRT scenes/example.rt
+./miniRT eval
 ```
