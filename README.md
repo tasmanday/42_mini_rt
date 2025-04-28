@@ -51,7 +51,6 @@ There are a number od test scenarios in the eval_scenarios directory or you can 
 
 ---
 
-```
 📄 Scene File Format
 
 .rt files describe the scene to render. Here's a simple example:
@@ -67,5 +66,3 @@ pl	Plane	Position, normal vector, RGB color
 cy	Cylinder	Position, orientation, diameter, height, RGB color
 
 Each line starts with an identifier followed by parameters like position, color, brightness, etc.
-
-```
