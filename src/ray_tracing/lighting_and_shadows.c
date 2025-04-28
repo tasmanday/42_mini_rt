@@ -86,6 +86,7 @@ bool	is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, \
 	This function implements basic Lambertian diffuse reflection:
 	1. Calculate Light Direction:
 	   - Finds normalized vector from intersection point to light source
+	   - Ensures the normal vector is also normalized for accurate calculations
 	   
 	2. Compute Light Intensity:
 	   - Uses dot product between light direction and surface normal
@@ -101,15 +102,16 @@ bool	is_in_shadow(t_Scene *scene, t_Vector3 intersection_point, \
 	   - Ensures all color components stay within [0,1] range
 
 	The result provides basic 3D shading with both ambient and directional
-	lighting components.
+	lighting components. Both the light direction and surface normal are
+	normalized to ensure accurate lighting calculations.
 */
 void	calculate_lighting(t_Light light, t_AmbientLight ambient, t_ray *ray)
 {
 	t_Vector3	light_dir;
 	float		intensity;
 
-	light_dir = vect_normalise(vect_subtract(light.position, \
-		vect_multiply_scalar(ray->ray_dir, ray->closest_hit_distance)));
+	light_dir = vect_normalise(vect_subtract(light.position, ray->intersection_point));
+	ray->normal_at_intersection = vect_normalise(ray->normal_at_intersection);
 	intensity = vect_dot(light_dir, ray->normal_at_intersection);
 	if (intensity < 0)
 		intensity = 0.0f;

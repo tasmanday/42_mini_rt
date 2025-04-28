@@ -56,11 +56,13 @@ void	calculate_normal_at_sphere(t_ray *ray)
 	direction as the axis. For the top cap (cyl_closest_point == 1), the normal
 	points in the opposite direction. This ensures that normals always point
 	outward from the cylinder's surface, which is essential for correct lighting
-	and reflection calculations.
+	and reflection calculations. The cylinder's axis is normalized before use to
+	ensure the normal vector has unit length.
 */
 void	calculate_normal_cylinder_cap(t_ray *ray, t_Cylinder cyl)
 {
-	ray->normal_at_intersection = vect_normalise(cyl.axis);
+	cyl.axis = vect_normalise(cyl.axis);
+	ray->normal_at_intersection = cyl.axis;
 	if (ray->cyl_closest_point == 1)
 	{
 		ray->normal_at_intersection = \
@@ -84,13 +86,14 @@ void	calculate_normal_cylinder_cap(t_ray *ray, t_Cylinder cyl)
 	Explanation
 	This function computes the normal vector at the intersection point on the
 	cylinder's body. It does so by:
-	1. Calculating the vector from the cylinder's center to the intersection
+	1. Normalizing the cylinder's axis to ensure consistent calculations
+	2. Calculating the vector from the cylinder's center to the intersection
 	point (civ).
-	2. Projecting this vector onto the cylinder's axis to find the parallel
+	3. Projecting this vector onto the cylinder's axis to find the parallel
 	component (pc).
-	3. Subtracting the parallel component from the original vector to isolate the
+	4. Subtracting the parallel component from the original vector to isolate the
 	   perpendicular component/normal component (nc).
-	4. Normalizing the resulting vector to ensure it is a unit vector.
+	5. Normalizing the resulting vector to ensure it is a unit vector.
 	imagine a right angle triangle with the hypotenuse being civ, the base being
 	pc which runs parallel to the cylinder's axis, and the perpendicular being
 	nc.
@@ -102,6 +105,7 @@ void	calculate_normal_cylinder_body(t_ray *ray, t_Cylinder cyl)
 	t_Vector3	pc;
 	t_Vector3	nc;
 
+	cyl.axis = vect_normalise(cyl.axis);
 	civ = vect_subtract(ray->intersection_point, cyl.center);
 	projection_length = vect_dot(civ, cyl.axis);
 	pc = vect_multiply_scalar(cyl.axis, projection_length);
@@ -128,7 +132,9 @@ void	calculate_normal_cylinder_body(t_ray *ray, t_Cylinder cyl)
 	- Values 0 and 1 indicate hits on the bottom and top caps respectively
 	- Values 2 and 3 indicate hits on the cylinder's body
 	Based on this information, it calls the appropriate specialized function to
-	calculate the normal vector for that specific part of the cylinder.
+	calculate the normal vector for that specific part of the cylinder. The
+	normal vector is always oriented to point outwards from the cylinder's
+	surface, which is essential for correct lighting and reflection calculations.
 */
 void	calculate_normal_at_cylinder(t_ray *ray)
 {
@@ -178,4 +184,6 @@ void	calculate_normal_at_intersection(t_ray *ray)
 		ray->normal_at_intersection = ray->closest_object->u_data.plane.normal;
 	else if (closest_object->type == CYLINDER)
 		calculate_normal_at_cylinder(ray);
+	if (vect_dot(ray->ray_dir, ray->normal_at_intersection) > 0)
+		ray->normal_at_intersection = vect_multiply_scalar(ray->normal_at_intersection, -1);
 }
