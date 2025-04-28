@@ -32,8 +32,6 @@ This project is written in C and uses the **minilibx** graphics library provided
 - [MiniLibX](https://harm-smits.github.io/42docs/libs/minilibx) (provided by 42)
 - `Linux`
 
----
-
 ### Building
 
 ```bash
@@ -86,3 +84,13 @@ Each line starts with an identifier followed by parameters like position, color,
 - **Rendering**: Pixels are colored and displayed using MiniLibX.
 
 ---
+
+## 🛠️ Made With
+
+C
+
+open, close, read, write, printf, malloc, free, perror, strerror, exit
+
+All functions of the math library (-lm man man 3 math)
+
+MinilibX
