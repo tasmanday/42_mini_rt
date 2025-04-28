@@ -98,3 +98,10 @@ open, close, read, write, printf, malloc, free, perror, strerror, exit
 All functions of the math library (-lm man man 3 math)
 
 MinilibX
+
+---
+
+## 🤝 Contributors
+
+- [Andrew](https://github.com/valedictum)
+- [Tasman](https://github.com/tasmanday)
