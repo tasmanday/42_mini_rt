@@ -110,7 +110,8 @@ void	calculate_lighting(t_Light light, t_AmbientLight ambient, t_ray *ray)
 	t_Vector3	light_dir;
 	float		intensity;
 
-	light_dir = vect_normalise(vect_subtract(light.position, ray->intersection_point));
+	light_dir = vect_normalise(vect_subtract(light.position, \
+		ray->intersection_point));
 	ray->normal_at_intersection = vect_normalise(ray->normal_at_intersection);
 	intensity = vect_dot(light_dir, ray->normal_at_intersection);
 	if (intensity < 0)

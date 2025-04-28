@@ -30,14 +30,14 @@ This project is written in C and uses the **minilibx** graphics library provided
 - `gcc`
 - `make`
 - [MiniLibX](https://harm-smits.github.io/42docs/libs/minilibx) (provided by 42)
-- Linux
+- `Linux`
 
 ---
 
-### Building
+### 🔧 Building
 
 ```bash
-git clone https://github.com/yourusername/minirt.git
+git clone https://github.com/tasmanday/minirt.git
 cd minirt
 make
 ```
@@ -45,5 +45,27 @@ make
 ### Running
 
 ```bash
-./miniRT eval
+./miniRT scenario_file.rt
+```
+There are a number od test scenarios in the eval_scenarios directory or you can make your own.
+
+---
+
+```
+📄 Scene File Format
+
+.rt files describe the scene to render. Here's a simple example:
+
+``` A 0.2 255,255,255 C -50,0,20 0,0,1 70 L -40,0,30 0.6 255,255,255 sp 0,0,20 20 255,0,0 ```
+Identifiers
+Symbol	Meaning	Notes
+A	Ambient light	Ratio and RGB color
+C	Camera	Position, direction, FOV
+L	Light	Position, brightness, RGB color
+sp	Sphere	Position, diameter, RGB color
+pl	Plane	Position, normal vector, RGB color
+cy	Cylinder	Position, orientation, diameter, height, RGB color
+
+Each line starts with an identifier followed by parameters like position, color, brightness, etc.
+
 ```

@@ -185,5 +185,6 @@ void	calculate_normal_at_intersection(t_ray *ray)
 	else if (closest_object->type == CYLINDER)
 		calculate_normal_at_cylinder(ray);
 	if (vect_dot(ray->ray_dir, ray->normal_at_intersection) > 0)
-		ray->normal_at_intersection = vect_multiply_scalar(ray->normal_at_intersection, -1);
+		ray->normal_at_intersection = \
+			vect_multiply_scalar(ray->normal_at_intersection, -1);
 }
