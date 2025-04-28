@@ -51,7 +51,7 @@ There are a number od test scenarios in the eval_scenarios directory or you can 
 
 ---
 
-📄 Scene File Format
+## 📄 Scene File Format
 
 `.rt` files describe the scene to render. Here's a simple example:
 
@@ -73,3 +73,16 @@ Identifiers
 | `cy` | Cylinder | Position, orientation, diameter, height, RGB color |
 
 Each line starts with an identifier followed by parameters like position, color, brightness, etc.
+
+---
+
+## 🧠 How It Works
+
+- **Ray Casting**: For the four corners of each pixel, a ray is shot into the scene.
+- **Intersection Tests**: The ray is checked against all scene objects.
+- **Shadows**: Casts rays to light sources to check for obstructions.
+- **Lighting**: Calculates color using the Phong model.
+- **Anti-aliasing**: Corner ray colours are averaged for each pixel allowing anti-alliasing with only one extra column and one extra row of rays needing to be processed.
+- **Rendering**: Pixels are colored and displayed using MiniLibX.
+
+---
