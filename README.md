@@ -64,7 +64,7 @@ sp 0,0,20 20 255,0,0
 
 Identifiers
 | Symbol | Meaning | Notes |
-|:--------:|:--------:|:--------:|
+|:--------:|:--------:|:--------|
 | `A` |	Ambient light | Ratio and RGB color |
 | `C` | Camera | Position, direction, FOV |
 | `L` | Light | Position, brightness, RGB color |
