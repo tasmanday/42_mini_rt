@@ -19,7 +19,11 @@ This project is written in C and uses the **minilibx** graphics library provided
 
 ## 📷 Example Output
 
-(Add screenshots here! Drop in a rendered image or two showing off your scene)
+![Rendered_Scene_1](images/img_1.jpg)
+
+![Rendered_Scene_2](images/img_2.jpg)
+
+![Rendered_Scene_3](images/img_3.jpg)
 
 ---
 
